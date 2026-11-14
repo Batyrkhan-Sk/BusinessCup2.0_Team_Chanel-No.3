@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -14,6 +14,7 @@ import { store } from "@/lib/client/store";
 import { formatDate, formatUsd, todayIso } from "@/lib/format";
 import { btn, Card, DemoBadge, Eyebrow, inputCls, Notice, Num, Pill, Wrap } from "@/components/ds";
 import { GuardianNav } from "./guardian-nav";
+import { Dropdown } from "@/components/dropdown";
 import { cn } from "@/lib/utils";
 
 const data = loadData();
@@ -94,23 +95,28 @@ export function OverpayView() {
               <h1 className="text-[26px] leading-tight font-bold tracking-tight md:text-[28px]">What did the pharmacy charge for your last fill?</h1>
             </div>
             <Field label="Program" id="offer">
-              <select id="offer" className={inputCls} {...form.register("offer_id")}>
-                {OFFERS.map((o) => (
-                  <option key={o.id} value={o.id}>
-                    {o.channel_label}
-                  </option>
-                ))}
-              </select>
+              <Controller
+                control={form.control}
+                name="offer_id"
+                render={({ field }) => (
+                  <Dropdown id="offer" value={field.value} onValueChange={field.onChange} options={OFFERS.map((o) => ({ value: o.id, label: o.channel_label }))} />
+                )}
+              />
             </Field>
             <div className="grid grid-cols-2 gap-4">
               <Field label="Dose on the box" id="dose">
-                <select id="dose" className={inputCls} {...form.register("dose_mg", { valueAsNumber: true })}>
-                  {doses.map((d) => (
-                    <option key={d} value={d}>
-                      {d} mg
-                    </option>
-                  ))}
-                </select>
+                <Controller
+                  control={form.control}
+                  name="dose_mg"
+                  render={({ field }) => (
+                    <Dropdown
+                      id="dose"
+                      value={String(field.value)}
+                      onValueChange={(d) => field.onChange(Number(d))}
+                      options={doses.map((d) => ({ value: String(d), label: `${d} mg` }))}
+                    />
+                  )}
+                />
               </Field>
               <Field label="Fill number on this program" id="fn">
                 <input id="fn" type="number" min={1} className={inputCls} {...form.register("fill_number", { valueAsNumber: true })} />
@@ -133,7 +139,7 @@ export function OverpayView() {
                 <input id="paid" inputMode="decimal" className={cn(inputCls, "num min-h-16 pl-10 text-[28px]")} {...form.register("paid_usd", { valueAsNumber: true })} />
               </div>
             </Field>
-            <button type="submit" className={btn({ size: "lg" })}>
+            <button type="submit" className={btn({ size: "md" })}>
               Check it
             </button>
             <span className="text-xs text-ink-3">The expected price comes from the program terms in our data. Code does the comparison; no AI involved.</span>

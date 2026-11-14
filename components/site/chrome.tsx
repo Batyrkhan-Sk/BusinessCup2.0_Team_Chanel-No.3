@@ -65,7 +65,6 @@ export function SiteFooter() {
             <strong className="font-semibold text-ink-2">{DISCLAIMER}</strong> DoseCost sells no medication, takes no money from drugmakers, pharmacies or
             telehealth companies, and never gives dosing guidance. Ask your doctor about any change to your prescription.
           </p>
-          <p>We collect the minimum: whether a diagnosis is on file (yes/no), never which one. Your answers stay in your browser unless you set a reminder.</p>
         </div>
         <div className="flex flex-col items-start gap-2 text-xs text-ink-3">
           <VerifiedLine />

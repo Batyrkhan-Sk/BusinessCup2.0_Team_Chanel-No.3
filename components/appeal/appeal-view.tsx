@@ -136,14 +136,16 @@ export function AppealView() {
               ))}
             </div>
           </Card>
-          <Card className="flex flex-col gap-2 p-6">
+          <Card className="flex flex-col gap-3 p-6">
             <Eyebrow>Filled from your case</Eyebrow>
-            {pack.summary.map(([k, v]) => (
-              <div key={k} className="flex justify-between gap-3 text-sm">
-                <span className="text-ink-2">{k}</span>
-                <span className="text-right">{v}</span>
-              </div>
-            ))}
+            <dl className="flex flex-col divide-y divide-border">
+              {pack.summary.map(([k, v]) => (
+                <div key={k} className="grid grid-cols-[minmax(0,5fr)_minmax(0,6fr)] items-baseline gap-4 py-2.5 text-sm first:pt-0 last:pb-0">
+                  <dt className="text-ink-2">{k}</dt>
+                  <dd className="font-medium text-ink">{v}</dd>
+                </div>
+              ))}
+            </dl>
           </Card>
           <Notice tone="warn" title="Before you send">
             Fill the bracketed fields. The medical-necessity draft contains no clinical claims until your doctor adds them and signs.

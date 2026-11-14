@@ -11,6 +11,7 @@ import { COVERAGE_LABELS, INSURERS, STATUS_LABELS, US_STATES } from "@/lib/conte
 import { store } from "@/lib/client/store";
 import { track } from "@/lib/client/analytics";
 import { btn, Card, choiceCls, DemoBadge, Eyebrow, inputCls, Radio } from "@/components/ds";
+import { Dropdown } from "@/components/dropdown";
 import { formatUsd } from "@/lib/format";
 import { nextMonth } from "@/lib/engine/dates";
 import { cn } from "@/lib/utils";
@@ -163,14 +164,13 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
                   <label htmlFor="state" className="text-sm font-semibold">
                     State
                   </label>
-                  <select id="state" className={cn(inputCls, "max-w-[240px]")} value={v.state ?? ""} onChange={(e) => setValue("state", e.target.value || null)}>
-                    <option value="">Prefer not to say</option>
-                    {US_STATES.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
-                      </option>
-                    ))}
-                  </select>
+                  <Dropdown
+                    id="state"
+                    className="max-w-[240px]"
+                    value={v.state ?? ""}
+                    onValueChange={(s) => setValue("state", s || null)}
+                    options={[{ value: "", label: "Prefer not to say" }, ...US_STATES.map((s) => ({ value: s, label: s }))]}
+                  />
                 </div>
               </Step>
             )}
@@ -229,19 +229,16 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
                   <label htmlFor="target" className="text-sm font-semibold">
                     Dose your doctor has planned, if you know it
                   </label>
-                  <select
+                  <Dropdown
                     id="target"
-                    className={cn(inputCls, "max-w-[360px]")}
+                    className="max-w-[360px]"
                     value={v.target_dose_mg === null ? "" : String(v.target_dose_mg)}
-                    onChange={(e) => setValue("target_dose_mg", e.target.value ? Number(e.target.value) : null)}
-                  >
-                    <option value="">Stay at my current step / I don&apos;t know</option>
-                    {product.dose_steps_mg.map((d) => (
-                      <option key={d} value={d}>
-                        {d} mg
-                      </option>
-                    ))}
-                  </select>
+                    onValueChange={(d) => setValue("target_dose_mg", d ? Number(d) : null)}
+                    options={[
+                      { value: "", label: "Stay at my current step / I don't know" },
+                      ...product.dose_steps_mg.map((d) => ({ value: String(d), label: `${d} mg` })),
+                    ]}
+                  />
                   <span className="text-sm text-ink-2">Used only to project cost over 12 months. Your doctor decides dosing.</span>
                 </div>
               </Step>
@@ -286,13 +283,13 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
                     <label htmlFor="intro" className="text-sm font-semibold">
                       How many {formatUsd(product.promo.intro_monthly_usd)} intro fills have you used? (offer covers {product.promo.intro_fills})
                     </label>
-                    <select id="intro" className={cn(inputCls, "max-w-[200px]")} value={String(v.intro_fills_used)} onChange={(e) => setValue("intro_fills_used", Number(e.target.value))}>
-                      {Array.from({ length: product.promo.intro_fills + 1 }, (_, i) => (
-                        <option key={i} value={i}>
-                          {i}
-                        </option>
-                      ))}
-                    </select>
+                    <Dropdown
+                      id="intro"
+                      className="max-w-[200px]"
+                      value={String(v.intro_fills_used)}
+                      onValueChange={(n) => setValue("intro_fills_used", Number(n))}
+                      options={Array.from({ length: product.promo.intro_fills + 1 }, (_, i) => ({ value: String(i), label: String(i) }))}
+                    />
                   </div>
                 )}
                 {isCommercial(v.coverage) && v.status === "pa_approved" && (
@@ -355,7 +352,6 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
             </Link>
           </div>
         </Card>
-        <p className="text-xs text-ink-3">Nothing is stored on our servers during the quiz. Answers live in your browser.</p>
       </aside>
     </div>
   );

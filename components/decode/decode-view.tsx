@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Upload } from "lucide-react";
@@ -10,7 +10,8 @@ import { loadData } from "@/lib/data/load";
 import { decodeExtraction, type DecodedDenial } from "@/lib/decoder/decode";
 import { store } from "@/lib/client/store";
 import { todayIso } from "@/lib/format";
-import { btn, Card, DemoBadge, Eyebrow, inputCls, Notice, Pill, Skeleton } from "@/components/ds";
+import { btn, Card, DemoBadge, Eyebrow, inputCls, Notice, Skeleton } from "@/components/ds";
+import { Dropdown } from "@/components/dropdown";
 import { cn } from "@/lib/utils";
 
 const data = loadData();
@@ -106,17 +107,17 @@ export function DecodeView() {
   }
 
   return (
-    <div className="mx-auto grid w-full max-w-[1120px] items-start gap-12 px-4 py-8 md:grid-cols-2 md:px-6 md:py-12">
-      <section className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <Eyebrow>Step 1 of 2</Eyebrow>
-          <h1 className="text-[28px] leading-tight font-bold tracking-tight md:text-4xl">Upload your denial letter</h1>
-          <p className="text-lg text-ink-2">
-            A photo or PDF. AI reads the reason, dates, plan type and reference number into a strict form. Then code works out your category, deadline, checklist and
-            what is at stake.
-          </p>
-        </div>
+    <div className="mx-auto grid w-full max-w-[1120px] items-start gap-x-12 gap-y-6 px-4 py-8 md:grid-cols-2 md:px-6 md:py-12">
+      <div className="flex flex-col gap-2 md:col-span-2">
+        <Eyebrow>Step 1 of 2</Eyebrow>
+        <h1 className="text-[28px] leading-tight font-bold tracking-tight md:text-4xl">Upload your denial letter</h1>
+        <p className="max-w-[540px] text-lg text-ink-2">
+          A photo or PDF. AI reads the reason, dates, plan type and reference number into a strict form. Then code works out your category, deadline, checklist and
+          what is at stake.
+        </p>
+      </div>
 
+      <section className="flex flex-col gap-6">
         <div
           onDragOver={(e) => {
             e.preventDefault();
@@ -169,18 +170,6 @@ export function DecodeView() {
           <button type="button" className={btn({ variant: "secondary" })} onClick={() => void run(null)} disabled={phase.kind === "reading"}>
             Try the sample letter
           </button>
-        </Card>
-
-        <Card className="flex flex-col gap-2.5 p-6">
-          <Eyebrow>What AI does, and what code does</Eyebrow>
-          <div className="flex items-start gap-2 text-sm">
-            <Pill tone="info">AI</Pill>
-            <span>Reads the letter and fills a strict form: reason text, dates, plan type, reference number. Nothing else.</span>
-          </div>
-          <div className="flex items-start gap-2 text-sm">
-            <Pill tone="accent">Code</Pill>
-            <span>Validates the form, maps the denial category, counts the appeal deadline, picks the checklist and scores whether appealing is worth it.</span>
-          </div>
         </Card>
       </section>
 
@@ -252,22 +241,44 @@ export function DecodeView() {
                     <label htmlFor="rt" className="text-sm font-semibold">
                       Was it a renewal?
                     </label>
-                    <select id="rt" className={inputCls} {...form.register("request_type")}>
-                      <option value="initial">First request</option>
-                      <option value="renewal">Renewal</option>
-                      <option value="unknown">Not sure</option>
-                    </select>
+                    <Controller
+                      control={form.control}
+                      name="request_type"
+                      render={({ field }) => (
+                        <Dropdown
+                          id="rt"
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          options={[
+                            { value: "initial", label: "First request" },
+                            { value: "renewal", label: "Renewal" },
+                            { value: "unknown", label: "Not sure" },
+                          ]}
+                        />
+                      )}
+                    />
                   </div>
                   <div className="flex flex-col gap-2">
                     <label htmlFor="ct" className="text-sm font-semibold">
                       Before or after you got the drug?
                     </label>
-                    <select id="ct" className={inputCls} {...form.register("claim_timing")}>
-                      <option value="pre_service">Before (prior authorization)</option>
-                      <option value="post_service">After (I already paid)</option>
-                      <option value="urgent">Urgent</option>
-                      <option value="unknown">Not sure</option>
-                    </select>
+                    <Controller
+                      control={form.control}
+                      name="claim_timing"
+                      render={({ field }) => (
+                        <Dropdown
+                          id="ct"
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          options={[
+                            { value: "pre_service", label: "Before (prior authorization)" },
+                            { value: "post_service", label: "After (I already paid)" },
+                            { value: "urgent", label: "Urgent" },
+                            { value: "unknown", label: "Not sure" },
+                          ]}
+                        />
+                      )}
+                    />
                   </div>
                 </div>
                 <button type="submit" className={btn()}>
