@@ -1,0 +1,17 @@
+{
+  "_demo": "DEMO persona input. Runs through the same live engine as real input; no outputs are stored here.",
+  "_persona": "Jessica, 34, Texas. Employer plan (Aetna-administered). Zepbound from her own doctor. PA required, then denied Oct 28, 2026. Pharmacy quoted list price.",
+  "coverage": "employer",
+  "insurer_id": "aetna",
+  "state": "TX",
+  "product_id": "zepbound-pen",
+  "current_dose_mg": 5,
+  "target_dose_mg": 10,
+  "diagnosis_on_file": true,
+  "status": "pa_denied",
+  "current_monthly_cost_usd": 1087,
+  "plan_copay_usd": null,
+  "intro_fills_used": 0,
+  "refills_on_time": true,
+  "start_month": "2026-12"
+}

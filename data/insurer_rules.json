@@ -1,0 +1,111 @@
+{
+  "verified_at": "2026-11-14",
+  "generic_insurer_id": "generic",
+  "insurers": [
+    {
+      "insurer_id": "cigna",
+      "insurer_label": "Cigna",
+      "policy_id": "IP0816",
+      "policy_title": "Weight Loss – Glucagon-Like Peptide-1 Agonists – Zepbound",
+      "effective_date": "2026-09-01",
+      "pdf_url": "https://static.cigna.com/assets/chcp/pdf/coveragePolicies/pharmacy/ip_0816_coveragepositioncriteria_weight_loss_zepbound.pdf",
+      "scope_note": "Applies to benefit plans administered by Cigna Companies. The member's own plan document overrides this policy (policy p. 1).",
+      "product_ids": ["zepbound-pen", "zepbound-vial", "zepbound-kwikpen"],
+      "initial_criteria": [
+        { "id": "age", "label": "Adult", "detail": "Patient is 18 or older.", "evidence": "Date of birth on the PA form", "source_page": "p. 4, 1.A.i" },
+        { "id": "lifestyle", "label": "Behavioral program for 3+ months", "detail": "Trial of behavioral modification and dietary restriction for at least 3 months.", "evidence": "Chart notes or program records with dates", "source_page": "p. 4, 1.A.ii" },
+        { "id": "bmi", "label": "Baseline BMI", "detail": "Baseline BMI ≥ 30, or ≥ 27 with at least one listed weight-related comorbidity, measured before any GLP-1 therapy.", "evidence": "Chart note with baseline height, weight and date", "source_page": "p. 4, 1.A.iii" },
+        { "id": "attestation", "label": "Used with diet and activity", "detail": "Medication will be used with behavioral modification and a reduced-calorie diet.", "evidence": "Prescriber attestation on the PA form", "source_page": "p. 5, 1.A.iv" }
+      ],
+      "initial_approval_months": 8,
+      "renewal_criteria": [
+        { "id": "baseline", "label": "Baseline still documented", "detail": "Baseline BMI criteria (as above) still on record.", "evidence": "The original baseline chart note", "source_page": "p. 5, 1.B.ii" },
+        { "id": "loss", "label": "Weight loss from baseline", "detail": "Patient has lost ≥ 5% of baseline body weight (baseline = before any GLP-1).", "evidence": "Current weight documented by the doctor alongside the baseline", "source_page": "p. 5, 1.B.iii" }
+      ],
+      "renewal_min_weight_loss_pct": 5,
+      "renewal_approval_months": 12,
+      "comorbidities": ["hypertension", "type 2 diabetes", "dyslipidemia", "obstructive sleep apnea", "cardiovascular disease", "knee osteoarthritis", "asthma", "COPD", "MASLD / NAFLD", "polycystic ovarian syndrome", "coronary artery disease"],
+      "source_url": "https://static.cigna.com/assets/chcp/pdf/coveragePolicies/pharmacy/ip_0816_coveragepositioncriteria_weight_loss_zepbound.pdf",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "Full PDF downloaded and read (7 pages). Cigna's National Formulary policy CNF 684 reportedly uses a 4% discontinuation threshold; that PDF returned 404 and is not modelled."
+    },
+    {
+      "insurer_id": "aetna",
+      "insurer_label": "Aetna (CVS Caremark commercial)",
+      "policy_id": "6450-C",
+      "policy_title": "Weight Loss (BMI 35) GIP/GLP-1, GLP-1 Agonists PA with Limit",
+      "effective_date": null,
+      "pdf_url": "https://www.aetna.com/products/rxnonmedicare/data/2026/Weight_Loss_%28BMI%2035%29_GIP-GLP-1%2C_GLP-1_Agonists_PA_with_Limit_6450-C_P08-2025_v8.html",
+      "scope_note": "Aetna commercial pharmacy policy covering Zepbound, Wegovy, Saxenda, Mounjaro and Foundayo. Plan design varies; some Aetna plans removed Zepbound from formulary in 2025 (secondary). Page blocked automated fetching; criteria below come from search-indexed excerpts.",
+      "product_ids": ["zepbound-pen", "zepbound-vial", "zepbound-kwikpen", "wegovy-pen", "wegovy-pill", "saxenda-pen", "foundayo-pill"],
+      "initial_criteria": [
+        { "id": "program", "label": "Weight-management program, 6+ months", "detail": "Participation in a comprehensive weight management program with continuing follow-up for at least 6 months prior to using drug therapy.", "evidence": "Program or visit records with dates covering 6+ months", "source_page": "policy 6450-C (excerpt)" },
+        { "id": "bmi", "label": "Baseline BMI", "detail": "A baseline BMI threshold applies. The policy title references BMI 35; the exact thresholds could not be read from the page.", "evidence": "Chart note with baseline height, weight and date", "source_page": null },
+        { "id": "comorbidity", "label": "Weight-related comorbidity", "detail": "At least one weight-related comorbid condition, where the BMI band requires it.", "evidence": "Diagnosis code on the PA form", "source_page": "policy 6450-C (excerpt)" }
+      ],
+      "initial_approval_months": null,
+      "renewal_criteria": [
+        { "id": "baseline", "label": "Baseline documented", "detail": "Renewal reviews compare against the baseline recorded before therapy.", "evidence": "The original baseline chart note", "source_page": null }
+      ],
+      "renewal_min_weight_loss_pct": null,
+      "renewal_approval_months": null,
+      "comorbidities": [],
+      "source_url": "https://www.aetna.com/products/rxnonmedicare/data/2026/Weight_Loss_%28BMI%2035%29_GIP-GLP-1%2C_GLP-1_Agonists_PA_with_Limit_6450-C_P08-2025_v8.html",
+      "verified_at": "2026-11-14",
+      "verification": "secondary",
+      "source_note": "aetna.com returned 403 to automated fetches; text taken from search-engine excerpts of the official page. BMI thresholds and renewal percentage NOT verified."
+    },
+    {
+      "insurer_id": "uhc",
+      "insurer_label": "UnitedHealthcare / Optum Rx",
+      "policy_id": "UHC provider notice 2025 (Zepbound obesity criteria)",
+      "policy_title": "Zepbound and phentermine prior authorization criteria",
+      "effective_date": "2025-01-01",
+      "pdf_url": "https://www.uhcprovider.com/content/provider/en/resource-library/news/2025/ma-medicaid-zepbound-phentermine.html",
+      "scope_note": "Verified text applies to UnitedHealthcare Community Plan of Massachusetts Senior Care Options and One Care plans only. UHC commercial criteria could not be read from a primary source; self-funded employer plans may exclude anti-obesity drugs entirely.",
+      "product_ids": ["zepbound-pen", "zepbound-vial", "zepbound-kwikpen"],
+      "initial_criteria": [
+        { "id": "diagnosis", "label": "Diagnosis of obesity or overweight", "detail": "Diagnosis of obesity or overweight condition; 18 years or older.", "evidence": "Diagnosis code on the PA form", "source_page": "notice, criteria list" },
+        { "id": "bmi", "label": "Baseline BMI", "detail": "Baseline BMI ≥ 30, or ≥ 27 with at least 1 weight-related comorbid condition; baseline weight required.", "evidence": "Chart note with baseline height, weight and date", "source_page": "notice, criteria list" },
+        { "id": "lifestyle", "label": "Diet and activity counseling", "detail": "Member has been counseled to continue a reduced-calorie diet and increased physical activity.", "evidence": "Chart note documenting counseling", "source_page": "notice, criteria list" },
+        { "id": "step", "label": "Step therapy (these plans)", "detail": "New users must first trial phentermine with or without topiramate.", "evidence": "Pharmacy history or chart note of the trial", "source_page": "notice, step therapy" }
+      ],
+      "initial_approval_months": null,
+      "renewal_criteria": [],
+      "renewal_min_weight_loss_pct": null,
+      "renewal_approval_months": 12,
+      "comorbidities": [],
+      "source_url": "https://www.uhcprovider.com/content/provider/en/resource-library/news/2025/ma-medicaid-zepbound-phentermine.html",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "Primary for the plans named in scope_note only. Renewal approval of up to 1 year is from the Optum Rx Indiana Medicaid GLP-1 criteria dated 07.01.2026 (p. 1)."
+    },
+    {
+      "insurer_id": "generic",
+      "insurer_label": "Any other plan (generic template)",
+      "policy_id": "generic-glp1-weight-pa",
+      "policy_title": "Common prior-authorization criteria for GLP-1 weight-management drugs",
+      "effective_date": null,
+      "pdf_url": null,
+      "scope_note": "Template built from criteria that recur across the verified Cigna and UHC documents. Your plan's own policy controls.",
+      "product_ids": ["zepbound-pen", "zepbound-vial", "zepbound-kwikpen", "wegovy-pen", "wegovy-pill", "saxenda-pen", "foundayo-pill"],
+      "initial_criteria": [
+        { "id": "bmi", "label": "Baseline BMI", "detail": "Commonly BMI ≥ 30, or ≥ 27 with a weight-related comorbidity, documented before therapy.", "evidence": "Chart note with baseline height, weight and date", "source_page": null },
+        { "id": "lifestyle", "label": "Lifestyle program", "detail": "Documented diet and activity program, often 3 to 6 months.", "evidence": "Program or visit records with dates", "source_page": null },
+        { "id": "diagnosis", "label": "Diagnosis on the PA", "detail": "Obesity or overweight diagnosis, plus a comorbidity code where required.", "evidence": "Diagnosis codes on the PA form", "source_page": null }
+      ],
+      "initial_approval_months": null,
+      "renewal_criteria": [
+        { "id": "loss", "label": "Weight loss from baseline", "detail": "Commonly ≥ 5% loss from the pre-therapy baseline.", "evidence": "Baseline and current weight documented by the doctor", "source_page": null }
+      ],
+      "renewal_min_weight_loss_pct": 5,
+      "renewal_approval_months": null,
+      "comorbidities": [],
+      "source_url": "https://static.cigna.com/assets/chcp/pdf/coveragePolicies/pharmacy/ip_0816_coveragepositioncriteria_weight_loss_zepbound.pdf",
+      "verified_at": "2026-11-14",
+      "verification": "editorial",
+      "source_note": "Editorial template. 5% renewal threshold appears in Cigna IP0816 and Michigan Medicaid (Prime Therapeutics) criteria."
+    }
+  ]
+}

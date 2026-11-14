@@ -1,0 +1,34 @@
+{
+  "_demo": "Seeded DEMO Guardian case (inputs only). Alerts and reminder dates are computed by lib/engine at request time.",
+  "today": "2026-11-14",
+  "cases": [
+    {
+      "id": "demo-renewal",
+      "label": "Zepbound PA renewal",
+      "product_id": "zepbound-kwikpen",
+      "approval_ends_on": "2026-12-07",
+      "baseline_document": { "label": "Baseline chart note", "dated": "2026-03-03" }
+    },
+    {
+      "id": "demo-promo",
+      "label": "Wegovy pen intro price",
+      "offer_id": "novocare-wegovy-pen",
+      "dose_mg": 0.5,
+      "intro_fills_used": 1,
+      "next_fill_date": "2026-12-02",
+      "fills": [
+        { "fill_date": "2026-11-03", "dose_mg": 0.25, "fill_number": 1, "paid_usd": 199, "refilled_within_window": true },
+        { "fill_date": "2026-12-02", "dose_mg": 0.5, "fill_number": 2, "paid_usd": 349, "refilled_within_window": true }
+      ]
+    },
+    {
+      "id": "demo-appeal",
+      "label": "Zepbound PA appeal",
+      "denial_notice_date": "2026-10-28",
+      "appeal_filed_on": "2026-11-20",
+      "lillydirect_offer_id": "lillydirect-zepbound-vial",
+      "last_delivery_date": "2026-10-30",
+      "dose_mg": 10
+    }
+  ]
+}

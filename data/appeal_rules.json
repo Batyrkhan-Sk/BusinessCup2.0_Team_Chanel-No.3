@@ -1,0 +1,149 @@
+{
+  "verified_at": "2026-11-14",
+  "deadlines": [
+    { "id": "internal_appeal_filing_days", "value": 180, "unit": "days", "citation": "29 CFR 2560.503-1(h)(3)(i): at least 180 days following receipt of an adverse benefit determination; HealthCare.gov: file within 180 days (6 months)", "source_url": "https://www.law.cornell.edu/cfr/text/29/2560.503-1", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "pre_service_decision_days", "value": 30, "unit": "days", "citation": "29 CFR 2560.503-1(i)(2)(ii): pre-service appeal decided not later than 30 days after receipt (one level)", "source_url": "https://www.law.cornell.edu/cfr/text/29/2560.503-1", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "pre_service_decision_days_two_levels", "value": 15, "unit": "days", "citation": "29 CFR 2560.503-1(i)(2)(ii): 15 days per level when the plan has two appeal levels", "source_url": "https://www.law.cornell.edu/cfr/text/29/2560.503-1", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "post_service_decision_days", "value": 60, "unit": "days", "citation": "29 CFR 2560.503-1(i)(2)(iii)(A): post-service appeal decided not later than 60 days after receipt (one level)", "source_url": "https://www.law.cornell.edu/cfr/text/29/2560.503-1", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "post_service_decision_days_two_levels", "value": 30, "unit": "days", "citation": "29 CFR 2560.503-1(i)(2)(iii)(A): 30 days per level when the plan has two appeal levels", "source_url": "https://www.law.cornell.edu/cfr/text/29/2560.503-1", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "urgent_decision_hours", "value": 72, "unit": "hours", "citation": "29 CFR 2560.503-1(i)(2)(i): urgent care appeals decided not later than 72 hours after receipt", "source_url": "https://www.law.cornell.edu/cfr/text/29/2560.503-1", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "external_review_filing_months", "value": 4, "unit": "months", "citation": "HealthCare.gov: file external review within 4 months after the date you receive the final determination", "source_url": "https://www.healthcare.gov/appeal-insurance-company-decision/external-review/", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "external_review_standard_decision_days", "value": 45, "unit": "days", "citation": "HealthCare.gov: standard external review decided no later than 45 days after the request", "source_url": "https://www.healthcare.gov/appeal-insurance-company-decision/external-review/", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "external_review_expedited_decision_hours", "value": 72, "unit": "hours", "citation": "HealthCare.gov: expedited external review no later than 72 hours", "source_url": "https://www.healthcare.gov/appeal-insurance-company-decision/external-review/", "verified_at": "2026-11-14", "verification": "primary" }
+  ],
+  "categories": [
+    {
+      "id": "plan_exclusion",
+      "label": "Plan exclusion",
+      "plain_english": "Your plan does not cover weight-management drugs at all. Criteria do not matter; appeals rarely change a written exclusion.",
+      "winnability": "low",
+      "keywords": ["excluded", "exclusion", "not a covered benefit", "not covered under your plan", "benefit plan does not cover", "weight loss drugs are not covered", "plan does not include coverage"],
+      "checklist_ids": ["denial_copy", "plan_document", "ask_exception"],
+      "source_url": "internal:denial-category-map",
+      "verified_at": "2026-11-14",
+      "verification": "editorial"
+    },
+    {
+      "id": "renewal_missing_baseline",
+      "label": "Renewal: baseline not documented",
+      "plain_english": "The renewal failed because the plan could not see your starting point to measure progress. The baseline record usually exists; it was not sent.",
+      "winnability": "high",
+      "keywords": ["baseline weight", "from baseline", "weight at the time the medication was started", "unable to verify a weight loss", "renewal", "reauthorization", "continuation"],
+      "checklist_ids": ["denial_copy", "baseline_note", "current_weight_note", "policy_excerpt"],
+      "source_url": "https://gsaindexed.apps.lara.state.mi.us/MOAHR/2026/26-002851.pdf",
+      "verified_at": "2026-11-14",
+      "verification": "editorial",
+      "source_note": "Pattern seen in Michigan administrative hearing decisions on Zepbound renewal denials (Dec 2025)."
+    },
+    {
+      "id": "missing_documentation",
+      "label": "PA: missing or incomplete documentation",
+      "plain_english": "The plan says records were not provided. This is the most fixable kind of denial: your doctor usually already has them.",
+      "winnability": "high",
+      "keywords": ["not provided", "not documented", "documentation", "insufficient information", "not sufficient data", "missing", "incomplete", "no records", "was not submitted", "chart notes"],
+      "checklist_ids": ["denial_copy", "baseline_note", "program_records", "diagnosis_code", "policy_excerpt", "lmn"],
+      "source_url": "internal:denial-category-map",
+      "verified_at": "2026-11-14",
+      "verification": "editorial"
+    },
+    {
+      "id": "diagnosis_code",
+      "label": "Diagnosis code missing or mismatched",
+      "plain_english": "The request did not carry a diagnosis code the policy accepts. Your doctor's office can correct the code and resubmit.",
+      "winnability": "high",
+      "keywords": ["diagnosis code", "icd-10", "icd 10", "diagnosis not", "indication not", "not for a covered diagnosis", "covered diagnosis"],
+      "checklist_ids": ["denial_copy", "diagnosis_code", "policy_excerpt"],
+      "source_url": "internal:denial-category-map",
+      "verified_at": "2026-11-14",
+      "verification": "editorial"
+    },
+    {
+      "id": "step_therapy",
+      "label": "Step therapy required",
+      "plain_english": "The plan wants another drug tried first. An appeal can work if that drug was tried, or is unsuitable for documented reasons.",
+      "winnability": "medium",
+      "keywords": ["step therapy", "trial of", "must try", "first-line", "prior trial", "phentermine", "preferred alternative"],
+      "checklist_ids": ["denial_copy", "step_history", "policy_excerpt", "lmn"],
+      "source_url": "internal:denial-category-map",
+      "verified_at": "2026-11-14",
+      "verification": "editorial"
+    },
+    {
+      "id": "non_formulary",
+      "label": "Not on the formulary",
+      "plain_english": "The drug is not on your plan's drug list. You can ask for a formulary exception, or the plan may cover a preferred alternative.",
+      "winnability": "medium",
+      "keywords": ["formulary", "non-formulary", "not on the drug list", "preferred drug", "formulary alternative"],
+      "checklist_ids": ["denial_copy", "ask_exception", "lmn"],
+      "source_url": "internal:denial-category-map",
+      "verified_at": "2026-11-14",
+      "verification": "editorial"
+    },
+    {
+      "id": "quantity_limit",
+      "label": "Quantity or dose limit",
+      "plain_english": "The amount or strength requested is above the plan's limit. Often fixed by correcting the prescription quantity.",
+      "winnability": "medium",
+      "keywords": ["quantity limit", "exceeds the limit", "dose exceeds", "quantity exceeds"],
+      "checklist_ids": ["denial_copy", "policy_excerpt"],
+      "source_url": "internal:denial-category-map",
+      "verified_at": "2026-11-14",
+      "verification": "editorial"
+    },
+    {
+      "id": "criteria_not_met",
+      "label": "Clinical criteria not met",
+      "plain_english": "The plan reviewed the records and says the criteria are not met. Winnable when the records show otherwise; harder when they do not.",
+      "winnability": "medium",
+      "keywords": ["does not meet", "criteria not met", "not medically necessary", "medical necessity"],
+      "checklist_ids": ["denial_copy", "policy_excerpt", "lmn", "baseline_note"],
+      "source_url": "internal:denial-category-map",
+      "verified_at": "2026-11-14",
+      "verification": "editorial"
+    },
+    {
+      "id": "other",
+      "label": "Other or unclear",
+      "plain_english": "We could not match the reason to a known pattern. Ask the plan for the specific criteria not met; they must tell you.",
+      "winnability": "medium",
+      "keywords": [],
+      "checklist_ids": ["denial_copy", "ask_criteria", "policy_excerpt"],
+      "source_url": "internal:denial-category-map",
+      "verified_at": "2026-11-14",
+      "verification": "editorial"
+    }
+  ],
+  "winnability_weights": {
+    "high": 1,
+    "medium": 0.5,
+    "low": 0.1,
+    "source_url": "internal:winnability-weights",
+    "verified_at": "2026-11-14",
+    "verification": "editorial",
+    "source_note": "Editorial ranking weights used only to order and threshold the 'worth appealing?' score. They are NOT success probabilities. Context: KFF found insurers upheld 66% of 2024 HealthCare.gov appeals overall, with no breakdown by reason."
+  },
+  "worth_appealing_min_score_usd": {
+    "value": 1000,
+    "source_url": "internal:worth-appealing-threshold",
+    "verified_at": "2026-11-14",
+    "verification": "editorial",
+    "source_note": "Editorial threshold: annual money at stake x winnability weight must reach this to label an appeal 'worth it'."
+  },
+  "checklist_items": [
+    { "id": "denial_copy", "label": "Copy of the denial letter", "detail": "Include the page with the reference number and the stated reason.", "who": "patient", "source_url": "https://www.healthcare.gov/appeal-insurance-company-decision/internal-appeals/", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "baseline_note", "label": "Chart note with baseline height, weight and date", "detail": "From before your first GLP-1 fill. Most patient portals have it.", "who": "doctor", "source_url": "https://static.cigna.com/assets/chcp/pdf/coveragePolicies/pharmacy/ip_0816_coveragepositioncriteria_weight_loss_zepbound.pdf", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "current_weight_note", "label": "Current measurements documented by your doctor", "detail": "Recorded alongside the baseline so the plan can compare them.", "who": "doctor", "source_url": "https://static.cigna.com/assets/chcp/pdf/coveragePolicies/pharmacy/ip_0816_coveragepositioncriteria_weight_loss_zepbound.pdf", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "program_records", "label": "Weight-management program records", "detail": "Visit dates, dietitian or program notes covering the period your plan requires.", "who": "doctor", "source_url": "https://www.aetna.com/products/rxnonmedicare/data/2026/Weight_Loss_%28BMI%2035%29_GIP-GLP-1%2C_GLP-1_Agonists_PA_with_Limit_6450-C_P08-2025_v8.html", "verified_at": "2026-11-14", "verification": "secondary" },
+    { "id": "diagnosis_code", "label": "Diagnosis code confirmation", "detail": "Your doctor confirms the codes on the PA form match what the policy accepts.", "who": "doctor", "source_url": "internal:checklist", "verified_at": "2026-11-14", "verification": "editorial" },
+    { "id": "policy_excerpt", "label": "Your plan's PA criteria page", "detail": "DoseCost attaches the policy excerpt with its page reference.", "who": "dosecost", "source_url": "internal:checklist", "verified_at": "2026-11-14", "verification": "editorial" },
+    { "id": "lmn", "label": "Letter of medical necessity, signed by your doctor", "detail": "DoseCost drafts the structure; your doctor writes and signs every clinical statement.", "who": "doctor", "source_url": "internal:checklist", "verified_at": "2026-11-14", "verification": "editorial" },
+    { "id": "step_history", "label": "Record of the step-therapy drug", "detail": "Pharmacy history or a chart note showing the trial, or why it is unsuitable.", "who": "doctor", "source_url": "internal:checklist", "verified_at": "2026-11-14", "verification": "editorial" },
+    { "id": "plan_document", "label": "Your plan's benefit booklet (SPD) exclusions page", "detail": "Confirms whether the exclusion is written into your plan.", "who": "patient", "source_url": "https://www.healthcare.gov/appeal-insurance-company-decision/internal-appeals/", "verified_at": "2026-11-14", "verification": "editorial" },
+    { "id": "ask_exception", "label": "Ask about a formulary or medical exception", "detail": "Plans may grant exceptions case by case; ask HR or the plan in writing.", "who": "patient", "source_url": "internal:checklist", "verified_at": "2026-11-14", "verification": "editorial" },
+    { "id": "ask_criteria", "label": "Ask the plan for the specific criteria not met", "detail": "The plan's notice must state the specific reason and the plan provisions it relied on.", "who": "patient", "source_url": "https://www.law.cornell.edu/cfr/text/29/2560.503-1", "verified_at": "2026-11-14", "verification": "primary" }
+  ],
+  "context_stats": [
+    { "id": "appeal_rate", "value": 1, "unit": "percent_upper_bound", "statement": "Fewer than 1% of denied in-network claims were appealed (HealthCare.gov insurers, 2024).", "source_url": "https://www.kff.org/private-insurance/claims-denials-and-appeals-in-aca-marketplace-plans-in-2024/", "verified_at": "2026-11-14", "verification": "primary" },
+    { "id": "appeals_upheld", "value": 66, "unit": "percent", "statement": "Insurers upheld 66% of appeals (HealthCare.gov insurers, 2024).", "source_url": "https://www.kff.org/private-insurance/claims-denials-and-appeals-in-aca-marketplace-plans-in-2024/", "verified_at": "2026-11-14", "verification": "primary" }
+  ]
+}

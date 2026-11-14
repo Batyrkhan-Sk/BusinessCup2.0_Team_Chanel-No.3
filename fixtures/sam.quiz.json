@@ -1,0 +1,17 @@
+{
+  "_demo": "DEMO persona input. Runs through the same live engine as real input; no outputs are stored here.",
+  "_persona": "Sam, 41, Ohio. No insurance. Self-pays for Wegovy pen through NovoCare. Has used 1 of 2 intro fills; the intro price ends after the next fill.",
+  "coverage": "none",
+  "insurer_id": null,
+  "state": "OH",
+  "product_id": "wegovy-pen",
+  "current_dose_mg": 0.5,
+  "target_dose_mg": null,
+  "diagnosis_on_file": null,
+  "status": "self_pay",
+  "current_monthly_cost_usd": 199,
+  "plan_copay_usd": null,
+  "intro_fills_used": 1,
+  "refills_on_time": true,
+  "start_month": "2026-12"
+}

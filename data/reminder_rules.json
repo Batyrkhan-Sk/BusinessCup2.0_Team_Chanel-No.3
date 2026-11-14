@@ -1,0 +1,12 @@
+{
+  "appeal_deadline_lead_days": [30, 7],
+  "refill_window_lead_days": 5,
+  "renewal_lead_days": [23, 7],
+  "promo_ending_lead_days": 5,
+  "plan_decision_overdue_grace_days": 1,
+  "january_plan_check_month": 1,
+  "source_url": "internal:reminder-rules",
+  "verified_at": "2026-11-14",
+  "verification": "editorial",
+  "source_note": "Our own reminder schedule. Lead times are product decisions, not facts."
+}

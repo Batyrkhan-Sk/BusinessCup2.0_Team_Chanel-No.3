@@ -1,0 +1,25 @@
+{
+  "product": "guardian",
+  "currency": "USD",
+  "plans": [
+    { "id": "monthly", "price_usd": 7.99, "interval": "month", "stripe_price_env": "STRIPE_PRICE_MONTHLY" },
+    { "id": "yearly", "price_usd": 59, "interval": "year", "stripe_price_env": "STRIPE_PRICE_YEARLY" }
+  ],
+  "free_features": [
+    "Denial letter decode with deadline and checklist",
+    "Cheapest-legal-path check with 12-month projection",
+    "Coverage check against your insurer's policy"
+  ],
+  "guardian_features": [
+    "Appeal pack: patient letter, medical-necessity draft for your doctor, checklist, PDF",
+    "Case timeline with every deadline computed",
+    "PA renewal reminders with your baseline document stored",
+    "Promo and dose-price alerts",
+    "Monthly 'did you overpay?' check",
+    "January plan-change check"
+  ],
+  "source_url": "internal:guardian-pricing",
+  "verified_at": "2026-11-14",
+  "verification": "editorial",
+  "source_note": "Our own price, set by the product owner in SPEC.md section 3.6."
+}

@@ -1,0 +1,71 @@
+{
+  "verified_at": "2026-11-14",
+  "cards": [
+    {
+      "id": "zepbound-savings-card-covered",
+      "label": "Zepbound Savings Card (commercial insurance that covers Zepbound)",
+      "manufacturer": "Eli Lilly and Company",
+      "product_ids": ["zepbound-pen", "zepbound-kwikpen"],
+      "applies_when": "with_coverage",
+      "as_low_as_monthly_usd": 25,
+      "max_monthly_benefit_usd": 100,
+      "max_annual_benefit_usd": 1300,
+      "expires_on": "2026-12-31",
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace"],
+        "cash_only": false,
+        "government_beneficiaries": "excluded",
+        "requires_plan_coverage": true,
+        "notes": "Cardholders must not be enrolled in Medicaid, Medicare (incl. Part D and Advantage), Medigap, DoD, VA, TRICARE/CHAMPUS or state drug assistance programs."
+      },
+      "source_url": "https://zepbound.lilly.com/coverage-savings",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "'pay as little as $25 for a 1-month, 2-month, or 3-month prescription fill of Zepbound single-dose pen'; 'maximum monthly savings of up to $100 per 1-month prescription'; annual maximum $1,300; 'Card expires and savings end on 12/31/2026'. LillyDirect also shows 'Insurance price: Pay as low as $25 per month' for KwikPen."
+    },
+    {
+      "id": "zepbound-savings-card-not-covered",
+      "label": "Zepbound Savings Card (commercial insurance that does not cover Zepbound)",
+      "manufacturer": "Eli Lilly and Company",
+      "product_ids": ["zepbound-pen"],
+      "applies_when": "without_coverage",
+      "as_low_as_monthly_usd": 499,
+      "max_monthly_benefit_usd": null,
+      "max_annual_benefit_usd": null,
+      "expires_on": "2026-12-31",
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace"],
+        "cash_only": false,
+        "government_beneficiaries": "excluded",
+        "requires_plan_coverage": false,
+        "notes": "Maximum monthly savings are 'based on wholesale acquisition cost minus $499'."
+      },
+      "source_url": "https://zepbound.lilly.com/coverage-savings",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "'pay as low as $499 for your 1-month prescription fill of Zepbound single-dose pen' for commercially insured without coverage. A KwikPen variant ('as low as $299' at 2.5 mg, dose-specific caps) exists but its per-dose floors were not fully stated, so it is not modelled."
+    },
+    {
+      "id": "wegovy-savings-offer-covered",
+      "label": "Wegovy Savings Offer (commercial insurance)",
+      "manufacturer": "Novo Nordisk",
+      "product_ids": ["wegovy-pen", "wegovy-pill"],
+      "applies_when": "with_coverage",
+      "as_low_as_monthly_usd": 25,
+      "max_monthly_benefit_usd": 100,
+      "max_annual_benefit_usd": null,
+      "expires_on": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace"],
+        "cash_only": false,
+        "government_beneficiaries": "excluded",
+        "requires_plan_coverage": true,
+        "notes": "'Government beneficiaries excluded.' Novo Nordisk may modify or cancel the program at any time. Duration/expiry not stated on the page."
+      },
+      "source_url": "https://www.wegovy.com/coverage-and-savings/save-on-wegovy.html",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "'Pay as little as $25, subject to a maximum savings of $100/month.'"
+    }
+  ]
+}

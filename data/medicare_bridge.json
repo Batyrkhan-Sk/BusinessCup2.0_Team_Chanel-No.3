@@ -1,0 +1,29 @@
+{
+  "id": "medicare-glp1-bridge",
+  "label": "Medicare GLP-1 Bridge",
+  "monthly_copay_usd": 50,
+  "starts_on": "2026-07-01",
+  "ends_on": "2027-12-31",
+  "eligible_coverage": ["medicare"],
+  "requires_prior_authorization": true,
+  "covered_product_ids": [
+    { "product_id": "wegovy-pen", "verification": "primary", "source_url": "https://www.wegovy.com/coverage-and-savings/save-on-wegovy.html" },
+    { "product_id": "wegovy-pill", "verification": "primary", "source_url": "https://www.wegovy.com/coverage-and-savings/save-on-wegovy.html" },
+    { "product_id": "zepbound-kwikpen", "verification": "secondary", "source_url": "https://www.obesityaction.org/medicare-bridge/" },
+    { "product_id": "foundayo-pill", "verification": "secondary", "source_url": "https://www.phlp.org/en/news/new-medicare-program-to-offer-limited-coverage-for-glp-1-weight-loss-medications" }
+  ],
+  "counts_toward_part_d_oop": false,
+  "low_income_subsidy_applies": false,
+  "notes": [
+    "CMS: 'Starting July 1, 2026, Medicare will begin a short-term demonstration'; extended through December 31, 2027; 'Eligible beneficiaries will have a $50 copay.'",
+    "CMS: operates outside the Part D benefit; the Part D deductible does not apply, the copay does not count toward TrOOP, and there is no low-income subsidy.",
+    "CMS: in 2026 a single central processor handles prior authorization, claims and pharmacy payment.",
+    "wegovy.com: requires a standalone PDP or MA-PD plan and a prior authorization from the prescriber; CMS determines eligibility.",
+    "Clinical eligibility criteria (BMI and comorbidity thresholds) were not readable on cms.gov; secondary sources mention BMI >= 27 with a qualifying condition. Not asserted by DoseCost.",
+    "Beneficiaries already receiving Part D GLP-1 coverage for other indications are reported as excluded (Pharmacy Times, Jul 9 2026; secondary)."
+  ],
+  "source_url": "https://www.cms.gov/priorities/innovation/innovation-models/medicare-glp-1-bridge",
+  "verified_at": "2026-11-14",
+  "verification": "primary",
+  "source_note": "Dates and $50 copay read on cms.gov. Covered drug list read on wegovy.com (Wegovy pen and pill, all doses) and secondary sources (Zepbound KwikPen, Foundayo)."
+}

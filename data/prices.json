@@ -1,0 +1,298 @@
+{
+  "verified_at": "2026-11-14",
+  "currency": "USD",
+  "offers": [
+    {
+      "id": "lillydirect-zepbound-vial",
+      "channel": "lillydirect",
+      "channel_label": "LillyDirect self-pay (single-dose vials)",
+      "product_id": "zepbound-vial",
+      "routes_to_offer_id": null,
+      "dose_prices": [
+        { "dose_mg": 2.5, "monthly_usd": 299 },
+        { "dose_mg": 5, "monthly_usd": 399 },
+        { "dose_mg": 7.5, "monthly_usd": 449, "late_refill_monthly_usd": 499 },
+        { "dose_mg": 10, "monthly_usd": 449, "late_refill_monthly_usd": 699 },
+        { "dose_mg": 12.5, "monthly_usd": 449, "late_refill_monthly_usd": 699 },
+        { "dose_mg": 15, "monthly_usd": 449, "late_refill_monthly_usd": 699 }
+      ],
+      "refill_window_days": 45,
+      "units_per_month": "4 single-dose vials",
+      "promo": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "medicare", "medicaid", "tricare_va", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "unverified",
+        "requires_plan_coverage": false,
+        "notes": "Self-pay price; does not run through insurance. The page does not state whether government beneficiaries are excluded."
+      },
+      "extra_costs_note": "Syringes and needles are bought separately.",
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://www.lilly.com/lillydirect/zepbound",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "Page text: 2.5 mg 'Starting at $299/month', 5 mg '$399/month', 7.5-15 mg '$449/month when you refill within 45 days'; 'Regular prices will apply if prescription is not refilled within 45 days ($499 for 7.5mg, $699 for 10mg, $699 for 12.5mg, and $699 for 15mg)'."
+    },
+    {
+      "id": "lillydirect-zepbound-kwikpen",
+      "channel": "lillydirect",
+      "channel_label": "LillyDirect self-pay (KwikPen)",
+      "product_id": "zepbound-kwikpen",
+      "routes_to_offer_id": null,
+      "dose_prices": [
+        { "dose_mg": 2.5, "monthly_usd": 299 },
+        { "dose_mg": 5, "monthly_usd": 399 },
+        { "dose_mg": 7.5, "monthly_usd": 449, "late_refill_monthly_usd": 499 },
+        { "dose_mg": 10, "monthly_usd": 449, "late_refill_monthly_usd": 699 },
+        { "dose_mg": 12.5, "monthly_usd": 449, "late_refill_monthly_usd": 699 },
+        { "dose_mg": 15, "monthly_usd": 449, "late_refill_monthly_usd": 699 }
+      ],
+      "refill_window_days": 45,
+      "units_per_month": "1 KwikPen (4 doses)",
+      "promo": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "medicare", "medicaid", "tricare_va", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "unverified",
+        "requires_plan_coverage": false,
+        "notes": "Self-pay price; does not run through insurance."
+      },
+      "extra_costs_note": "Pen needle purchase required.",
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://www.lilly.com/lillydirect/zepbound",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "KwikPen rows on the same page show the same $299 / $399 / $449 ladder with 'Pen needle purchase required'. Late-refill prices are stated once on the page; applied to KwikPen as well."
+    },
+    {
+      "id": "novocare-wegovy-pen",
+      "channel": "novocare",
+      "channel_label": "NovoCare / wegovy.com self-pay (pen)",
+      "product_id": "wegovy-pen",
+      "routes_to_offer_id": null,
+      "dose_prices": [
+        { "dose_mg": 0.25, "monthly_usd": 349 },
+        { "dose_mg": 0.5, "monthly_usd": 349 },
+        { "dose_mg": 1, "monthly_usd": 349 },
+        { "dose_mg": 1.7, "monthly_usd": 349 },
+        { "dose_mg": 2.4, "monthly_usd": 349 },
+        { "dose_mg": 7.2, "monthly_usd": 399 }
+      ],
+      "refill_window_days": null,
+      "units_per_month": "1 box of 4 pens",
+      "promo": {
+        "label": "Limited-time intro offer: $199 for the first 2 monthly fills at 0.25 mg or 0.5 mg",
+        "intro_monthly_usd": 199,
+        "intro_fills": 2,
+        "doses_mg": [0.25, 0.5],
+        "valid_through": "2026-12-31"
+      },
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "medicare", "medicaid", "tricare_va", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "unverified",
+        "requires_plan_coverage": false,
+        "notes": "Self-pay (no insurance) price. 'Eligibility and restrictions apply'; the page does not list government exclusions for self-pay."
+      },
+      "extra_costs_note": "Needles included.",
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://www.wegovy.com/coverage-and-savings/save-on-wegovy.html",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "'$199 per month for the first 2 months, 0.25 mg or 0.5 mg doses, then $349 per month'; offer covers 2 monthly fills through December 31, 2026; $349 for 0.25-2.4 mg; Wegovy HD 7.2 mg $399. One month = one box of 4 pens."
+    },
+    {
+      "id": "novocare-wegovy-pill",
+      "channel": "novocare",
+      "channel_label": "NovoCare / wegovy.com self-pay (pill)",
+      "product_id": "wegovy-pill",
+      "routes_to_offer_id": null,
+      "dose_prices": [
+        { "dose_mg": 1.5, "monthly_usd": 149 },
+        { "dose_mg": 4, "monthly_usd": 199 },
+        { "dose_mg": 9, "monthly_usd": 299 },
+        { "dose_mg": 25, "monthly_usd": 299 }
+      ],
+      "refill_window_days": null,
+      "units_per_month": "1 bottle of 30 tablets",
+      "promo": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "medicare", "medicaid", "tricare_va", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "unverified",
+        "requires_plan_coverage": false
+      },
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://www.wegovy.com/coverage-and-savings/save-on-wegovy.html",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "'$149 for each month of 1.5 mg, $199 per month for 4 mg, and $299 per month for 9 mg and 25 mg'. One month = one bottle of 30 tablets."
+    },
+    {
+      "id": "trumprx-zepbound",
+      "channel": "trumprx",
+      "channel_label": "TrumpRx.gov (Zepbound, routes to LillyDirect)",
+      "product_id": "zepbound-vial",
+      "routes_to_offer_id": "lillydirect-zepbound-vial",
+      "dose_prices": [{ "dose_mg": null, "monthly_usd": 299 }],
+      "refill_window_days": null,
+      "units_per_month": "as fulfilled by LillyDirect",
+      "promo": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "excluded",
+        "requires_plan_coverage": false,
+        "notes": "TrumpRx prices are cash-pay only (site FAQ, per secondary reporting). Government-plan exclusion reported by clearhealthcosts.com; not read on trumprx.gov itself."
+      },
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://trumprx.gov",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "Homepage lists 'Zepbound $299/mo' (Lowest Presidential Deal) and original price $1,087. Dose not stated; $299 is LillyDirect's starting-dose price. Purchases are redirected to LillyDirect."
+    },
+    {
+      "id": "trumprx-wegovy-pen",
+      "channel": "trumprx",
+      "channel_label": "TrumpRx.gov (Wegovy pen, pharmacy coupon)",
+      "product_id": "wegovy-pen",
+      "routes_to_offer_id": "novocare-wegovy-pen",
+      "dose_prices": [{ "dose_mg": null, "monthly_usd": 199 }],
+      "refill_window_days": null,
+      "units_per_month": "as fulfilled by the manufacturer offer",
+      "promo": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "excluded",
+        "requires_plan_coverage": false
+      },
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://trumprx.gov",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "Homepage lists 'Wegovy Pen $199/mo', original price $1,349. $199 is the intro price; later fills follow the manufacturer offer ($349)."
+    },
+    {
+      "id": "trumprx-wegovy-pill",
+      "channel": "trumprx",
+      "channel_label": "TrumpRx.gov (Wegovy pill)",
+      "product_id": "wegovy-pill",
+      "routes_to_offer_id": "novocare-wegovy-pill",
+      "dose_prices": [{ "dose_mg": null, "monthly_usd": 149 }],
+      "refill_window_days": null,
+      "units_per_month": "as fulfilled by the manufacturer offer",
+      "promo": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "excluded",
+        "requires_plan_coverage": false
+      },
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://trumprx.gov",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "Homepage lists 'Wegovy Pill $149/mo', original price $1,349."
+    },
+    {
+      "id": "list-zepbound",
+      "channel": "list",
+      "channel_label": "List price (no program)",
+      "product_id": "zepbound-pen",
+      "routes_to_offer_id": null,
+      "dose_prices": [{ "dose_mg": null, "monthly_usd": 1087 }],
+      "refill_window_days": null,
+      "units_per_month": "1 month",
+      "promo": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "medicare", "medicaid", "tricare_va", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "allowed",
+        "requires_plan_coverage": false
+      },
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://trumprx.gov",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "TrumpRx 'Original Price' for Zepbound: $1,087. Used as the no-program reference price for every Zepbound device."
+    },
+    {
+      "id": "list-wegovy",
+      "channel": "list",
+      "channel_label": "List price (no program)",
+      "product_id": "wegovy-pen",
+      "routes_to_offer_id": null,
+      "dose_prices": [{ "dose_mg": null, "monthly_usd": 1349 }],
+      "refill_window_days": null,
+      "units_per_month": "1 month",
+      "promo": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "medicare", "medicaid", "tricare_va", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "allowed",
+        "requires_plan_coverage": false
+      },
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://trumprx.gov",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "TrumpRx 'Original Price' for Wegovy pen and pill: $1,349."
+    },
+    {
+      "id": "list-wegovy-pill",
+      "channel": "list",
+      "channel_label": "List price (no program)",
+      "product_id": "wegovy-pill",
+      "routes_to_offer_id": null,
+      "dose_prices": [{ "dose_mg": null, "monthly_usd": 1349 }],
+      "refill_window_days": null,
+      "units_per_month": "1 month",
+      "promo": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "medicare", "medicaid", "tricare_va", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "allowed",
+        "requires_plan_coverage": false
+      },
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://trumprx.gov",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "TrumpRx 'Original Price' for Wegovy pill: $1,349."
+    },
+    {
+      "id": "list-ozempic",
+      "channel": "list",
+      "channel_label": "List price (no program)",
+      "product_id": "ozempic-pen",
+      "routes_to_offer_id": null,
+      "dose_prices": [{ "dose_mg": null, "monthly_usd": 1028 }],
+      "refill_window_days": null,
+      "units_per_month": "1 month",
+      "promo": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "medicare", "medicaid", "tricare_va", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "allowed",
+        "requires_plan_coverage": false
+      },
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://trumprx.gov",
+      "verified_at": "2026-11-14",
+      "verification": "primary",
+      "source_note": "TrumpRx 'Original Price' for Ozempic: $1,028. TrumpRx deal price $199/mo is listed but its terms were not readable; not modelled as an offer."
+    }
+  ]
+}
