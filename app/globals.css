@@ -1,26 +1,162 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * DoseCost design tokens. Mirrors the approved design canvas 1:1
+ * (design-canvas/project/dc.css). shadcn/ui variables below are mapped
+ * onto these tokens; do not introduce colors outside this block.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* color: one accent (deep teal) on a warm neutral ground */
+  --dc-ground: #f6f5f1;
+  --dc-surface: #ffffff;
+  --dc-surface-2: #eeece6;
+  --dc-ink: #16201f;
+  --dc-ink-2: #4b5654;
+  --dc-ink-3: #6b7573;
+  --dc-border: #e1ded6;
+  --dc-accent: #0e6b5e;
+  --dc-accent-ink: #0a5248;
+  --dc-accent-soft: #e1f0ec;
+  --dc-warn: #8a5300;
+  --dc-warn-soft: #fbefd9;
+  --dc-danger: #a3302e;
+  --dc-danger-soft: #fbe6e4;
+  --dc-info: #2f5d8a;
+  --dc-info-soft: #e4edf6;
+
+  /* type scale (px) */
+  --dc-fs-12: 0.75rem;
+  --dc-fs-14: 0.875rem;
+  --dc-fs-16: 1rem;
+  --dc-fs-18: 1.125rem;
+  --dc-fs-22: 1.375rem;
+  --dc-fs-28: 1.75rem;
+  --dc-fs-36: 2.25rem;
+  --dc-fs-48: 3rem;
+  --dc-fs-64: 4rem;
+  --dc-fs-88: 5.5rem;
+
+  /* spacing: 8pt grid */
+  --dc-s1: 0.25rem;
+  --dc-s2: 0.5rem;
+  --dc-s3: 1rem;
+  --dc-s4: 1.5rem;
+  --dc-s5: 2rem;
+  --dc-s6: 3rem;
+  --dc-s7: 4rem;
+  --dc-s8: 6rem;
+
+  /* radii */
+  --dc-r-sm: 0.5rem;
+  --dc-r-md: 0.75rem;
+  --dc-r-lg: 1rem;
+  --dc-r-xl: 1.5rem;
+
+  /* shadows */
+  --dc-sh-sm: 0 1px 2px rgba(22, 32, 31, 0.06);
+  --dc-sh-md: 0 4px 16px rgba(22, 32, 31, 0.08);
+  --dc-sh-lg: 0 12px 40px rgba(22, 32, 31, 0.12);
+  --dc-focus: 0 0 0 3px rgba(14, 107, 94, 0.35);
+
+  /* shadcn/ui semantic variables, wired to the tokens above */
+  --radius: var(--dc-r-md);
+  --background: var(--dc-ground);
+  --foreground: var(--dc-ink);
+  --card: var(--dc-surface);
+  --card-foreground: var(--dc-ink);
+  --popover: var(--dc-surface);
+  --popover-foreground: var(--dc-ink);
+  --primary: var(--dc-accent);
+  --primary-foreground: #ffffff;
+  --secondary: var(--dc-surface);
+  --secondary-foreground: var(--dc-ink);
+  --muted: var(--dc-surface-2);
+  --muted-foreground: var(--dc-ink-2);
+  --accent: var(--dc-accent-soft);
+  --accent-foreground: var(--dc-accent-ink);
+  --destructive: var(--dc-danger);
+  --border: var(--dc-border);
+  --input: var(--dc-border);
+  --ring: var(--dc-accent);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-ink: var(--dc-ink);
+  --color-ink-2: var(--dc-ink-2);
+  --color-ink-3: var(--dc-ink-3);
+  --color-surface: var(--dc-surface);
+  --color-surface-2: var(--dc-surface-2);
+  --color-brand: var(--dc-accent);
+  --color-brand-ink: var(--dc-accent-ink);
+  --color-brand-soft: var(--dc-accent-soft);
+  --color-warn: var(--dc-warn);
+  --color-warn-soft: var(--dc-warn-soft);
+  --color-danger: var(--dc-danger);
+  --color-danger-soft: var(--dc-danger-soft);
+  --color-info: var(--dc-info);
+  --color-info-soft: var(--dc-info-soft);
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-instrument-serif), Georgia, serif;
+
+  --radius-sm: var(--dc-r-sm);
+  --radius-md: var(--dc-r-md);
+  --radius-lg: var(--dc-r-lg);
+  --radius-xl: var(--dc-r-xl);
+
+  --shadow-sm: var(--dc-sh-sm);
+  --shadow-md: var(--dc-sh-md);
+  --shadow-lg: var(--dc-sh-lg);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--dc-focus);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Big money numerals: display face, tabular figures */
+.num {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
