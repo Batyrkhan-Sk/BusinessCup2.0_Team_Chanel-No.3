@@ -157,7 +157,7 @@ export function DecodedView() {
         <Card className="overflow-hidden">
           <div className="px-6 pt-6 pb-2">
             <h2 className="text-[22px] font-semibold">What the letter says</h2>
-            <span className="text-sm text-ink-2">Extracted by AI into a strict form, validated by code.</span>
+            <span className="text-sm text-ink-2">The key facts from your letter. Check them against the original.</span>
           </div>
           <table className="w-full border-collapse text-sm">
             <tbody>

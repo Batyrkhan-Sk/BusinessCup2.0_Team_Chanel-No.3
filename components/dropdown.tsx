@@ -40,6 +40,7 @@ export function Dropdown({
       modal={false}
     >
       <SelectPrimitive.Trigger
+        type="button"
         id={id}
         aria-invalid={invalid || undefined}
         aria-describedby={describedBy}

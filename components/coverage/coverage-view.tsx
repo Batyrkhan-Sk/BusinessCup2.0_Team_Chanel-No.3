@@ -58,7 +58,7 @@ export function CoverageView() {
           {c.demo && <DemoBadge />}
         </div>
         <div className="flex flex-col gap-2">
-          <Eyebrow>Coverage check · rules, not AI</Eyebrow>
+          <Eyebrow>Coverage check</Eyebrow>
           <h1 className="text-[28px] leading-tight font-bold tracking-tight md:text-4xl">
             {copy.title} <span className={copy.tone === "danger" ? "text-danger" : copy.tone === "warn" ? "text-warn" : "text-brand"}>{copy.accent}</span>
           </h1>

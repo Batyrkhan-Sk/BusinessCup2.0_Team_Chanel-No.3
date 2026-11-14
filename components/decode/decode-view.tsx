@@ -5,13 +5,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Upload } from "lucide-react";
+import { PenLine, Upload } from "lucide-react";
 import { loadData } from "@/lib/data/load";
 import { decodeExtraction, type DecodedDenial } from "@/lib/decoder/decode";
 import { store } from "@/lib/client/store";
 import { todayIso } from "@/lib/format";
 import { btn, Card, DemoBadge, Eyebrow, inputCls, Notice, Skeleton } from "@/components/ds";
 import { Dropdown } from "@/components/dropdown";
+import { DatePicker } from "@/components/date-picker";
 import { cn } from "@/lib/utils";
 
 const data = loadData();
@@ -64,7 +65,7 @@ export function DecodeView() {
           title: json.error === "not_configured" ? "Letter reading is not configured on this deployment" : "We could not read this letter",
           message:
             json.error === "not_configured"
-              ? "The AI reading step needs an API key that has not been added yet. Nothing was faked. You can type the letter's facts below; the deadline, category and checklist are computed by the same code."
+              ? "Letter reading isn't available right now. Type the letter's facts below and you'll get the same deadline, checklist and next steps."
               : json.message ?? "Try a sharper photo of the page that states the reason, or type it in.",
           missing: json.missing,
         });
@@ -112,8 +113,7 @@ export function DecodeView() {
         <Eyebrow>Step 1 of 2</Eyebrow>
         <h1 className="text-[28px] leading-tight font-bold tracking-tight md:text-4xl">Upload your denial letter</h1>
         <p className="max-w-[540px] text-lg text-ink-2">
-          A photo or PDF. AI reads the reason, dates, plan type and reference number into a strict form. Then code works out your category, deadline, checklist and
-          what is at stake.
+          A photo or PDF is enough. We&apos;ll show you why it was denied, your appeal deadline, what to gather, and how winnable it is.
         </p>
       </div>
 
@@ -161,7 +161,7 @@ export function DecodeView() {
               <strong>No letter handy?</strong>
             </div>
             <span className="text-sm text-ink-2">
-              A fictional Zepbound PA denial from a made-up Texas plan, run through the same live pipeline.{" "}
+              See how it works with a sample Zepbound denial from a made-up Texas plan.{" "}
               <a href="/api/demo-letter" target="_blank" rel="noreferrer" className="text-brand">
                 View the letter
               </a>
@@ -209,8 +209,9 @@ export function DecodeView() {
             <div className="flex items-center justify-between">
               <Eyebrow>Or type the letter&apos;s facts</Eyebrow>
               {!manual && (
-                <button type="button" className={btn({ variant: "ghost", size: "sm" })} onClick={() => setManual(true)}>
-                  Open
+                <button type="button" className={btn({ variant: "secondary", size: "sm", className: "gap-2" })} onClick={() => setManual(true)}>
+                  <PenLine aria-hidden="true" className="size-4" />
+                  Type it in
                 </button>
               )}
             </div>
@@ -228,14 +229,20 @@ export function DecodeView() {
                     <label htmlFor="date" className="text-sm font-semibold">
                       Date of the notice
                     </label>
-                    <input id="date" type="date" className={inputCls} aria-invalid={Boolean(form.formState.errors.notice_date)} {...form.register("notice_date")} />
+                    <Controller
+                      control={form.control}
+                      name="notice_date"
+                      render={({ field }) => (
+                        <DatePicker id="date" value={field.value ?? ""} onChange={field.onChange} invalid={Boolean(form.formState.errors.notice_date)} placeholder="Pick a date" noFuture />
+                      )}
+                    />
                     {form.formState.errors.notice_date && <p className="text-sm text-danger">{form.formState.errors.notice_date.message}</p>}
                   </div>
                   <div className="flex flex-col gap-2">
                     <label htmlFor="ref" className="text-sm font-semibold">
                       Reference number (optional)
                     </label>
-                    <input id="ref" className={inputCls} {...form.register("reference_number")} />
+                    <input id="ref" className={cn(inputCls, "placeholder:text-ink-3")} placeholder="e.g. PA-2026-0418-7731" autoComplete="off" {...form.register("reference_number")} />
                   </div>
                   <div className="flex flex-col gap-2">
                     <label htmlFor="rt" className="text-sm font-semibold">
@@ -271,8 +278,8 @@ export function DecodeView() {
                           value={field.value}
                           onValueChange={field.onChange}
                           options={[
-                            { value: "pre_service", label: "Before (prior authorization)" },
-                            { value: "post_service", label: "After (I already paid)" },
+                            { value: "pre_service", label: "Before I got it" },
+                            { value: "post_service", label: "After I paid" },
                             { value: "urgent", label: "Urgent" },
                             { value: "unknown", label: "Not sure" },
                           ]}
@@ -286,7 +293,7 @@ export function DecodeView() {
                 </button>
               </form>
             ) : (
-              <p className="text-sm text-ink-2">No upload needed: copy the reason sentence and the date. The same code computes everything else.</p>
+              <p className="text-sm text-ink-2">No upload needed: copy the reason and the date from your letter, and we&apos;ll do the rest.</p>
             )}
           </Card>
         )}

@@ -15,6 +15,8 @@ import { formatDate, formatUsd, todayIso } from "@/lib/format";
 import { btn, Card, DemoBadge, Eyebrow, inputCls, Notice, Num, Pill, Wrap } from "@/components/ds";
 import { GuardianNav } from "./guardian-nav";
 import { Dropdown } from "@/components/dropdown";
+import { DatePicker } from "@/components/date-picker";
+import { NumberStepper } from "@/components/number-stepper";
 import { cn } from "@/lib/utils";
 
 const data = loadData();
@@ -118,12 +120,22 @@ export function OverpayView() {
                   )}
                 />
               </Field>
-              <Field label="Fill number on this program" id="fn">
-                <input id="fn" type="number" min={1} className={inputCls} {...form.register("fill_number", { valueAsNumber: true })} />
+              <Field label="Fill number" id="fn">
+                <Controller
+                  control={form.control}
+                  name="fill_number"
+                  render={({ field }) => <NumberStepper id="fn" value={field.value} onChange={field.onChange} min={1} max={24} label="fill number" />}
+                />
               </Field>
             </div>
             <Field label="Fill date" id="fd" error={form.formState.errors.fill_date?.message}>
-              <input id="fd" type="date" className={inputCls} {...form.register("fill_date")} />
+              <Controller
+                control={form.control}
+                name="fill_date"
+                render={({ field }) => (
+                  <DatePicker id="fd" value={field.value ?? ""} onChange={field.onChange} invalid={Boolean(form.formState.errors.fill_date)} placeholder="When you picked it up" noFuture />
+                )}
+              />
             </Field>
             {offer?.refill_window_days && (
               <label className="flex items-center gap-2.5 text-sm">
@@ -142,7 +154,7 @@ export function OverpayView() {
             <button type="submit" className={btn({ size: "md" })}>
               Check it
             </button>
-            <span className="text-xs text-ink-3">The expected price comes from the program terms in our data. Code does the comparison; no AI involved.</span>
+            <span className="text-xs text-ink-3">We compare it with the price the program&apos;s published terms say you should pay.</span>
           </Card>
         </form>
 
