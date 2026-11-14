@@ -6,7 +6,6 @@ A B2C web app for US adults paying for Zepbound, Wegovy and other GLP-1 drugs. F
 
 **Not medical, legal or financial advice.** DoseCost sells no medication and takes no money from drugmakers, pharmacies or telehealth companies.
 
-- Design (approved): https://claude.ai/artifact/Q9wihheEeVvupUWoCNReE3 (source in `design-canvas/`, git-ignored)
 - Data sources and what could not be verified: [`data/SOURCES.md`](data/SOURCES.md)
 
 ## Architecture
