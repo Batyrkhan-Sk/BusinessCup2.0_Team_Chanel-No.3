@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/server/stripe";
 import { getDb, schema } from "@/lib/db/client";
-import { notConfigured } from "@/lib/server/env";
 
 export const runtime = "nodejs";
 
@@ -9,7 +8,10 @@ export const runtime = "nodejs";
 export async function POST(req: Request) {
   const stripe = getStripe();
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
-  if (!stripe || !secret) return NextResponse.json({ ...notConfigured("stripe"), missing: [!stripe ? "STRIPE_SECRET_KEY" : null, !secret ? "STRIPE_WEBHOOK_SECRET" : null].filter(Boolean) }, { status: 503 });
+  if (!stripe || !secret) {
+    const missing = [!stripe ? "STRIPE_SECRET_KEY" : null, !secret ? "STRIPE_WEBHOOK_SECRET" : null].filter(Boolean);
+    return NextResponse.json({ error: "not_configured", integration: "stripe", missing, message: `Stripe webhook is not configured (missing: ${missing.join(", ")}). Nothing was recorded.` }, { status: 503 });
+  }
   const sig = req.headers.get("stripe-signature");
   if (!sig) return NextResponse.json({ error: "missing_signature" }, { status: 400 });
   const body = await req.text();

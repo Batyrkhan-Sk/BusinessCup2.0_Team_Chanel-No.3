@@ -17,7 +17,8 @@
     "extract:demo": "tsx scripts/extract-demo-letter.ts",
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "stripe:setup": "node --env-file=.env.local scripts/stripe-setup.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",

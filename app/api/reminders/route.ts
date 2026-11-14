@@ -35,8 +35,13 @@ export async function POST(req: Request) {
   const rows = items.flatMap((it) =>
     [...new Set(it.remind_on)].filter((d) => d >= today).map((send_on) => ({ email, kind: it.payload.kind, send_on, payload: it.payload })),
   );
-  if (rows.length) await db.insert(schema.reminders).values(rows);
-  if (snapshot !== undefined) await db.insert(schema.caseSnapshots).values({ email, snapshot: snapshot as object });
+  try {
+    if (rows.length) await db.insert(schema.reminders).values(rows);
+    if (snapshot !== undefined) await db.insert(schema.caseSnapshots).values({ email, snapshot: snapshot as object });
+  } catch (e) {
+    console.error("[reminders] insert failed", e);
+    return NextResponse.json({ error: "storage_failed", message: "Could not save your reminders. Run the database migration (pnpm db:migrate) and try again." }, { status: 500 });
+  }
 
   let sent = false;
   if (isConfigured("resend")) {
