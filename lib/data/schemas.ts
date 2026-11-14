@@ -154,7 +154,7 @@ export const MedicareBridgeSchema = Provenance.extend({
   eligible_coverage: z.array(CoverageType).min(1),
   requires_prior_authorization: z.boolean(),
   covered_product_ids: z.array(
-    z.object({ product_id: z.string(), verification: Verification, source_url: sourceUrl }),
+    z.object({ product_id: z.string(), verification: Verification, source_url: sourceUrl, verified_at: isoDate }),
   ),
   counts_toward_part_d_oop: z.boolean(),
   low_income_subsidy_applies: z.boolean(),

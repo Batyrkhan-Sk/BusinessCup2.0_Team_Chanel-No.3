@@ -7,10 +7,10 @@
   "eligible_coverage": ["medicare"],
   "requires_prior_authorization": true,
   "covered_product_ids": [
-    { "product_id": "wegovy-pen", "verification": "primary", "source_url": "https://www.wegovy.com/coverage-and-savings/save-on-wegovy.html" },
-    { "product_id": "wegovy-pill", "verification": "primary", "source_url": "https://www.wegovy.com/coverage-and-savings/save-on-wegovy.html" },
-    { "product_id": "zepbound-kwikpen", "verification": "secondary", "source_url": "https://www.obesityaction.org/medicare-bridge/" },
-    { "product_id": "foundayo-pill", "verification": "secondary", "source_url": "https://www.phlp.org/en/news/new-medicare-program-to-offer-limited-coverage-for-glp-1-weight-loss-medications" }
+    { "product_id": "wegovy-pen", "verification": "primary", "source_url": "https://www.wegovy.com/coverage-and-savings/save-on-wegovy.html", "verified_at": "2026-11-14" },
+    { "product_id": "wegovy-pill", "verification": "primary", "source_url": "https://www.wegovy.com/coverage-and-savings/save-on-wegovy.html", "verified_at": "2026-11-14" },
+    { "product_id": "zepbound-kwikpen", "verification": "secondary", "source_url": "https://www.obesityaction.org/medicare-bridge/", "verified_at": "2026-11-14" },
+    { "product_id": "foundayo-pill", "verification": "secondary", "source_url": "https://www.phlp.org/en/news/new-medicare-program-to-offer-limited-coverage-for-glp-1-weight-loss-medications", "verified_at": "2026-11-14" }
   ],
   "counts_toward_part_d_oop": false,
   "low_income_subsidy_applies": false,
