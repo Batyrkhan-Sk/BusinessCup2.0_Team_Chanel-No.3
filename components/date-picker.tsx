@@ -46,7 +46,7 @@ export function DatePicker({
         aria-describedby={describedBy}
         aria-haspopup="dialog"
         className={cn(
-          "group flex min-h-12 w-full cursor-pointer items-center justify-between gap-3 rounded-[var(--dc-r-md)] border border-border bg-surface px-4 text-left text-base outline-none transition-colors",
+          "group flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 rounded-[var(--dc-r-md)] border border-border bg-surface px-4 text-left text-base outline-none transition-colors",
           "hover:border-ink-3 focus-visible:border-brand focus-visible:shadow-[var(--dc-focus)] data-popup-open:border-brand data-popup-open:shadow-[var(--dc-focus)]",
           "aria-invalid:border-danger",
         )}

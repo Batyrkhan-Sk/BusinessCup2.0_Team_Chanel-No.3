@@ -15,6 +15,7 @@ import { btn, Card, Check, DemoBadge, Eyebrow, Num, Pill, Wrap, type PillTone } 
 import { EmailPreview } from "@/components/email/email-preview";
 import { ReminderSignup, type ReminderOption } from "@/components/email/reminder-signup";
 import { GuardianNav } from "./guardian-nav";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 const data = loadData();
@@ -113,19 +114,25 @@ export function TimelineView() {
       )}
 
       <div className={cn("flex flex-wrap items-end justify-between gap-3", hasOwn && "border-t border-border pt-8")}>
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-center gap-2">
-            <Eyebrow>{hasOwn ? "Example case" : "DEMO case"} · as of {formatDate(DEMO_CASE.today)}</Eyebrow>
-            <DemoBadge />
-          </div>
+        <div className="flex flex-wrap items-center gap-3">
           <DemoHeading className="text-[28px] font-bold tracking-tight md:text-4xl">{demo.items.length} things need attention soon</DemoHeading>
+          <DemoBadge />
         </div>
         <span className="text-xs text-ink-3">A fictional example, so you can see what Guardian watches.</span>
       </div>
 
       <section className="grid gap-4 md:grid-cols-3" aria-label="Watch list">
         {renewal && (
-          <WatchCard tone="warn" label="Approval renewal (PA)" sub="Zepbound · DEMO">
+          <WatchCard
+            tone="warn"
+            label="Approval renewal (PA)"
+            sub="Zepbound · DEMO"
+            action={
+              <button type="button" className={btn({ variant: "secondary", size: "sm" })} onClick={() => setPreviewId(renewal.id)}>
+                Preview the reminder
+              </button>
+            }
+          >
             <Num className="text-5xl">in {renewal.days_until} days</Num>
             <p className="text-sm">
               Your approval ends <strong>{formatDate(renewal.due_on)}</strong>. Renewals fail when baseline data is missing. Yours is on file.
@@ -138,13 +145,19 @@ export function TimelineView() {
                 <Check on={false} /> Ask your doctor to submit the renewal
               </span>
             </div>
-            <button type="button" className={btn({ variant: "secondary", size: "sm" })} onClick={() => setPreviewId(renewal.id)}>
-              Preview the reminder
-            </button>
           </WatchCard>
         )}
         {promo && promo.payload.kind === "promo_ending" && (
-          <WatchCard tone="danger" label="Promo ending" sub="Wegovy pen · DEMO">
+          <WatchCard
+            tone="danger"
+            label="Promo ending"
+            sub="Wegovy pen · DEMO"
+            action={
+              <button type="button" className={btn({ variant: "secondary", size: "sm" })} onClick={() => setPreviewId(promo.id)}>
+                Preview the reminder
+              </button>
+            }
+          >
             <Num className="text-5xl">
               {formatUsd(promo.payload.intro_usd)} → {formatUsd(promo.payload.then_usd)}
             </Num>
@@ -158,17 +171,20 @@ export function TimelineView() {
                 <Num className="text-2xl">{formatUsd(promo.payload.projected_12mo_usd)}</Num>
               </div>
             )}
-            <button type="button" className={btn({ variant: "secondary", size: "sm" })} onClick={() => setPreviewId(promo.id)}>
-              Preview the reminder
-            </button>
           </WatchCard>
         )}
-        <WatchCard tone="accent" label="Monthly check" sub="Every fill">
+        <WatchCard
+          tone="accent"
+          label="Monthly check"
+          sub="Every fill"
+          action={
+            <Link className={btn({ size: "sm" })} href="/guardian/overpay?demo=1">
+              Log my last fill
+            </Link>
+          }
+        >
           <Num className="text-5xl">Did you overpay?</Num>
           <p className="text-sm">Enter what the pharmacy charged for your last fill. It takes 10 seconds; we compare it with the price you should pay.</p>
-          <Link className={btn({ size: "sm" })} href="/guardian/overpay?demo=1">
-            Log my last fill
-          </Link>
         </WatchCard>
       </section>
 
@@ -210,29 +226,30 @@ export function TimelineView() {
           </Card>
           <Card className="flex flex-col gap-2.5 p-6">
             <Eyebrow>Reminders scheduled</Eyebrow>
-            {demo.items.flatMap((i) => i.remind_on.map((d) => ({ d, label: TITLE[i.kind], id: i.id }))).sort((a, b) => a.d.localeCompare(b.d)).map((r) => (
+            {[
+              ...demo.items.flatMap((i) => i.remind_on.map((d) => ({ d, label: TITLE[i.kind], id: i.id }))),
+              ...(demo.appeal_decision_due ? [{ d: addDays(demo.appeal_decision_due, data.reminderRules.plan_decision_overdue_grace_days), label: "Plan decision overdue check", id: "overdue" }] : []),
+            ]
+              .sort((a, b) => a.d.localeCompare(b.d))
+              .map((r) => (
               <div key={`${r.id}-${r.d}`} className="flex justify-between text-sm">
                 <span>{r.label}</span>
                 <span className="text-ink-2">{formatDate(r.d)}</span>
               </div>
             ))}
-            {demo.appeal_decision_due && (
-              <div className="flex justify-between text-sm">
-                <span>Plan decision overdue check</span>
-                <span className="text-ink-2">{formatDate(addDays(demo.appeal_decision_due, data.reminderRules.plan_decision_overdue_grace_days))}</span>
-              </div>
-            )}
           </Card>
           {refill && appeal && (
             <Card className="flex flex-col gap-2 p-6">
               <Eyebrow>Preview a reminder</Eyebrow>
-              <div className="flex flex-wrap gap-2" role="tablist" aria-label="Choose reminder to preview">
-                {demo.items.map((i) => (
-                  <button key={i.id} role="tab" aria-selected={i.id === previewItem?.id} onClick={() => setPreviewId(i.id)} className={cn("min-h-10 rounded-full px-3.5 text-sm font-semibold outline-none focus-visible:shadow-[var(--dc-focus)]", i.id === previewItem?.id ? "bg-brand-soft text-brand-ink" : "bg-surface-2 text-ink-2")}>
-                    {TITLE[i.kind]}
-                  </button>
-                ))}
-              </div>
+              <Tabs value={previewItem?.id ?? ""} onValueChange={(v) => setPreviewId(String(v))}>
+                <TabsList aria-label="Choose reminder to preview" className="h-auto w-full flex-wrap justify-start gap-1 bg-surface-2 p-1">
+                  {demo.items.map((i) => (
+                    <TabsTrigger key={i.id} value={i.id} className="h-8 flex-none px-2.5 text-[13px] data-active:bg-surface data-active:text-ink data-active:shadow-sm">
+                      {TITLE[i.kind]}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
             </Card>
           )}
         </div>
@@ -257,14 +274,16 @@ export function TimelineView() {
   );
 }
 
-function WatchCard({ tone, label, sub, children }: { tone: PillTone; label: string; sub: string; children: React.ReactNode }) {
+/** Equal-height watch card: content flows from the top, the action is pinned to the bottom so all cards line up. */
+function WatchCard({ tone, label, sub, action, children }: { tone: PillTone; label: string; sub: string; action: React.ReactNode; children: React.ReactNode }) {
   return (
-    <Card className="flex flex-col gap-2.5 p-6 shadow-md">
-      <div className="flex items-center justify-between">
+    <Card className="flex h-full flex-col gap-3 p-6 shadow-md">
+      <div className="flex min-h-6 items-center justify-between gap-2">
         <Pill tone={tone}>{label}</Pill>
         <span className="text-xs text-ink-3">{sub}</span>
       </div>
       {children}
+      <div className="mt-auto pt-2">{action}</div>
     </Card>
   );
 }

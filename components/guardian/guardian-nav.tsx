@@ -1,32 +1,32 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { store } from "@/lib/client/store";
-import { Pill } from "@/components/ds";
 import { cn } from "@/lib/utils";
 
+/** Second-level navigation inside Guardian, styled as a segmented control so it reads as a sub-section of the main nav. */
 export function GuardianNav({ active }: { active: "timeline" | "overpay" | "appeal" }) {
-  const [member, setMember] = useState(false);
-  useEffect(() => setMember(Boolean(store.getGuardian()?.active)), []);
   const links = [
     { id: "timeline", href: "/guardian", label: "Timeline" },
     { id: "overpay", href: "/guardian/overpay", label: "Overpayment check" },
     { id: "appeal", href: "/appeal?demo=jessica", label: "Appeal pack" },
   ] as const;
   return (
-    <nav aria-label="Guardian" className="flex flex-wrap items-center gap-4 border-b border-border pb-3">
-      {links.map((l) => (
-        <Link
-          key={l.id}
-          href={l.href}
-          aria-current={active === l.id ? "page" : undefined}
-          className={cn("pb-1 text-[15px] font-medium no-underline", active === l.id ? "border-b-2 border-brand text-brand-ink" : "text-ink-2 hover:text-ink")}
-        >
-          {l.label}
-        </Link>
-      ))}
-      <span className="ml-auto">{member ? <Pill tone="accent">Guardian member</Pill> : <Link href="/paywall" className="text-sm font-semibold text-brand">Get Guardian</Link>}</span>
+    <nav aria-label="Guardian sections" className="flex max-w-full overflow-x-auto">
+      <div className="inline-flex items-center gap-1 rounded-[var(--dc-r-md)] bg-surface-2 p-1">
+        {links.map((l) => (
+          <Link
+            key={l.id}
+            href={l.href}
+            aria-current={active === l.id ? "page" : undefined}
+            className={cn(
+              "rounded-[var(--dc-r-sm)] px-3 py-1.5 text-sm font-medium whitespace-nowrap no-underline transition-colors outline-none focus-visible:shadow-[var(--dc-focus)]",
+              active === l.id ? "bg-surface text-ink shadow-sm" : "text-ink-2 hover:text-ink",
+            )}
+          >
+            {l.label}
+          </Link>
+        ))}
+      </div>
     </nav>
   );
 }

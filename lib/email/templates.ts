@@ -102,6 +102,12 @@ function hi(p: ReminderPayload) {
   return p.first_name ? `Hi ${p.first_name}, ` : "";
 }
 
+/** "Hi Sam, your …" with a name; "Your …" without one. */
+function greet(p: ReminderPayload, rest: string) {
+  const h = hi(p);
+  return h ? h + rest : rest.charAt(0).toUpperCase() + rest.slice(1);
+}
+
 function compose(p: ReminderPayload): Body {
   switch (p.kind) {
     case "promo_ending": {
@@ -109,7 +115,7 @@ function compose(p: ReminderPayload): Body {
       return {
         subject: ends ? `Your ${formatUsd(p.intro_usd)} intro price ends after your next fill` : `${p.intro_fills_left} intro fills left at ${formatUsd(p.intro_usd)}`,
         preheader: `After that, ${p.product_label} self-pay is ${formatUsd(p.then_usd)} a month.`,
-        headline: `${hi(p)}your next ${p.product_label} fill is ${ends ? "the last one" : "one of the last"} at ${formatUsd(p.intro_usd)}.`,
+        headline: greet(p, `your next ${p.product_label} fill is ${ends ? "the last one" : "one of the last"} at ${formatUsd(p.intro_usd)}.`),
         paragraphs: [
           `The self-pay intro offer runs through ${formatDate(p.valid_through)}. After it, the self-pay price is ${formatUsd(p.then_usd)} a month.`,
           ...(p.alternative_label && p.alternative_from_usd !== null
@@ -128,9 +134,9 @@ function compose(p: ReminderPayload): Body {
     }
     case "pa_renewal":
       return {
-        subject: `Your PA renewal is in ${p.days_until} days`,
+        subject: `Your approval renewal is in ${p.days_until} days`,
         preheader: `${p.product_label} approval ends ${formatDate(p.approval_ends_on)}.`,
-        headline: `${hi(p)}your ${p.product_label} approval ends ${formatDate(p.approval_ends_on)}.`,
+        headline: greet(p, `your ${p.product_label} approval ends ${formatDate(p.approval_ends_on)}.`),
         paragraphs: [
           "Renewals are often denied when the plan cannot see your starting point. Ask your doctor's office to submit the renewal this week and to attach your baseline record.",
           ...(p.baseline_label ? [`Stored in your case: ${p.baseline_label}.`] : []),
@@ -140,13 +146,13 @@ function compose(p: ReminderPayload): Body {
           ...(p.at_stake_monthly_usd !== null ? [{ label: "At stake if it lapses, per month", value: formatUsd(p.at_stake_monthly_usd) }] : []),
         ],
         cta: { label: "Open the renewal checklist", path: "/guardian" },
-        reason: "You get this because you turned on PA renewal reminders.",
+        reason: "You get this because you turned on approval renewal reminders.",
       };
     case "refill_window":
       return {
         subject: `${p.days_left} days left to keep your ${formatUsd(p.keep_price_usd)} ${p.product_label} price`,
         preheader: `Refill by ${formatDate(p.window_closes_on)}.`,
-        headline: `${hi(p)}refill by ${formatDate(p.window_closes_on)} to keep ${formatUsd(p.keep_price_usd)}.`,
+        headline: greet(p, `refill by ${formatDate(p.window_closes_on)} to keep ${formatUsd(p.keep_price_usd)}.`),
         paragraphs: [
           `Your refill window closes on ${formatDate(p.window_closes_on)}. After that, the regular self-pay price at your dose is ${formatUsd(p.late_price_usd)}.`,
         ],
@@ -161,7 +167,7 @@ function compose(p: ReminderPayload): Body {
       return {
         subject: `${p.days_left} days left to appeal your ${p.product_label} denial`,
         preheader: `File by ${formatDate(p.file_by)}.`,
-        headline: `${hi(p)}file your appeal by ${formatDate(p.file_by)}.`,
+        headline: greet(p, `file your appeal by ${formatDate(p.file_by)}.`),
         paragraphs: [
           `That is the last day for the internal appeal${p.reference_number ? ` on reference ${p.reference_number}` : ""}. Your appeal pack and checklist are in your case.`,
         ],
@@ -176,7 +182,7 @@ function compose(p: ReminderPayload): Body {
       return {
         subject: "Did you overpay for this month's fill?",
         preheader: "It takes 10 seconds.",
-        headline: `${hi(p)}did you pay the right price for ${p.product_label} this month?`,
+        headline: greet(p, `did you pay the right price for ${p.product_label} this month?`),
         paragraphs: ["Enter what the pharmacy charged. We compare it with your expected price from the program terms and tell you exactly what to ask for if it is wrong."],
         stats: p.expected_usd !== null ? [{ label: "Expected this month", value: formatUsd(p.expected_usd), accent: true }] : [],
         cta: { label: "Log my last fill", path: "/guardian/overpay" },

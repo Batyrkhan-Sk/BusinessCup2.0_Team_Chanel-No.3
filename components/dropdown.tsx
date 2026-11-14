@@ -45,7 +45,7 @@ export function Dropdown({
         aria-invalid={invalid || undefined}
         aria-describedby={describedBy}
         className={cn(
-          "group flex min-h-12 w-full cursor-pointer items-center justify-between gap-3 rounded-[var(--dc-r-md)] border border-border bg-surface px-4 text-left text-base text-ink outline-none transition-colors",
+          "group flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 rounded-[var(--dc-r-md)] border border-border bg-surface px-4 text-left text-base text-ink outline-none transition-colors",
           "hover:border-ink-3 focus-visible:border-brand focus-visible:shadow-[var(--dc-focus)] data-popup-open:border-brand data-popup-open:shadow-[var(--dc-focus)]",
           "aria-invalid:border-danger disabled:cursor-not-allowed disabled:opacity-50",
           className,

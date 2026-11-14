@@ -4,7 +4,7 @@ import { Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const stepBtn =
-  "inline-flex size-12 shrink-0 cursor-pointer items-center justify-center text-ink-2 outline-none transition-colors hover:bg-surface-2 hover:text-ink focus-visible:shadow-[var(--dc-focus)] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-transparent";
+  "inline-flex size-11 shrink-0 cursor-pointer items-center justify-center text-ink-2 outline-none transition-colors hover:bg-surface-2 hover:text-ink focus-visible:shadow-[var(--dc-focus)] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-transparent";
 
 /** A typed whole-number field with − / + buttons, replacing the browser's native number spinner. */
 export function NumberStepper({
@@ -26,7 +26,7 @@ export function NumberStepper({
   const n = Number.isFinite(value) ? value : min;
   const clamp = (x: number) => Math.min(max, Math.max(min, x));
   return (
-    <div className="flex min-h-12 w-full items-stretch overflow-hidden rounded-[var(--dc-r-md)] border border-border bg-surface focus-within:border-brand">
+    <div className="flex min-h-11 w-full items-stretch overflow-hidden rounded-[var(--dc-r-md)] border border-border bg-surface focus-within:border-brand">
       <button type="button" className={cn(stepBtn, "border-r border-border")} onClick={() => onChange(clamp(n - 1))} disabled={n <= min} aria-label={`Decrease ${label}`}>
         <Minus aria-hidden="true" className="size-4" />
       </button>

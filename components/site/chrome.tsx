@@ -2,8 +2,9 @@ import Link from "next/link";
 import { loadData, pricesVerifiedOn } from "@/lib/data/load";
 import { formatDate } from "@/lib/format";
 import { DISCLAIMER } from "@/lib/content";
-import { btn, Wrap } from "@/components/ds";
+import { Wrap } from "@/components/ds";
 import { cn } from "@/lib/utils";
+import { HeaderNav } from "./header-nav";
 
 export function Logo() {
   return (
@@ -16,7 +17,7 @@ export function Logo() {
   );
 }
 
-export function SiteHeader({ children, cta }: { children?: React.ReactNode; cta?: React.ReactNode }) {
+export function SiteHeader() {
   return (
     <header>
       <Wrap>
@@ -24,26 +25,7 @@ export function SiteHeader({ children, cta }: { children?: React.ReactNode; cta?
           <div className="justify-self-start">
             <Logo />
           </div>
-          {children ?? (
-            <div className="hidden items-center gap-6 text-[15px] font-medium md:flex">
-              <Link className="text-ink-2 no-underline hover:text-ink" href="/decode">
-                Decode a denial
-              </Link>
-              <Link className="text-ink-2 no-underline hover:text-ink" href="/quiz">
-                Cheapest path
-              </Link>
-              <Link className="text-ink-2 no-underline hover:text-ink" href="/guardian">
-                Guardian
-              </Link>
-            </div>
-          )}
-          <div className="justify-self-end">
-            {cta ?? (
-              <Link className={btn({ variant: "secondary", size: "sm" })} href="/guardian">
-                Open my case
-              </Link>
-            )}
-          </div>
+          <HeaderNav />
         </nav>
       </Wrap>
     </header>

@@ -4,6 +4,7 @@
  */
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import { badgeVariants } from "@/components/ui/badge";
 
 export const btn = cva(
   "inline-flex items-center justify-center gap-2 rounded-[var(--dc-r-md)] border font-semibold no-underline transition-colors outline-none focus-visible:shadow-[var(--dc-focus)] disabled:pointer-events-none disabled:opacity-50 cursor-pointer select-none",
@@ -17,9 +18,9 @@ export const btn = cva(
         outlineOnDark: "border-white/40 bg-transparent text-white hover:bg-white/10",
       },
       size: {
-        sm: "min-h-10 px-3.5 text-sm",
-        md: "min-h-12 px-5 text-base",
-        lg: "min-h-14 px-7 text-lg",
+        sm: "min-h-9 px-3 text-sm",
+        md: "min-h-11 px-4 text-[15px]",
+        lg: "min-h-12 px-5 text-base",
       },
       block: { true: "w-full" },
     },
@@ -38,9 +39,10 @@ const pillTone = {
 } as const;
 export type PillTone = keyof typeof pillTone;
 
+/** Status label: shadcn/ui Badge styles (badgeVariants), squared corners, toned with the DoseCost tokens. */
 export function Pill({ tone = "neutral", className, children }: { tone?: PillTone; className?: string; children: React.ReactNode }) {
   return (
-    <span className={cn("inline-flex min-h-7 items-center gap-1.5 rounded-full px-3 text-[13px] font-semibold whitespace-nowrap", pillTone[tone], className)}>
+    <span data-slot="badge" className={cn(badgeVariants({ variant: "secondary" }), "h-6 rounded-md px-2 text-xs font-semibold", pillTone[tone], className)}>
       {children}
     </span>
   );
@@ -102,7 +104,7 @@ export function Notice({ tone = "info", title, children, className }: { tone?: "
 }
 
 export const inputCls =
-  "min-h-12 w-full rounded-[var(--dc-r-md)] border border-border bg-surface px-4 text-base text-ink outline-none focus-visible:shadow-[var(--dc-focus)] focus-visible:border-brand aria-invalid:border-danger";
+  "min-h-11 w-full rounded-[var(--dc-r-md)] border border-border bg-surface px-4 text-base text-ink outline-none focus-visible:shadow-[var(--dc-focus)] focus-visible:border-brand aria-invalid:border-danger";
 
 export const choiceCls = (on: boolean) =>
   cn(
