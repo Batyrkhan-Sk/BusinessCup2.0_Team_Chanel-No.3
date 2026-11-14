@@ -1,6 +1,4 @@
-# DoseCost: Milestone 2 (Phase 2: product built from the approved design)
-
-Design (approved): https://claude.ai/artifact/Q9wihheEeVvupUWoCNReE3 · source `design-canvas/project/*.dc.html` (git-ignored).
+# DoseCost: Milestone 2 (Phase 2: product built from the design)
 
 ## Status at a glance
 
@@ -38,10 +36,10 @@ The reminder preview on `/result` and `/guardian` uses the same `renderReminderE
 ## Blocked / needs the owner
 
 - **Resend domain**: `RESEND_FROM=onboarding@resend.dev` only delivers to the Resend account owner. To email real users, verify a domain in Resend and update `RESEND_FROM`.
-- **`NEXT_PUBLIC_APP_URL`**: set to the production URL after the first deploy (email links and Stripe redirects use it; the fallback is `VERCEL_URL`).
-- **`STRIPE_WEBHOOK_SECRET`** for production: register `https://<prod>/api/stripe/webhook` for `checkout.session.completed`, `customer.subscription.updated` and `customer.subscription.deleted`.
-- **Vercel env**: every variable in `.env.example` must also be set in the Vercel project. Run `pnpm db:migrate` once against the production `DATABASE_URL` (already done for the current Neon DB).
-- Deploys and pushes are handled by the coordinator; nothing was pushed from here.
+- ~~`NEXT_PUBLIC_APP_URL`~~ done: set to https://dosecost.vercel.app in Vercel (http://localhost:3000 locally).
+- ~~Stripe webhook~~ done: test endpoint https://dosecost.vercel.app/api/stripe/webhook registered for `checkout.session.completed`, `customer.subscription.updated` and `customer.subscription.deleted`; `STRIPE_WEBHOOK_SECRET` set locally and in Vercel.
+- **Database migration**: applied to the Neon database in `DATABASE_URL` (`drizzle.__drizzle_migrations` has 1 entry; tables `reminders`, `case_snapshots`, `entitlements`, `events` exist). Verified for production: an analytics event posted to https://dosecost.vercel.app/api/events appeared in this same database, so production uses the migrated tables.
+- Production is live at https://dosecost.vercel.app (deployed by the coordinator from 7e035f6). Commits after it (honest storage errors, webhook message, `stripe:setup`, these docs) ship with the next deploy. Pushes and deploys are handled by the coordinator.
 
 ## Facts not verified (unchanged; see `data/SOURCES.md`)
 BGH "72% → 60%" (not found; verified 67%/72% used), Aetna BMI thresholds and renewal %, UHC commercial criteria, Medicare Bridge clinical criteria, government eligibility for manufacturer self-pay (flagged in UI), savings card terms after 2026-12-31 (flagged as an assumption).
@@ -56,7 +54,7 @@ BGH "72% → 60%" (not found; verified 67%/72% used), Aetna BMI thresholds and r
 - No commit carries a Claude attribution trailer from 8ac4dab onward, per the owner's rule.
 
 ## Next steps
-1. Deploy; set `NEXT_PUBLIC_APP_URL` and the production webhook secret; run one test payment end to end.
+1. Redeploy to ship the latest commits, then run one test payment end to end on production (card 4242 4242 4242 4242) and confirm an `entitlements` row appears.
 2. Verify a Resend domain so reminders reach any user.
 3. Re-verify prices on 2026-12-01 (the Wegovy intro offer and the Zepbound card both end 2026-12-31), then run the January plan-change check against the 2027 terms.
 4. Optional: rate limiting on `/api/decode`, and a Playwright smoke test of the jury flow.

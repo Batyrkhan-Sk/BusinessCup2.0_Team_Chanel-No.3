@@ -1,8 +1,6 @@
 # DoseCost: Milestone 1 (Phase 1, design gate)
 
-**Design artifact:** https://claude.ai/artifact/Q9wihheEeVvupUWoCNReE3 (24 boards: tokens, plus landing, upload/DEMO, decoded denial, quiz ×3, cheapest path with reminder-email preview, Guardian timeline, overpayment check, reminder email, coverage, appeal pack, paywall, each for mobile and desktop). Status: **approved by the product owner**. The artifact is private until shared from its Share menu.
-
-Incident: the first canvas (`UNHA1wFzevMnJQYTcnEgAk`) was lost. The RepayPath agent shared the same scratch folder and overwrote six of its source files, and the artifact itself then returned "not found". The design was rebuilt on a new canvas, with the source kept inside this repo (`design-canvas/`, git-ignored).
+**Design:** 24 boards covering design tokens, landing, upload/DEMO, decoded denial, quiz (3 steps shown), cheapest path with reminder-email preview, Guardian timeline, overpayment check, reminder email, coverage, appeal pack and paywall, each for mobile and desktop.
 
 ## Test results
 

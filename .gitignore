@@ -41,7 +41,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# design canvas source (published as a claude.ai artifact)
+# local design source (not shipped)
 /design-canvas/
 
 .vercel
