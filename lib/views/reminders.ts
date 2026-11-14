@@ -8,7 +8,7 @@ import type { ReminderOption } from "@/components/email/reminder-signup";
 
 const LABEL: Record<WatchItem["kind"], string> = {
   promo_ending: "Promo ending, before the price changes",
-  pa_renewal: "PA renewal, before the approval ends",
+  pa_renewal: "Insurance approval renewal, before it ends",
   refill_window: "Refill window, before it closes",
   appeal_deadline: "Appeal deadline, ahead of the last day",
   monthly_check: "Monthly \"did you overpay?\" check",

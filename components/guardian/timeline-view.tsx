@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 const data = loadData();
 
 const TONE: Record<WatchItem["kind"], PillTone> = { pa_renewal: "warn", promo_ending: "danger", refill_window: "warn", appeal_deadline: "info", monthly_check: "accent" };
-const TITLE: Record<WatchItem["kind"], string> = { pa_renewal: "PA renewal", promo_ending: "Promo ending", refill_window: "Refill window", appeal_deadline: "Appeal deadline", monthly_check: "Monthly check" };
+const TITLE: Record<WatchItem["kind"], string> = { pa_renewal: "Approval renewal (PA)", promo_ending: "Promo ending", refill_window: "Refill window", appeal_deadline: "Appeal deadline", monthly_check: "Monthly check" };
 
 export function TimelineView() {
   const demo = useMemo(() => demoWatchList(data, DEMO_CASE, DEMO_PERSONAS.sam.input, DEMO_PERSONAS.jessica.input), []);
@@ -57,7 +57,7 @@ export function TimelineView() {
   const previewItem = demo.items.find((i) => i.id === previewId) ?? demo.items[0];
 
   const timeline = [
-    { date: demo.items.length ? DEMO_CASE.cases.find((c) => c.id === "demo-appeal")?.denial_notice_date as string : null, title: "PA denied", body: "Missing documentation: weight-management program and baseline BMI", state: "bad" as const },
+    { date: demo.items.length ? DEMO_CASE.cases.find((c) => c.id === "demo-appeal")?.denial_notice_date as string : null, title: "Insurance approval (PA) denied", body: "Missing documentation: weight-management program and baseline BMI", state: "bad" as const },
     { date: DEMO_CASE.today, title: "Letter decoded, switched to LillyDirect vials", body: jp.savings_vs_current_usd !== null ? `Saving ${formatUsd(jp.savings_vs_current_usd)} over 12 months against the pharmacy quote` : "", state: "done" as const },
     { date: demo.appeal_filed_on, title: "Send appeal pack", body: "Collect the documents on the checklist; the doctor reviews the necessity letter", state: "next" as const },
     { date: demo.appeal_decision_due, title: "Plan decision due", body: "Pre-service appeal window. We email you if it passes with no answer.", state: "future" as const },
@@ -65,23 +65,67 @@ export function TimelineView() {
     { date: appeal?.due_on ?? null, title: "Last day to file the internal appeal", body: "After a final denial, external review is the next step.", state: "future" as const },
   ];
 
+  const hasOwn = own !== null && own.length > 0;
+  const today = todayIso();
+  const ownNext = hasOwn
+    ? own
+        .flatMap((o) => o.remind_on.map((d) => ({ d, label: o.label })))
+        .filter((x) => x.d >= today)
+        .sort((a, b) => a.d.localeCompare(b.d))[0]
+    : undefined;
+  const DemoHeading = hasOwn ? "h2" : "h1";
+
   return (
     <Wrap className="flex flex-col gap-6 pt-2 pb-16">
       <GuardianNav active="timeline" />
-      <div className="flex flex-wrap items-end justify-between gap-3">
+
+      {hasOwn && (
+        <Card className="flex flex-col gap-4 p-6 shadow-md md:p-8">
+          <div className="flex flex-col gap-1.5">
+            <Eyebrow>Your case · from your answers in this browser</Eyebrow>
+            <h1 className="text-[28px] font-bold tracking-tight md:text-4xl">
+              {own.length === 1 ? "1 date to watch" : `${own.length} dates to watch`}
+            </h1>
+            {ownNext && (
+              <p className="text-ink-2">
+                Next: <strong className="text-ink">{ownNext.label}</strong> on {formatDate(ownNext.d)}.
+              </p>
+            )}
+          </div>
+          <ReminderSignup options={own} snapshot={{ source: "guardian" }} />
+        </Card>
+      )}
+
+      {own !== null && !hasOwn && (
+        <Card className="flex flex-col gap-3 border-brand/30 bg-brand-soft p-5 md:flex-row md:items-center md:justify-between">
+          <p className="text-sm text-ink">
+            <strong>Below is an example case.</strong> Start yours in a minute and your own dates show up here.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Link className={btn({ size: "sm" })} href="/decode">
+              Decode a letter
+            </Link>
+            <Link className={btn({ variant: "secondary", size: "sm" })} href="/quiz">
+              Check my price
+            </Link>
+          </div>
+        </Card>
+      )}
+
+      <div className={cn("flex flex-wrap items-end justify-between gap-3", hasOwn && "border-t border-border pt-8")}>
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
-            <Eyebrow>DEMO case · as of {formatDate(DEMO_CASE.today)}</Eyebrow>
+            <Eyebrow>{hasOwn ? "Example case" : "DEMO case"} · as of {formatDate(DEMO_CASE.today)}</Eyebrow>
             <DemoBadge />
           </div>
-          <h1 className="text-[28px] font-bold tracking-tight md:text-4xl">{demo.items.length} things need attention soon</h1>
+          <DemoHeading className="text-[28px] font-bold tracking-tight md:text-4xl">{demo.items.length} things need attention soon</DemoHeading>
         </div>
-        <span className="text-xs text-ink-3">A seeded, fictional case run through the live engine. Your own case appears below.</span>
+        <span className="text-xs text-ink-3">A fictional example, so you can see what Guardian watches.</span>
       </div>
 
       <section className="grid gap-4 md:grid-cols-3" aria-label="Watch list">
         {renewal && (
-          <WatchCard tone="warn" label="PA renewal" sub="Zepbound · DEMO">
+          <WatchCard tone="warn" label="Approval renewal (PA)" sub="Zepbound · DEMO">
             <Num className="text-5xl">in {renewal.days_until} days</Num>
             <p className="text-sm">
               Your approval ends <strong>{formatDate(renewal.due_on)}</strong>. Renewals fail when baseline data is missing. Yours is on file.
@@ -121,7 +165,7 @@ export function TimelineView() {
         )}
         <WatchCard tone="accent" label="Monthly check" sub="Every fill">
           <Num className="text-5xl">Did you overpay?</Num>
-          <p className="text-sm">Enter what the pharmacy charged for your last fill. It takes 10 seconds; code compares it with your expected price.</p>
+          <p className="text-sm">Enter what the pharmacy charged for your last fill. It takes 10 seconds; we compare it with the price you should pay.</p>
           <Link className={btn({ size: "sm" })} href="/guardian/overpay?demo=1">
             Log my last fill
           </Link>
@@ -131,7 +175,7 @@ export function TimelineView() {
       <section className="grid items-start gap-6 lg:grid-cols-[7fr_5fr]">
         <Card className="flex flex-col gap-4 p-6">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-[22px] font-semibold">Case timeline · Zepbound PA appeal</h2>
+            <h2 className="text-[22px] font-semibold">Case timeline · Zepbound appeal</h2>
             <span className="text-sm text-ink-2">Ref. DEMO-2026-48213</span>
           </div>
           <ol className="flex flex-col">
@@ -197,37 +241,17 @@ export function TimelineView() {
       {previewItem && (
         <section className="grid items-start gap-6 rounded-[var(--dc-r-lg)] bg-surface-2 p-4 md:grid-cols-[4fr_8fr] md:p-8" aria-labelledby="email-h">
           <div className="flex flex-col gap-3">
-            <Eyebrow>Template: {previewItem.kind.replace("_", "-")} · sent by Vercel Cron via Resend</Eyebrow>
+            <Eyebrow>Reminder email preview</Eyebrow>
             <h2 id="email-h" className="text-2xl font-bold tracking-tight">
               {TITLE[previewItem.kind]} email, exactly as it arrives
             </h2>
-            <p className="text-sm text-ink-2">Every number is filled by the engine from the data files; this preview and the scheduled send use the same renderer.</p>
+            <p className="text-sm text-ink-2">This is exactly the email that arrives before the date, with your numbers filled in.</p>
             <ReminderSignup compact options={[{ id: previewItem.id, label: TITLE[previewItem.kind], payload: previewItem.payload, remind_on: previewItem.remind_on }]} snapshot={{ demo: true }} />
           </div>
           <EmailPreview payload={previewItem.payload} height={600} />
         </section>
       )}
 
-      <Card className="flex flex-col gap-3 p-6">
-        <h2 className="text-[22px] font-semibold">Your own case</h2>
-        {own === null ? (
-          <p className="text-sm text-ink-2">Loading…</p>
-        ) : own.length === 0 ? (
-          <div className="flex flex-col gap-3">
-            <p className="text-sm text-ink-2">No case yet. Decode a letter or run the path check, and your timeline starts here.</p>
-            <div className="flex flex-wrap gap-2">
-              <Link className={btn({ size: "sm" })} href="/decode">
-                Decode a letter
-              </Link>
-              <Link className={btn({ variant: "secondary", size: "sm" })} href="/quiz">
-                Check my path
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <ReminderSignup options={own} snapshot={{ source: "guardian" }} />
-        )}
-      </Card>
       <p className="text-xs text-ink-3">Not medical, legal or financial advice. Stored for your case: email, dates, prices and the documents you choose to keep. Never weight or symptoms.</p>
     </Wrap>
   );

@@ -178,7 +178,7 @@ export function DecodedView() {
               ))}
               <tr className="border-b border-border">
                 <th scope="row" className="px-4 py-3 text-left text-xs font-semibold tracking-[0.06em] text-ink-3 uppercase">
-                  Category (code)
+                  Denial type
                 </th>
                 <td className="px-4 py-3">
                   <Pill tone={winTone}>{d.category_label}</Pill>
@@ -186,7 +186,7 @@ export function DecodedView() {
               </tr>
               <tr>
                 <th scope="row" className="px-4 py-3 text-left text-xs font-semibold tracking-[0.06em] text-ink-3 uppercase">
-                  Winnability (code)
+                  Chance of winning (our estimate)
                 </th>
                 <td className="px-4 py-3">
                   <Pill tone={winTone}>{d.winnability}</Pill>
@@ -249,7 +249,7 @@ export function DecodedView() {
         )}
         <Card className="flex flex-col gap-3 p-6">
           <Eyebrow>Meanwhile</Eyebrow>
-          <p className="text-sm">Appeals take weeks. See the cheapest legal way to keep filling your prescription while you wait{extras?.atStake ? `, and why ${formatUsd(extras.atStake)} a year is at stake` : ""}.</p>
+          <p className="text-sm">Appeals take weeks. See the lowest-cost official way to keep filling your prescription while you wait{extras?.atStake ? `, and why ${formatUsd(extras.atStake)} a year is at stake` : ""}.</p>
           <Link className={btn({ variant: "secondary", className: "self-start" })} href={state.demo ? "/result?demo=jessica" : "/result"}>
             See my cheapest path
           </Link>

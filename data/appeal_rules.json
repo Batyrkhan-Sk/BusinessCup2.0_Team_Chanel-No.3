@@ -25,7 +25,7 @@
     },
     {
       "id": "renewal_missing_baseline",
-      "label": "Renewal: baseline not documented",
+      "label": "Renewal: starting records missing",
       "plain_english": "The renewal failed because the plan could not see your starting point to measure progress. The baseline record usually exists; it was not sent.",
       "winnability": "high",
       "keywords": ["baseline weight", "from baseline", "weight at the time the medication was started", "unable to verify a weight loss", "renewal", "reauthorization", "continuation"],
@@ -37,7 +37,7 @@
     },
     {
       "id": "missing_documentation",
-      "label": "PA: missing or incomplete documentation",
+      "label": "Missing or incomplete paperwork",
       "plain_english": "The plan says records were not provided. This is the most fixable kind of denial: your doctor usually already has them.",
       "winnability": "high",
       "keywords": ["not provided", "not documented", "documentation", "insufficient information", "not sufficient data", "missing", "incomplete", "no records", "was not submitted", "chart notes"],
@@ -59,7 +59,7 @@
     },
     {
       "id": "step_therapy",
-      "label": "Step therapy required",
+      "label": "Must try other drugs first",
       "plain_english": "The plan wants another drug tried first. An appeal can work if that drug was tried, or is unsuitable for documented reasons.",
       "winnability": "medium",
       "keywords": ["step therapy", "trial of", "must try", "first-line", "prior trial", "phentermine", "preferred alternative"],
@@ -70,7 +70,7 @@
     },
     {
       "id": "non_formulary",
-      "label": "Not on the formulary",
+      "label": "Not on the plan's drug list",
       "plain_english": "The drug is not on your plan's drug list. You can ask for a formulary exception, or the plan may cover a preferred alternative.",
       "winnability": "medium",
       "keywords": ["formulary", "non-formulary", "not on the drug list", "preferred drug", "formulary alternative"],

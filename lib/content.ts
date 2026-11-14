@@ -44,7 +44,7 @@ export const COVERAGE_COPY: Record<CoverageStatus, { title: string; accent: stri
   excluded_by_plan: {
     title: "Excluded",
     accent: "by your plan",
-    body: "When a plan writes weight-management drugs out of its benefit, the criteria do not matter and appeals rarely change it. Your cheapest legal path is self-pay.",
+    body: "When a plan writes weight-management drugs out of its benefit, the criteria do not matter and appeals rarely change it. Your lowest-cost option is self-pay.",
     tone: "danger",
   },
   needs_diagnosis_code_clarification: {

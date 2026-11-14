@@ -57,7 +57,7 @@ export function ResultView() {
       <Wrap className="py-16">
         <Card className="mx-auto flex max-w-xl flex-col gap-4 p-8 text-center">
           <h1 className="text-2xl font-bold">{c.status === "empty" ? "No answers yet" : "Let's finish your answers"}</h1>
-          <p className="text-ink-2">{c.status === "invalid" ? c.message : "Answer 8 quick questions and we compute your cheapest legal path. Or run a DEMO persona."}</p>
+          <p className="text-ink-2">{c.status === "invalid" ? c.message : "Answer 8 quick questions and we find your lowest price. Or run a DEMO persona."}</p>
           <div className="flex flex-col justify-center gap-2 sm:flex-row">
             <Link className={btn()} href="/quiz">
               Start the quiz
@@ -95,7 +95,7 @@ export function ResultView() {
       {best ? (
         <motion.section {...reveal} className="grid items-center gap-8 rounded-[var(--dc-r-lg)] bg-brand p-6 text-white shadow-md md:grid-cols-[1fr_420px] md:p-10">
           <div className="flex flex-col gap-3">
-            <Eyebrow onDark>Your cheapest legal path today</Eyebrow>
+            <Eyebrow onDark>Your lowest price today</Eyebrow>
             <h1 className="text-[28px] leading-tight font-bold tracking-tight md:text-[40px]">{best.label}</h1>
             <p className="max-w-[560px] text-lg text-white/80">
               {best.reasons.map((r) => REASON_COPY[r]).filter(Boolean).join(". ") || "Available with what you told us."}
@@ -119,6 +119,22 @@ export function ResultView() {
               <div>
                 <Eyebrow onDark>{path.savings_vs_current_usd >= 0 ? "You save over 12 months" : "Next 12 months cost more than today"}</Eyebrow>
                 <Num className="block text-[64px] md:text-[88px]">{formatUsd(Math.abs(path.savings_vs_current_usd))}</Num>
+                {path.savings_vs_current_usd < 0 && (
+                  <div className="mt-2 flex flex-col gap-3">
+                    <p className="text-sm text-white/90">
+                      Your price is going up, for example because an intro offer ends. This is still the lowest official option we found. Here&apos;s how to keep it
+                      as low as possible:
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <a className={btn({ variant: "onDark", size: "sm" })} href="#preview-h">
+                        Remind me before it changes
+                      </a>
+                      <Link className={btn({ variant: "outlineOnDark", size: "sm" })} href={c.demo ? `/coverage?demo=${c.demo}` : "/coverage"}>
+                        Check if insurance could cover it
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div>
@@ -175,7 +191,7 @@ export function ResultView() {
             <h2 className="text-[22px] font-semibold">Worth appealing?</h2>
             {worth ? (
               <Pill tone={worth.worth_it ? "accent" : "danger"}>
-                {worth.worth_it ? "Yes" : "Probably not"}: {worth.winnability} winnability
+                {worth.worth_it ? "Yes" : "Probably not"} · chance of winning: {worth.winnability}
               </Pill>
             ) : (
               <Pill tone="neutral">{input.status === "pa_denied" ? "Decode your letter to score it" : "No denial on file"}</Pill>
@@ -194,7 +210,7 @@ export function ResultView() {
                     Your denial reason maps to <strong>{c.decoded?.category_label.toLowerCase()}</strong>. {c.decoded?.plain_english}
                   </p>
                 ) : (
-                  <p className="text-sm">Upload the denial letter and we score winnability by the type of denial: missing paperwork is often fixable, a plan exclusion rarely is.</p>
+                  <p className="text-sm">Upload the denial letter and we estimate your chance of winning from the type of denial: missing paperwork is often fixable, a plan exclusion rarely is.</p>
                 )}
                 <span className="text-xs text-ink-3">
                   Score = money at stake × an editorial weight for the denial type (not a probability). Context: insurers upheld most appeals that were filed in
@@ -303,14 +319,14 @@ function ChannelTable({ path }: { path: PathResult }) {
   return (
     <Card className="overflow-hidden">
       <div className="px-6 pt-6 pb-2">
-        <h2 className="text-[22px] font-semibold">Every channel we checked</h2>
+        <h2 className="text-[22px] font-semibold">Every option we checked</h2>
         <span className="text-sm text-ink-2">Rules applied to your answers</span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="border-b border-border text-left text-xs font-semibold tracking-[0.06em] text-ink-3 uppercase">
-              <th scope="col" className="px-4 py-2.5">Channel</th>
+              <th scope="col" className="px-4 py-2.5">Option</th>
               <th scope="col" className="px-4 py-2.5">Status</th>
               <th scope="col" className="px-4 py-2.5 text-right">12 months</th>
             </tr>

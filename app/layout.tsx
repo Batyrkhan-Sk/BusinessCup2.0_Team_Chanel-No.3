@@ -9,7 +9,7 @@ const serif = Instrument_Serif({ variable: "--font-instrument-serif", subsets: [
 export const metadata: Metadata = {
   title: { default: "DoseCost: GLP-1 Cost Guardian", template: "%s · DoseCost" },
   description:
-    "Find your cheapest legal path to Zepbound, Wegovy and other GLP-1s, decode a denial letter, and never overpay. Not medical, legal or financial advice.",
+    "Find your lowest price for Zepbound, Wegovy and other GLP-1s, decode a denial letter, and never overpay. Not medical, legal or financial advice.",
 };
 
 export const viewport: Viewport = { themeColor: "#0e6b5e", width: "device-width", initialScale: 1 };

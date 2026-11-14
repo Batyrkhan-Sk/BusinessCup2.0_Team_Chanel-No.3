@@ -73,7 +73,7 @@ export function buildAppealPack(args: {
     checklist: d.checklist.map((c) => ({ label: c.label, detail: c.detail, who: c.who })),
     summary: [
       ["Denial category", d.category_label],
-      ["Winnability (editorial tier)", d.winnability],
+      ["Chance of winning (our estimate)", d.winnability],
       ["File the appeal by", dl ? formatDate(dl.file_by) : "—"],
       ["Plan decision window", decision ?? "—"],
       ["Policy cited", rule ? `${rule.insurer_label} ${rule.policy_id}` : "—"],

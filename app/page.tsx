@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { loadData } from "@/lib/data/load";
 import { landingView } from "@/lib/views/landing";
 import { DEMO_CASE, DEMO_LETTER, DEMO_PERSONAS } from "@/lib/fixtures";
@@ -6,6 +7,10 @@ import { formatDate, formatUsd, formatUsdRange } from "@/lib/format";
 import { btn, Card, Check, DemoBadge, Eyebrow, Num, Pill, Wrap } from "@/components/ds";
 import { PageShell, VerifiedLine } from "@/components/site/chrome";
 import { StatCard } from "@/components/site/stat-card";
+import { EndingSoon } from "@/components/site/ending-soon";
+
+/** Re-render hourly so the "days left" count on expiring discounts stays current. */
+export const revalidate = 3600;
 
 export default function LandingPage() {
   const data = loadData();
@@ -17,29 +22,43 @@ export default function LandingPage() {
 
   return (
     <PageShell>
-      {/* Hero: leads with the denial decoder */}
+      {/* Hero: the price moves without warning; two doors by situation */}
       <Wrap className="grid items-center gap-12 pt-8 pb-14 md:grid-cols-2 md:pt-12">
         <div className="flex flex-col gap-6">
-          <Eyebrow>GLP-1 Cost Guardian · for people whose own doctor prescribes</Eyebrow>
+          <Eyebrow>GLP-1 Cost Guardian · Zepbound, Wegovy and more</Eyebrow>
           <h1 className="text-[34px] leading-[1.06] font-bold tracking-tight md:text-[52px]">
-            Denied, or paying <Num className="text-[42px] text-danger md:text-[60px]">{formatUsd(v.hero.high_usd)}</Num> when it could be{" "}
-            <Num className="text-[42px] text-brand md:text-[60px]">{formatUsd(v.hero.low_usd)}</Num>?
+            Your GLP-1 can cost <Num className="text-[42px] text-brand md:text-[60px]">{formatUsd(v.hero.low_usd)}</Num> or{" "}
+            <Num className="text-[42px] text-danger md:text-[60px]">{formatUsd(v.hero.high_usd)}</Num> a month.
           </h1>
           <p className="max-w-[540px] text-lg text-ink-2 md:text-xl">
-            Upload your denial letter. In a minute you get the reason in plain English, your appeal deadline, a checklist, and your cheapest legal path while
-            you wait. Then Guardian keeps watch so you never overpay.
+            The price jumps without warning: a denial, an approval that expires, a refill one day late, an intro offer that ends. We find your lowest price
+            today from official sources only (no compounded copies) and warn you before the next jump.
           </p>
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Link className={btn({ size: "lg" })} href="/decode">
-              Upload my denial letter
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Link
+              href="/decode"
+              className="group flex flex-col gap-1 rounded-[var(--dc-r-lg)] bg-brand p-4 text-white no-underline shadow-md transition-colors hover:bg-brand-ink focus-visible:shadow-[var(--dc-focus)]"
+            >
+              <span className="text-sm text-white/80">Insurance said no?</span>
+              <span className="flex items-center justify-between gap-2 text-base font-semibold md:text-[17px]">
+                Decode my denial letter
+                <ArrowRight aria-hidden="true" className="size-5 shrink-0 transition-transform group-hover:translate-x-0.5" />
+              </span>
             </Link>
-            <Link className={btn({ variant: "secondary", size: "lg" })} href="/decode?demo=1">
-              <DemoBadge className="min-h-[22px] px-2 text-[11px]" />
-              Try a sample letter
+            <Link
+              href="/quiz"
+              className="group flex flex-col gap-1 rounded-[var(--dc-r-lg)] border border-border bg-surface p-4 text-ink no-underline shadow-sm transition-colors hover:border-brand focus-visible:shadow-[var(--dc-focus)]"
+            >
+              <span className="text-sm text-ink-2">Paying cash, or about to start?</span>
+              <span className="flex items-center justify-between gap-2 text-base font-semibold md:text-[17px]">
+                Check my lowest price
+                <ArrowRight aria-hidden="true" className="size-5 shrink-0 text-brand transition-transform group-hover:translate-x-0.5" />
+              </span>
             </Link>
           </div>
-          <Link href="/quiz" className="text-sm font-semibold text-brand">
-            No denial? Check your cheapest path in 8 questions →
+          <Link href="/decode?demo=1" className="inline-flex items-center gap-2 self-start text-sm font-semibold text-brand">
+            <DemoBadge className="min-h-[22px] px-2 text-[11px]" />
+            No letter? Try a sample one
           </Link>
           <div className="flex flex-wrap gap-5">
             <span className="inline-flex items-center gap-1.5 text-xs text-ink-3">
@@ -67,7 +86,7 @@ export default function LandingPage() {
             <div className="rounded-[var(--dc-r-md)] bg-background p-4">
               <span className="text-xs text-ink-3">Worth appealing?</span>
               <div className="num text-[26px] text-brand md:text-[32px]">{formatUsd(v.example.at_stake_usd)}</div>
-              <span className="text-xs text-ink-3">a year at stake · winnability {v.example.winnability}</span>
+              <span className="text-xs text-ink-3">a year at stake · chance of winning: {v.example.winnability}</span>
             </div>
           </div>
           <ul className="flex flex-col gap-2">
@@ -90,6 +109,8 @@ export default function LandingPage() {
         </Card>
       </Wrap>
 
+      <EndingSoon data={data} />
+
       {/* Guardian tracking surfaces */}
       <Wrap className="pb-16">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
@@ -104,7 +125,7 @@ export default function LandingPage() {
         <div className="grid gap-4 md:grid-cols-3">
           <Card className="flex flex-col gap-2.5 p-6">
             <div className="flex items-center justify-between">
-              <Pill tone="warn">PA renewal</Pill>
+              <Pill tone="warn">Approval renewal (PA)</Pill>
               <span className="text-xs text-ink-3">DEMO case</span>
             </div>
             <Num className="text-[44px]">in {v.guardian.renewal_days} days</Num>
@@ -131,7 +152,7 @@ export default function LandingPage() {
               <span className="text-xs text-ink-3">Monthly check</span>
             </div>
             <Num className="text-[44px] text-danger">{formatUsd(v.guardian.overpaid_usd, { signed: true })}</Num>
-            <p className="text-sm text-ink-2">Enter what the pharmacy charged. Code compares it with your expected price and tells you exactly what to ask for.</p>
+            <p className="text-sm text-ink-2">Enter what the pharmacy charged. We compare it with the price you should pay and tell you exactly what to ask for.</p>
           </Card>
         </div>
       </Wrap>
@@ -149,7 +170,7 @@ export default function LandingPage() {
       <Wrap className="grid items-start gap-12 pb-16 md:grid-cols-2">
         <div className="flex flex-col gap-4">
           <Eyebrow>Many prices for one drug</Eyebrow>
-          <h2 className="text-[26px] leading-tight font-bold tracking-tight md:text-[32px]">Same medicine. Six legal prices. Each with rules.</h2>
+          <h2 className="text-[26px] leading-tight font-bold tracking-tight md:text-[32px]">Same medicine. Six official prices. Each with rules.</h2>
           <p className="text-ink-2">
             Cash prices change with your dose step and when promos expire. Cash offers cannot be combined with insurance or government plans. We model all of it
             over 12 months, not just today&apos;s sticker.
@@ -162,7 +183,7 @@ export default function LandingPage() {
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr className="border-b border-border text-left text-xs font-semibold tracking-[0.06em] text-ink-3 uppercase">
-                <th scope="col" className="px-3 py-2.5">Channel</th>
+                <th scope="col" className="px-3 py-2.5">Option</th>
                 <th scope="col" className="px-3 py-2.5">Who qualifies</th>
                 <th scope="col" className="px-3 py-2.5 text-right">Per month</th>
               </tr>

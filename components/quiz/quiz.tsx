@@ -148,7 +148,7 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
         <AnimatePresence mode="wait">
           <motion.div key={step} {...motionProps} className="flex flex-col gap-6">
             {step === "coverage" && (
-              <Step eyebrow="Coverage" title="How do you pay for health care right now?" hint="This decides which channels are legal for you. Cash offers cannot be combined with insurance or government plans.">
+              <Step eyebrow="Coverage" title="How do you pay for health care right now?" hint="This decides which ways of buying are open to you. Cash offers cannot be combined with insurance or government plans.">
                 <ChoiceList
                   name="coverage"
                   value={v.coverage}
