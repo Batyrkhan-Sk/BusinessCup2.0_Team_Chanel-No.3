@@ -20,8 +20,10 @@ export function SiteHeader({ children, cta }: { children?: React.ReactNode; cta?
   return (
     <header>
       <Wrap>
-        <nav aria-label="Main" className="flex flex-wrap items-center justify-between gap-4 py-4">
-          <Logo />
+        <nav aria-label="Main" className="grid grid-cols-[1fr_auto] items-center gap-4 py-4 md:grid-cols-[1fr_auto_1fr]">
+          <div className="justify-self-start">
+            <Logo />
+          </div>
           {children ?? (
             <div className="hidden items-center gap-6 text-[15px] font-medium md:flex">
               <Link className="text-ink-2 no-underline hover:text-ink" href="/decode">
@@ -35,11 +37,13 @@ export function SiteHeader({ children, cta }: { children?: React.ReactNode; cta?
               </Link>
             </div>
           )}
-          {cta ?? (
-            <Link className={btn({ variant: "secondary", size: "sm" })} href="/guardian">
-              Open my case
-            </Link>
-          )}
+          <div className="justify-self-end">
+            {cta ?? (
+              <Link className={btn({ variant: "secondary", size: "sm" })} href="/guardian">
+                Open my case
+              </Link>
+            )}
+          </div>
         </nav>
       </Wrap>
     </header>
@@ -82,7 +86,7 @@ export function PageShell({ children, header }: { children: React.ReactNode; hea
     <div className="flex min-h-dvh flex-col">
       {header ?? <SiteHeader />}
       <main id="main" className="flex-1">
-        {children}
+        <div className="dc-page-in">{children}</div>
       </main>
       <SiteFooter />
     </div>

@@ -290,7 +290,6 @@ export function DecodeView() {
             )}
           </Card>
         )}
-        <p className="text-xs text-ink-3">Not medical or legal advice. Deadlines are computed from the dates on your letter under federal rules; your plan documents control.</p>
       </aside>
     </div>
   );

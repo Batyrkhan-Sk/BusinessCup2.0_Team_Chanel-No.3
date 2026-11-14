@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { loadData, pricesVerifiedOn } from "@/lib/data/load";
 import { formatDate, formatUsd } from "@/lib/format";
 import { Quiz, type QuizProduct } from "@/components/quiz/quiz";
-import { PageShell, SiteHeader } from "@/components/site/chrome";
+import { PageShell } from "@/components/site/chrome";
 
 export const metadata: Metadata = { title: "Find your cheapest path" };
 
@@ -28,7 +28,7 @@ export default function QuizPage() {
     };
   });
   return (
-    <PageShell header={<SiteHeader cta={<span className="text-sm text-ink-2">About 2 minutes · no login</span>} />}>
+    <PageShell>
       <Quiz products={products} verifiedOn={formatDate(pricesVerifiedOn(data))} />
     </PageShell>
   );
