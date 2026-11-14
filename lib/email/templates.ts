@@ -185,7 +185,7 @@ function compose(p: ReminderPayload): Body {
   }
 }
 
-export function renderReminderEmail(payload: ReminderPayload, appUrl: string): RenderedEmail {
+export function renderReminderEmail(payload: ReminderPayload, appUrl: string, opts: { unsubscribeUrl?: string } = {}): RenderedEmail {
   const b = compose(payload);
   const url = (path: string) => `${appUrl.replace(/\/$/, "")}${path}`;
   const footer = `Prices verified on ${formatDate(payload.prices_verified_on)} from ${payload.source_label}. Not medical, legal or financial advice. ${b.reason}`;
@@ -211,7 +211,7 @@ ${b.stats.length ? `<table role="presentation" width="100%" cellpadding="0" cell
 <a href="${esc(url(b.cta.path))}" style="display:inline-block;background:${C.accent};color:#fff;text-decoration:none;font:600 15px/1 Arial,sans-serif;padding:14px 20px;border-radius:12px">${esc(b.cta.label)}</a>
 ${b.secondary ? `<p style="margin:16px 0 0"><a href="${esc(url(b.secondary.path))}" style="font:14px/1.4 Arial,sans-serif;color:${C.accent}">${esc(b.secondary.label)}</a></p>` : ""}
 </td></tr>
-<tr><td style="padding:16px 4px;font:12px/1.5 Arial,sans-serif;color:${C.ink3}">${esc(footer)} <a href="${esc(url("/guardian?unsubscribe=1"))}" style="color:${C.ink3}">Unsubscribe</a></td></tr>
+<tr><td style="padding:16px 4px;font:12px/1.5 Arial,sans-serif;color:${C.ink3}">${esc(footer)} <a href="${esc(opts.unsubscribeUrl ?? url("/guardian?unsubscribe=1"))}" style="color:${C.ink3}">Unsubscribe</a></td></tr>
 </table></td></tr></table></body></html>`;
 
   const text = [

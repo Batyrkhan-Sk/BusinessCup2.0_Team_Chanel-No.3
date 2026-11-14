@@ -14,7 +14,10 @@
     "data:validate": "tsx scripts/validate-data.ts",
     "lint:data": "tsx scripts/check-no-literals.ts",
     "fixtures:letter": "tsx scripts/make-demo-letter.ts",
-    "extract:demo": "tsx scripts/extract-demo-letter.ts"
+    "extract:demo": "tsx scripts/extract-demo-letter.ts",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "drizzle-kit migrate",
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",

@@ -80,6 +80,37 @@ pnpm fixtures:letter   # regenerate fixtures/demo-denial-letter.pdf
 pnpm extract:demo      # run the DEMO letter through Claude (needs ANTHROPIC_API_KEY)
 ```
 
+## Routes
+
+| Route | What it is |
+|---|---|
+| `/` | Landing: leads with "Upload my denial letter" / "Try a sample letter", Guardian watch strip, stats, channel prices |
+| `/decode` (`?demo=1`) | Upload a photo/PDF or run the fictional DEMO letter; manual entry fallback |
+| `/decoded` | Decoded denial: category, deadline, decision window, external review, checklist, reminders |
+| `/quiz` | 8-step quiz (react-hook-form + zod, framer-motion, localStorage, no login) |
+| `/result` (`?demo=jessica\|sam`) | Cheapest legal path, 12-month Recharts chart, every channel, worth-appealing score, live reminder-email preview + signup |
+| `/coverage` | Coverage status with the insurer's PA criteria (PDF link + page) |
+| `/guardian` | Case timeline, seeded DEMO case (PA renewal in 23 days, intro price ends after the next fill), reminder previews |
+| `/guardian/overpay` (`?demo=1`) | Monthly "did you overpay?" check |
+| `/appeal` (`?demo=jessica`) | Appeal pack preview + PDF export (Guardian, or DEMO case) |
+| `/paywall`, `/guardian/welcome` | Plans from `pricing.json`, Stripe test Checkout, server-side session verification |
+| `/sources` | Every data record with its source and verification date |
+| `POST /api/decode` | Claude vision extraction → code decode (503 `not_configured` without `ANTHROPIC_API_KEY`) |
+| `POST /api/checkout`, `GET /api/checkout/verify`, `POST /api/stripe/webhook` | Stripe test mode; webhook writes `entitlements` |
+| `POST /api/reminders`, `POST /api/reminders/send-now` | Schedule reminders (Neon) / send one now (Resend) |
+| `GET /api/cron/reminders` | Vercel Cron (daily, `vercel.json`), `Authorization: Bearer $CRON_SECRET` |
+| `POST /api/events` | quiz_start, result_view, paywall_view, checkout_start, reminder_set |
+| `GET /api/status` | Which integrations are configured (missing variable names only) |
+
+## Setting up the integrations
+
+1. `cp .env.example .env.local` and fill in the values.
+2. Neon: create a database, set `DATABASE_URL`, run `pnpm db:push` (schema in `lib/db/schema.ts`, SQL in `drizzle/`).
+3. Stripe (test mode): create a "Guardian" product with a monthly and a yearly recurring price matching `data/pricing.json`; set `STRIPE_SECRET_KEY`, `STRIPE_PRICE_MONTHLY`, `STRIPE_PRICE_YEARLY`; add a webhook to `/api/stripe/webhook` for `checkout.session.completed`, `customer.subscription.updated` and `customer.subscription.deleted`, and set `STRIPE_WEBHOOK_SECRET`.
+4. Resend: verify a sending domain; set `RESEND_API_KEY` and `RESEND_FROM`.
+5. Anthropic: set `ANTHROPIC_API_KEY` (used only server-side by `/api/decode`).
+6. Vercel: set `CRON_SECRET` (Vercel sends it to the cron route automatically) and `NEXT_PUBLIC_APP_URL`.
+
 ## Environment
 
 See `.env.example`: `DATABASE_URL`, `RESEND_API_KEY`, `RESEND_FROM`, `STRIPE_SECRET_KEY`, `STRIPE_PRICE_MONTHLY`, `STRIPE_PRICE_YEARLY`, `STRIPE_WEBHOOK_SECRET`, `ANTHROPIC_API_KEY`, `CRON_SECRET`, `NEXT_PUBLIC_APP_URL`.

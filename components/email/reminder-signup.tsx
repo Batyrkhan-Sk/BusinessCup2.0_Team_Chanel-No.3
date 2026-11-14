@@ -40,7 +40,7 @@ export function ReminderSignup({ options, snapshot, compact }: { options: Remind
     const r = await call("/api/reminders", { email, items: chosen.map((o) => ({ payload: o.payload, remind_on: o.remind_on })), snapshot });
     if (r.ok) {
       track("reminder_set", { count: chosen.length });
-      setState({ kind: "done", text: `Scheduled ${r.scheduled ?? chosen.length} reminder${chosen.length === 1 ? "" : "s"}. A confirmation is on its way.` });
+      setState({ kind: "done", text: `Scheduled ${r.scheduled ?? 0} reminder email${r.scheduled === 1 ? "" : "s"}.${r.sent ? " The first one was just sent to your inbox." : ""}` });
       toast.success("Reminders scheduled");
     } else setState({ kind: "error", text: r.message ?? "Could not schedule reminders.", missing: r.missing });
   }
