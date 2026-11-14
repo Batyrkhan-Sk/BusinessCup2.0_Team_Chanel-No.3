@@ -6,6 +6,9 @@
       "id": "demo-renewal",
       "label": "Zepbound PA renewal",
       "product_id": "zepbound-kwikpen",
+      "dose_mg": 10,
+      "self_pay_offer_id": "lillydirect-zepbound-kwikpen",
+      "covered_card_id": "zepbound-savings-card-covered",
       "approval_ends_on": "2026-12-07",
       "baseline_document": { "label": "Baseline chart note", "dated": "2026-03-03" }
     },

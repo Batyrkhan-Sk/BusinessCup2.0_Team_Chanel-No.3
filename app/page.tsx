@@ -1,103 +1,215 @@
-import Image from "next/image";
+import Link from "next/link";
+import { loadData } from "@/lib/data/load";
+import { landingView } from "@/lib/views/landing";
+import { DEMO_CASE, DEMO_LETTER, DEMO_PERSONAS } from "@/lib/fixtures";
+import { formatDate, formatUsd, formatUsdRange } from "@/lib/format";
+import { btn, Card, Check, DemoBadge, Eyebrow, Num, Pill, Wrap } from "@/components/ds";
+import { PageShell, VerifiedLine } from "@/components/site/chrome";
+import { StatCard } from "@/components/site/stat-card";
 
-export default function Home() {
+export default function LandingPage() {
+  const data = loadData();
+  const v = landingView(data, { cases: DEMO_CASE, jessica: DEMO_PERSONAS.jessica.input, sam: DEMO_PERSONAS.sam.input, letter: DEMO_LETTER });
+  const stat = (id: string) => data.stats.stats.find((s) => s.id === id)!;
+  const guardian = data.pricing.plans;
+  const monthly = guardian.find((p) => p.id === "monthly")!;
+  const yearly = guardian.find((p) => p.id === "yearly")!;
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <PageShell>
+      {/* Hero: leads with the denial decoder */}
+      <Wrap className="grid items-center gap-12 pt-8 pb-14 md:grid-cols-2 md:pt-12">
+        <div className="flex flex-col gap-6">
+          <Eyebrow>GLP-1 Cost Guardian · for people whose own doctor prescribes</Eyebrow>
+          <h1 className="text-[34px] leading-[1.06] font-bold tracking-tight md:text-[52px]">
+            Denied, or paying <Num className="text-[42px] text-danger md:text-[60px]">{formatUsd(v.hero.high_usd)}</Num> when it could be{" "}
+            <Num className="text-[42px] text-brand md:text-[60px]">{formatUsd(v.hero.low_usd)}</Num>?
+          </h1>
+          <p className="max-w-[540px] text-lg text-ink-2 md:text-xl">
+            Upload your denial letter. In a minute you get the reason in plain English, your appeal deadline, a checklist, and your cheapest legal path while
+            you wait. Then Guardian keeps watch so you never overpay.
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Link className={btn({ size: "lg" })} href="/decode">
+              Upload my denial letter
+            </Link>
+            <Link className={btn({ variant: "secondary", size: "lg" })} href="/decode?demo=1">
+              <DemoBadge className="min-h-[22px] px-2 text-[11px]" />
+              Try a sample letter
+            </Link>
+          </div>
+          <Link href="/quiz" className="text-sm font-semibold text-brand">
+            No denial? Check your cheapest path in 8 questions →
+          </Link>
+          <div className="flex flex-wrap gap-5">
+            <span className="inline-flex items-center gap-1.5 text-xs text-ink-3">
+              <span aria-hidden="true" className="inline-block size-2 rounded-full bg-brand" />
+              No login. No drug sales. No pharma money.
+            </span>
+            <VerifiedLine />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        <Card className="flex flex-col gap-4 p-5 shadow-lg md:p-6" aria-label="Example decoded denial (DEMO)">
+          <div className="flex items-center justify-between">
+            <Eyebrow>Example: the sample letter, decoded</Eyebrow>
+            <DemoBadge />
+          </div>
+          <p className="text-lg leading-snug font-semibold md:text-[22px]">
+            Denied for <span className="text-brand">{v.example.category_label.toLowerCase()}</span>, not because the drug is excluded.
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-[var(--dc-r-md)] bg-background p-4">
+              <span className="text-xs text-ink-3">Appeal by</span>
+              <div className="num text-[26px] md:text-[32px]">{formatDate(v.example.file_by)}</div>
+              <span className="text-xs text-ink-3">{v.example.filing_window_days} days from the notice</span>
+            </div>
+            <div className="rounded-[var(--dc-r-md)] bg-background p-4">
+              <span className="text-xs text-ink-3">Worth appealing?</span>
+              <div className="num text-[26px] text-brand md:text-[32px]">{formatUsd(v.example.at_stake_usd)}</div>
+              <span className="text-xs text-ink-3">a year at stake · winnability {v.example.winnability}</span>
+            </div>
+          </div>
+          <ul className="flex flex-col gap-2">
+            {["Baseline chart note from your doctor", "Weight-program records for the period your plan requires", "Letter of medical necessity, doctor-signed"].map((t) => (
+              <li key={t} className="flex items-center gap-2.5 text-sm">
+                <Check on={false} />
+                {t}
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
+            <span className="text-sm text-ink-2">
+              Meanwhile: {v.example.best_label}, <strong className="text-ink">{formatUsd(v.example.best_monthly_top_usd)}/mo</strong> at most, not{" "}
+              {formatUsd(v.example.current_monthly_usd)}
+            </span>
+            <Link className="text-sm font-semibold text-brand" href="/decode?demo=1">
+              Run the sample
+            </Link>
+          </div>
+        </Card>
+      </Wrap>
+
+      {/* Guardian tracking surfaces */}
+      <Wrap className="pb-16">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
+          <div className="flex flex-col gap-1.5">
+            <Eyebrow>Guardian keeps watch, every month</Eyebrow>
+            <h2 className="text-[26px] font-bold tracking-tight md:text-[32px]">Prices change. Approvals expire. We tell you first.</h2>
+          </div>
+          <Link className={btn({ variant: "secondary" })} href="/guardian">
+            See a live case
+          </Link>
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card className="flex flex-col gap-2.5 p-6">
+            <div className="flex items-center justify-between">
+              <Pill tone="warn">PA renewal</Pill>
+              <span className="text-xs text-ink-3">DEMO case</span>
+            </div>
+            <Num className="text-[44px]">in {v.guardian.renewal_days} days</Num>
+            <p className="text-sm text-ink-2">
+              The Zepbound approval ends {formatDate(v.guardian.renewal_ends_on)}. The baseline chart note is stored, so the renewal does not fail for missing data.
+            </p>
+          </Card>
+          <Card className="flex flex-col gap-2.5 p-6">
+            <div className="flex items-center justify-between">
+              <Pill tone="danger">Promo ending</Pill>
+              <span className="text-xs text-ink-3">DEMO · Wegovy pen</span>
+            </div>
+            <Num className="text-[44px]">
+              {formatUsd(v.guardian.promo_intro_usd)} → {formatUsd(v.guardian.promo_then_usd)}
+            </Num>
+            <p className="text-sm text-ink-2">
+              The intro price ends after the next fill. The offer runs through {formatDate(v.guardian.promo_valid_through)}; we remind you before the price
+              changes, not after.
+            </p>
+          </Card>
+          <Card className="flex flex-col gap-2.5 p-6">
+            <div className="flex items-center justify-between">
+              <Pill tone="accent">Did you overpay?</Pill>
+              <span className="text-xs text-ink-3">Monthly check</span>
+            </div>
+            <Num className="text-[44px] text-danger">{formatUsd(v.guardian.overpaid_usd, { signed: true })}</Num>
+            <p className="text-sm text-ink-2">Enter what the pharmacy charged. Code compares it with your expected price and tells you exactly what to ask for.</p>
+          </Card>
+        </div>
+      </Wrap>
+
+      {/* Stats */}
+      <Wrap className="pb-16">
+        <div className="grid gap-4 md:grid-cols-3">
+          <StatCard stat={stat("hard_to_afford")} extra={`${stat("hard_to_afford_insured").display} of insured users say the same.`} />
+          <StatCard stat={stat("appeal_rate")} extra="Most people never find out a denial was fixable." />
+          <StatCard stat={stat("employers_cover_2026")} extra={`Only ${stat("employers_continue_2027").display} of them say they are likely to keep it in 2027.`} />
+        </div>
+      </Wrap>
+
+      {/* Channels */}
+      <Wrap className="grid items-start gap-12 pb-16 md:grid-cols-2">
+        <div className="flex flex-col gap-4">
+          <Eyebrow>Many prices for one drug</Eyebrow>
+          <h2 className="text-[26px] leading-tight font-bold tracking-tight md:text-[32px]">Same medicine. Six legal prices. Each with rules.</h2>
+          <p className="text-ink-2">
+            Cash prices change with your dose step and when promos expire. Cash offers cannot be combined with insurance or government plans. We model all of it
+            over 12 months, not just today&apos;s sticker.
+          </p>
+          <Link className={btn({ variant: "secondary", className: "self-start" })} href="/quiz">
+            Find my cheapest path
+          </Link>
+        </div>
+        <Card className="overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-border text-left text-xs font-semibold tracking-[0.06em] text-ink-3 uppercase">
+                <th scope="col" className="px-3 py-2.5">Channel</th>
+                <th scope="col" className="px-3 py-2.5">Who qualifies</th>
+                <th scope="col" className="px-3 py-2.5 text-right">Per month</th>
+              </tr>
+            </thead>
+            <tbody>
+              {v.channels.map((c) => (
+                <tr key={c.label} className="border-b border-border last:border-0">
+                  <td className="px-3 py-3 align-top">{c.label}</td>
+                  <td className="px-3 py-3 align-top text-ink-2">
+                    {c.who}
+                    {"window" in c && c.window ? `, ${formatDate(c.window[0])}–${formatDate(c.window[1])}` : ""}
+                    {"promo_through" in c && c.promo_through ? ` (to ${formatDate(c.promo_through)})` : ""}
+                  </td>
+                  <td className={`num px-3 py-3 text-right align-top text-xl whitespace-nowrap ${"danger" in c && c.danger ? "text-danger" : ""}`}>
+                    {"as_low_as" in c.price ? `as low as ${formatUsd(c.price.as_low_as)}` : "flat" in c.price ? formatUsd(c.price.flat) : formatUsdRange(c.price.range)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Card>
+      </Wrap>
+
+      {/* Pricing */}
+      <Wrap className="pb-16">
+        <div className="grid gap-6 md:grid-cols-2">
+          <Card className="flex flex-col gap-3 p-6">
+            <Eyebrow>Free, no login</Eyebrow>
+            <Num className="text-5xl">{formatUsd(0)}</Num>
+            <p className="text-ink-2">{data.pricing.free_features.join(" · ")}.</p>
+            <Link className={btn({ variant: "secondary", className: "self-start" })} href="/decode">
+              Decode a letter
+            </Link>
+          </Card>
+          <Card accent className="flex flex-col gap-3 p-6">
+            <Eyebrow onDark>Guardian</Eyebrow>
+            <div className="flex items-baseline gap-2">
+              <Num className="text-5xl">{formatUsd(monthly.price_usd)}</Num>
+              <span className="text-white/80">/month, or {formatUsd(yearly.price_usd)}/year</span>
+            </div>
+            <p className="text-white/80">{data.pricing.guardian_features.join(" · ")}.</p>
+            <Link className={btn({ variant: "onDark", className: "self-start" })} href="/paywall">
+              See Guardian
+            </Link>
+          </Card>
+        </div>
+      </Wrap>
+    </PageShell>
   );
 }
