@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -36,6 +36,8 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
   const reduce = useReducedMotion();
   const [stepIdx, setStepIdx] = useState(0);
   const [hydrated, setHydrated] = useState(false);
+  /** Set on final submit so the draft autosave cannot overwrite the completed answers (which carry start_month) before navigation. */
+  const submitted = useRef(false);
 
   const form = useForm<QuizValues>({ resolver: zodResolver(QuizSchema), defaultValues: QUIZ_DEFAULTS as QuizValues, mode: "onChange" });
   const { watch, setValue, trigger, handleSubmit, formState, register } = form;
@@ -57,7 +59,7 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
 
   // persist draft
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || submitted.current) return;
     store.setQuiz({ ...v, step: stepIdx, demo: null });
   }, [v, stepIdx, hydrated]);
 
@@ -108,6 +110,7 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
   }
   function onSubmit(values: QuizValues) {
     const start_month = nextMonth(new Date().toISOString().slice(0, 7));
+    submitted.current = true;
     store.setQuiz({ ...values, start_month, step: stepIdx, demo: null });
     router.push("/result");
   }
