@@ -1,5 +1,7 @@
 # DoseCost: GLP-1 Cost Guardian
 
+## Team: Chanel No.3
+
 > Your GLP-1 can cost $25 or $449 a month. DoseCost finds your cheapest **legal** path and makes sure you never overpay.
 
 A B2C web app for US adults paying for Zepbound, Wegovy and other GLP-1 drugs. Free: decode a denial letter, check your cheapest path across every legal channel, check coverage. **Guardian** ($7.99/month or $59/year, Stripe test mode): appeal pack with PDF, case timeline, PA renewal reminders with stored baseline, promo and dose-price alerts, a monthly "did you overpay?" check, and a January plan-change check.
