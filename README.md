@@ -1,119 +1,208 @@
 # DoseCost: GLP-1 Cost Guardian
 
-## Team: Chanel No.3
+**Team: Chanel No.3** · Zimran Business Cup Hackathon 2.0 · Money track
 
-> Your GLP-1 can cost $25 or $449 a month. DoseCost finds your cheapest **legal** path and makes sure you never overpay.
+**Live site: [dosecost.vercel.app](https://dosecost.vercel.app/)** · no login, no install
 
-A B2C web app for US adults paying for Zepbound, Wegovy and other GLP-1 drugs. Free: decode a denial letter, check your cheapest path across every legal channel, check coverage. **Guardian** ($7.99/month or $59/year, Stripe test mode): appeal pack with PDF, case timeline, PA renewal reminders with stored baseline, promo and dose-price alerts, a monthly "did you overpay?" check, and a January plan-change check.
+> Your GLP-1 can cost $25 or $449 a month. DoseCost finds your cheapest legal price and warns you before it jumps.
 
-**Not medical, legal or financial advice.** DoseCost sells no medication and takes no money from drugmakers, pharmacies or telehealth companies.
+## What it is
 
-- Data sources and what could not be verified: [`data/SOURCES.md`](data/SOURCES.md)
+Many people in the US pay for weight-loss medicines like Zepbound and Wegovy. The price can jump without warning: the insurance says no, an approval expires, a refill is one day late, or an intro offer ends.
 
-## **Deploy:** [Link](https://dosecost.vercel.app/)
+DoseCost helps in three ways:
 
-## Architecture
+1. **Reads the insurance denial letter.** Upload a photo or PDF. AI reads it, and our code tells you why you were denied, the last day to appeal, and which documents to collect.
+2. **Finds the cheapest legal way to pay.** It compares every official option (insurance, savings cards, the drugmakers' own pharmacies, Medicare rules) and shows your cost for the next 12 months.
+3. **Watches your dates.** It emails you before the price goes up or a deadline passes.
 
-```
-app/                 Next.js 15 App Router (screens, API routes)
-components/          product components (components/ui = themed shadcn/ui primitives)
-lib/data/            zod schemas + validating loader for /data
-lib/engine/          PURE functions: channels, eligibility, 12-month projection, best path,
-                     coverage check, denial category, deadlines, checklist, worth-appealing,
-                     overpayment check, watch-list alerts
-lib/llm/             server-only Claude vision extraction of denial letters (zod-validated)
-lib/decoder/         pure "code half" of the decoder: extraction → category, deadlines, checklist
-lib/lint/            detector behind `pnpm lint:data`
-data/*.json          versioned facts; every record has source_url + verified_at
-scripts/             ingest-openfda, validate-data, check-no-literals, make-demo-letter, extract-demo-letter
-fixtures/            DEMO inputs only (personas, seeded Guardian case, fictional denial letter)
-tests/               Vitest: SPEC §8 scenarios + deadlines, overpay, alerts, LLM boundary, data integrity
-```
+The first two are free. **Guardian** is the paid plan: $7.99 a month or $59 a year, with a 7-day free trial.
 
-Stack: Next.js 15, TypeScript, Tailwind v4, shadcn/ui (custom token theme in `app/globals.css`), framer-motion, Recharts, lucide-react, react-hook-form + zod, Sonner, Drizzle + Neon, Stripe, Resend, `@anthropic-ai/sdk`, pdf-lib, Vitest.
+DoseCost does not sell medicine and takes no money from drugmakers, pharmacies or telehealth companies. **It is not medical, legal or financial advice.**
 
-## What code does vs what the LLM does
+## For the jury: try it in 5 minutes
 
-| Step | Who | Notes |
+Everything works without an account. The examples use made-up people and a made-up letter, but they go through the same real code as a real user.
+
+| # | What to do | What you will see |
 |---|---|---|
-| Read a denial letter (photo/PDF) into facts: reason (verbatim), dates, plan type, reference, request type | **LLM** (`claude-opus-5-5`, structured output, zod-validated) | Fails with a typed error without `ANTHROPIC_API_KEY`; never fabricates. Server-side fallback on refusal is enabled (`fallbacks: "default"`). |
-| Denial category, winnability tier, appeal deadline, decision windows, external review, checklist | **Code** | `lib/decoder`, `lib/engine/denial.ts`, rules in `appeal_rules.json` |
-| Every price, channel, eligibility rule, promo window, dose-step projection, savings, worth-appealing score | **Code** | `lib/engine/path.ts`; numbers only from `/data` |
-| Coverage status (likely covered with PA / excluded by plan / needs diagnosis code clarification) | **Code** | rules over coverage type, insurer, product, status and diagnosis yes/no |
-| Overpayment check, renewal / promo / refill reminders | **Code** | `lib/engine/overpay.ts`, `lib/engine/alerts.ts` |
+| 1 | Open the [home page](https://dosecost.vercel.app/) and click **"No letter? Try a sample one"** | The sample denial letter is read by AI, then explained: why it was denied, the appeal deadline and a checklist |
+| 2 | Open [the sample price result](https://dosecost.vercel.app/result?demo=jessica) | The cheapest path, a 12-month cost chart, every option with its price, and a preview of the reminder email |
+| 3 | Or click **"Check my lowest price"** and answer a few short questions (up to 8) | Your own result, built from your answers |
+| 4 | Open [Guardian](https://dosecost.vercel.app/guardian) | An example case: what needs attention soon, the case timeline, and every reminder email |
+| 5 | Open the [appeal pack](https://dosecost.vercel.app/appeal?demo=jessica) | The appeal letter, the doctor's letter template and the checklist, with a PDF download |
+| 6 | Open the [plans page](https://dosecost.vercel.app/paywall) and start the free trial | Stripe's payment page (test mode). Use the test card below |
 
-## Data sources and ingest
+### Test payment (no real money)
 
-| File | How it is produced |
+- Card number: **4242 4242 4242 4242**
+- Any future date (for example 12/30), any 3-digit CVC, any name.
+- You get a **7-day free trial**. Stripe shows "7 days free, then $7.99 per month" (or $59 per year).
+- After paying you land on a welcome page, and all Guardian features open right away.
+- To cancel, click **"Manage or cancel plan"** on the Guardian pages. It opens Stripe's own billing page.
+
+The trial is the full Guardian plan. Nothing is held back during the trial. The only difference is that you pay $0 for the first 7 days.
+
+## Emails and reminders
+
+### What emails exist
+
+| Email | When it is sent |
 |---|---|
-| `data/drugs.json` | `pnpm ingest:openfda` (openFDA NDC + label endpoints); re-runnable |
-| `data/prices.json`, `savings_cards.json`, `medicare_bridge.json`, `insurer_rules.json`, `appeal_rules.json`, `stats.json` | compiled by hand from primary sources (no public API), each record cited |
-| `data/pricing.json`, `reminder_rules.json` | our own product decisions (`internal:` source, `verification: editorial`) |
+| Approval renewal | Before your insurance approval expires |
+| Promo ending | Before an intro price ends |
+| Refill window | Before your low price is lost because a refill is late |
+| Appeal deadline | Before the last day to appeal |
+| Monthly check | After each fill: "did the pharmacy charge you the right price?" |
+| Discount ending | Before a savings card or offer ends |
+| New plan year | In January, when insurance plans change |
 
-`pnpm data:validate` parses every file with its zod schema and cross-checks references (every offer, card and rule points at a real openFDA product and dose).
+### How sending works
 
-### How to refresh data
+- You enter your email and click **"Set reminders"**. We save the dates in our database.
+- A scheduled job runs **every day at 14:00 UTC**, finds the reminders due that day and sends them with [Resend](https://resend.com).
+- **"Send me this email now"** sends one email immediately, so you can see it without waiting.
+- The numbers in each email (days left, prices, dates) are worked out again on the day it is sent, so they are never out of date.
+- Every email has a one-click **Unsubscribe** link.
+- The **email preview on the site uses the same template as the real email**, so what you see there is exactly what arrives.
 
-1. `pnpm ingest:openfda` and review the diff of `data/drugs.json`.
-2. Re-check each source URL in `data/SOURCES.md`; update values, `verified_at`, and `verification`.
-3. `pnpm data:validate && pnpm test` (the scenario tests pin worked numbers; update them, with provenance, if a price changed).
-4. The UI's "Prices verified on {date}" line reads the dates from the data automatically.
+### Current status: please read
 
-## Safety boundaries
+Right now emails are sent from Resend's shared test address (`onboarding@resend.dev`). Resend only delivers emails from that address to the team's own inbox. So **if you type your own email, the email may not arrive yet.** The site tells you plainly if a send fails; it never pretends.
 
-- **No medical advice.** No dosing guidance, no efficacy claims, no symptom or weight tracking. The projection only follows the dose the user says their doctor planned, one label step per fill; DoseCost never picks a dose or a medicine.
-- **Different medicines are "ask your doctor" only.** A cheaper different drug is never chosen as the best path.
-- **No compounded or "research peptide" referrals, no affiliate links** to pharmacies or telehealth.
-- **We never assert clinical facts.** The letter of medical necessity is a structure with brackets for the doctor to complete and sign.
-- **Minimal health data.** Diagnosis on file is yes/no only. Answers live in localStorage; email is stored only for reminders.
-- **Honest uncertainty.** Secondary or unverified facts are flagged in data and in the UI; expired programs are flagged as assumptions, not hidden.
-- **No fake outputs.** Missing keys produce a clear "not configured" state. DEMO data are labelled inputs that run through the same live pipeline.
-- Disclaimer on every screen: "Not medical, legal or financial advice".
+We are setting up our own sending domain. Once it is verified, emails reach any address with no code change; only one setting changes.
 
-## Commands
+Until then, the email preview on the [result](https://dosecost.vercel.app/result?demo=jessica) and [Guardian](https://dosecost.vercel.app/guardian) pages shows the exact email.
+
+## Free vs Guardian
+
+| Free | Guardian ($7.99/month or $59/year, 7 days free) |
+|---|---|
+| Read a denial letter: reason, deadline, checklist | Full appeal pack: patient letter, doctor's letter template, checklist, PDF |
+| Cheapest legal path with a 12-month cost | Case timeline with every deadline |
+| Coverage check against your insurer's rules | Reminders before **every** date |
+| **One** email reminder | Monthly "did you overpay?" check |
+| | January plan-change check |
+
+## Where the numbers come from
+
+- **No price is typed into the app's code.** Every price, rule and date lives in data files in [`data/`](data/). Each record has a source link and the date we checked it.
+- An automatic check (`pnpm lint:data`) fails the build if someone types a dollar amount or a percentage into the screens.
+- The [Sources page](https://dosecost.vercel.app/sources) lists every source. [`data/SOURCES.md`](data/SOURCES.md) also lists what we **could not** verify, instead of guessing.
+- Prices were last checked on **Nov 14, 2026**. The site shows this date in the footer.
+
+## What the AI does and what the code does
+
+| Job | Who does it |
+|---|---|
+| Read the letter photo or PDF and pull out the facts (reason, dates, plan, reference number) | **AI** (Claude, server only). If it is unsure, it says which fields to double-check. |
+| Decide why you were denied, how fixable it is, the deadlines and the checklist | **Code**, using written rules |
+| Every price, saving, 12-month projection and "worth appealing?" answer | **Code**, using only the data files |
+| Reminder dates, the overpayment check, alerts | **Code** |
+
+The AI explains. The code calculates.
+
+## Safety and privacy
+
+- **No medical advice.** We never suggest a dose or a medicine. We only follow the dose the user says their doctor planned. Switching medicine is always "ask your doctor".
+- **No compounded or "research" drugs, no affiliate links.**
+- **Minimal data.** Quiz answers stay in your browser. We store only your email (for reminders) and your case dates. We never ask for weight, symptoms or a diagnosis, beyond a yes/no on whether one is on file.
+- The doctor's letter is a template with blanks for the doctor to fill in and sign. We never make medical claims.
+- Every page says "Not medical, legal or financial advice".
+
+## Known limits
+
+- US only, and covers the main GLP-1 medicines (Zepbound, Wegovy, Foundayo and others in the data files).
+- A Guardian membership is remembered **in the browser where you paid**. It does not carry over to another device.
+- Payments are in Stripe **test mode**, so no real money moves.
+- Email delivery to outside addresses waits on our sending domain (see "Current status" above).
+
+## Tests
+
+**90 automated tests** (`pnpm test`), including:
+
+- The worked examples from our spec, checked to the cent.
+- A sweep of **5,184** combinations of medicine, insurance, dose and situation, checking that every result is legal, consistent and uses only real data.
+- Reminder dates, appeal deadlines, the overpayment check and the AI boundary (the AI output is validated and never trusted blindly).
+
+---
+
+## For developers
+
+### Run it locally
 
 ```bash
-pnpm dev               # local app
-pnpm test              # Vitest
-pnpm typecheck
-pnpm lint:data         # fails on $ / % literals in app/ and components/
-pnpm data:validate
-pnpm ingest:openfda
-pnpm fixtures:letter   # regenerate fixtures/demo-denial-letter.pdf
-pnpm extract:demo      # run the DEMO letter through Claude (needs ANTHROPIC_API_KEY)
+pnpm install
+cp .env.example .env.local   # fill in the keys (see below)
+pnpm db:push                  # create the database tables
+pnpm dev                      # open http://localhost:3000
 ```
 
-## Routes
+Every integration works on its own. If a key is missing, that feature shows a clear "not configured" message instead of fake results.
 
-| Route | What it is |
+### Commands
+
+```bash
+pnpm dev               # run the app locally
+pnpm test              # run all tests
+pnpm typecheck         # check TypeScript
+pnpm lint:data         # fail if a $ or % amount is typed into the screens
+pnpm data:validate     # check every data file and the links between them
+pnpm ingest:openfda    # refresh the medicine list from the FDA's open data
+pnpm fixtures:letter   # rebuild the sample denial letter PDF
+pnpm extract:demo      # run the sample letter through Claude
+pnpm stripe:setup      # create the Guardian product and prices in Stripe test mode
+```
+
+### Keys (`.env.local`)
+
+| Key | What it is for |
 |---|---|
-| `/` | Landing: leads with "Upload my denial letter" / "Try a sample letter", Guardian watch strip, stats, channel prices |
-| `/decode` (`?demo=1`) | Upload a photo/PDF or run the fictional DEMO letter; manual entry fallback |
-| `/decoded` | Decoded denial: category, deadline, decision window, external review, checklist, reminders |
-| `/quiz` | 8-step quiz (react-hook-form + zod, framer-motion, localStorage, no login) |
-| `/result` (`?demo=jessica\|sam`) | Cheapest legal path, 12-month Recharts chart, every channel, worth-appealing score, live reminder-email preview + signup |
-| `/coverage` | Coverage status with the insurer's PA criteria (PDF link + page) |
-| `/guardian` | Case timeline, seeded DEMO case (PA renewal in 23 days, intro price ends after the next fill), reminder previews |
-| `/guardian/overpay` (`?demo=1`) | Monthly "did you overpay?" check |
-| `/appeal` (`?demo=jessica`) | Appeal pack preview + PDF export (Guardian, or DEMO case) |
-| `/paywall`, `/guardian/welcome` | Plans from `pricing.json`, Stripe test Checkout, server-side session verification |
-| `/sources` | Every data record with its source and verification date |
-| `POST /api/decode` | Claude vision extraction → code decode (503 `not_configured` without `ANTHROPIC_API_KEY`) |
-| `POST /api/checkout`, `GET /api/checkout/verify`, `POST /api/stripe/webhook` | Stripe test mode; webhook writes `entitlements` |
-| `POST /api/reminders`, `POST /api/reminders/send-now` | Schedule reminders (Neon) / send one now (Resend) |
-| `GET /api/cron/reminders` | Vercel Cron (daily, `vercel.json`), `Authorization: Bearer $CRON_SECRET` |
-| `POST /api/events` | quiz_start, result_view, paywall_view, checkout_start, reminder_set |
-| `GET /api/status` | Which integrations are configured (missing variable names only) |
+| `DATABASE_URL` | Neon Postgres: reminders, case dates, memberships |
+| `RESEND_API_KEY`, `RESEND_FROM` | Sending emails. `RESEND_FROM` must use a domain verified in Resend to reach any inbox |
+| `STRIPE_SECRET_KEY`, `STRIPE_PRICE_MONTHLY`, `STRIPE_PRICE_YEARLY`, `STRIPE_WEBHOOK_SECRET` | Payments (test mode) |
+| `ANTHROPIC_API_KEY` | Reading denial letters (server only) |
+| `CRON_SECRET` | Protects the daily email job |
+| `NEXT_PUBLIC_APP_URL` | The site address used in emails and payment redirects |
 
-## Setting up the integrations
+### Setting up the services
 
-1. `cp .env.example .env.local` and fill in the values.
-2. Neon: create a database, set `DATABASE_URL`, run `pnpm db:push` (schema in `lib/db/schema.ts`, SQL in `drizzle/`).
-3. Stripe (test mode): create a "Guardian" product with a monthly and a yearly recurring price matching `data/pricing.json`; set `STRIPE_SECRET_KEY`, `STRIPE_PRICE_MONTHLY`, `STRIPE_PRICE_YEARLY`; add a webhook to `/api/stripe/webhook` for `checkout.session.completed`, `customer.subscription.updated` and `customer.subscription.deleted`, and set `STRIPE_WEBHOOK_SECRET`.
-4. Resend: verify a sending domain; set `RESEND_API_KEY` and `RESEND_FROM`.
-5. Anthropic: set `ANTHROPIC_API_KEY` (used only server-side by `/api/decode`).
-6. Vercel: set `CRON_SECRET` (Vercel sends it to the cron route automatically) and `NEXT_PUBLIC_APP_URL`.
+1. **Neon:** create a database, put its address in `DATABASE_URL`, run `pnpm db:push`.
+2. **Stripe (test mode):** run `pnpm stripe:setup`, or create a "Guardian" product with a monthly and a yearly price that match `data/pricing.json`. Add a webhook to `/api/stripe/webhook` for `checkout.session.completed`, `customer.subscription.updated` and `customer.subscription.deleted`. The trial length comes from `trial_days` in `data/pricing.json`.
+3. **Resend:** add and verify your domain (Resend shows the DNS records to add), then set `RESEND_FROM`, for example `DoseCost <reminders@yourdomain.com>`.
+4. **Anthropic:** set `ANTHROPIC_API_KEY`.
+5. **Vercel:** set all keys above. The daily job is defined in `vercel.json` and runs at 14:00 UTC.
 
-## Environment
+### How the code is organised
 
-See `.env.example`: `DATABASE_URL`, `RESEND_API_KEY`, `RESEND_FROM`, `STRIPE_SECRET_KEY`, `STRIPE_PRICE_MONTHLY`, `STRIPE_PRICE_YEARLY`, `STRIPE_WEBHOOK_SECRET`, `ANTHROPIC_API_KEY`, `CRON_SECRET`, `NEXT_PUBLIC_APP_URL`.
+```
+app/            pages and API routes (Next.js 15)
+components/     screens and UI pieces (shadcn/ui)
+lib/engine/     the calculations: prices, 12-month path, deadlines, alerts (pure functions)
+lib/decoder/    turns the AI's letter facts into a category, deadlines and a checklist
+lib/llm/        the Claude call that reads letters (server only)
+lib/email/      email templates
+data/           all prices and rules, each with a source and check date
+fixtures/       the made-up demo people and the made-up denial letter
+scripts/        data refresh, data checks, demo letter, Stripe setup
+tests/          automated tests
+```
+
+Stack: Next.js 15, TypeScript, Tailwind v4, shadcn/ui, Recharts, Drizzle + Neon Postgres, Stripe, Resend, Claude (Anthropic SDK), pdf-lib, Vitest. Hosted on Vercel.
+
+### Pages and API routes
+
+| Route | What it does |
+|---|---|
+| `/` | Home page |
+| `/decode`, `/decoded` | Upload or try the sample letter, then see it explained |
+| `/quiz`, `/result` | The questions, then the cheapest path (`?demo=jessica` or `?demo=sam` for examples) |
+| `/coverage` | Does your insurance cover it, and what it needs |
+| `/guardian`, `/guardian/overpay`, `/appeal` | Guardian: timeline, overpayment check, appeal pack |
+| `/paywall`, `/guardian/welcome` | Plans, then the welcome page after payment |
+| `/sources` | Every data source |
+| `POST /api/decode` | Reads a letter with AI, then decodes it with code |
+| `POST /api/checkout`, `GET /api/checkout/verify`, `POST /api/stripe/webhook`, `POST /api/billing/portal` | Payment, checking a payment, Stripe events, manage or cancel |
+| `POST /api/reminders`, `POST /api/reminders/send-now`, `GET /api/unsubscribe` | Save reminders, send one now, unsubscribe |
+| `GET /api/cron/reminders` | The daily email job (needs `CRON_SECRET`) |
+| `GET /api/status` | Which services are set up (names only, never values) |
