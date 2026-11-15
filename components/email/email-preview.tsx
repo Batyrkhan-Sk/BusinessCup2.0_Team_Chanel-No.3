@@ -12,7 +12,7 @@ const getServerOrigin = () => "";
  */
 export function EmailPreview({ payload, title = "Email preview", height = 520 }: { payload: ReminderPayload; title?: string; height?: number }) {
   const origin = useSyncExternalStore(subscribe, getOrigin, getServerOrigin);
-  const email = useMemo(() => renderReminderEmail(payload, origin || "https://dosecost.app"), [payload, origin]);
+  const email = useMemo(() => renderReminderEmail(payload, origin || process.env.NEXT_PUBLIC_APP_URL || ""), [payload, origin]);
   return (
     <div className="overflow-hidden rounded-[var(--dc-r-md)] bg-surface shadow-md">
       <div className="flex flex-col gap-1 border-b border-border px-5 py-3 text-[13px]">

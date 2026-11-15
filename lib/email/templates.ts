@@ -209,7 +209,7 @@ export function renderReminderEmail(payload: ReminderPayload, appUrl: string, op
 <span style="display:none;max-height:0;overflow:hidden">${esc(b.preheader)}</span>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.ground}"><tr><td align="center" style="padding:24px 12px">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px">
-<tr><td style="padding:0 4px 16px;font:700 16px/1 Arial,sans-serif;color:${C.ink}"><span style="display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:7px;background:${C.accent};color:#fff;font:400 15px/24px Georgia,serif;margin-right:8px">$</span>DoseCost Guardian</td></tr>
+<tr><td style="padding:0 4px 16px;font:700 16px/1 Arial,sans-serif;color:${C.ink}"><img src="${esc(url("/apple-icon.png"))}" width="24" height="24" alt="" style="display:inline-block;width:24px;height:24px;border:0;border-radius:6px;vertical-align:middle;margin-right:8px"><span style="vertical-align:middle">DoseCost Guardian</span></td></tr>
 <tr><td style="background:${C.surface};border:1px solid ${C.border};border-radius:16px;padding:28px">
 ${demo}<h1 style="margin:0 0 16px;font:600 21px/1.3 Arial,sans-serif;color:${C.ink}">${esc(b.headline)}</h1>
 ${b.paragraphs.map((p) => `<p style="margin:0 0 14px;font:15px/1.6 Arial,sans-serif;color:${C.ink}">${esc(p)}</p>`).join("")}
