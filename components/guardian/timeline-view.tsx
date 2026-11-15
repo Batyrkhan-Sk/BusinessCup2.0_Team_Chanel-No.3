@@ -55,6 +55,7 @@ export function TimelineView() {
   const janCheck = `${Number(DEMO_CASE.today.slice(0, 4)) + 1}-${String(data.reminderRules.january_plan_check_month).padStart(2, "0")}-01`;
   const card = data.savingsCards.cards.find((c) => c.id === "zepbound-savings-card-covered");
   const previewItem = demo.items.find((i) => i.id === previewId) ?? demo.items[0];
+  const [details, setDetails] = useState(false);
 
   const timeline = [
     { date: demo.items.length ? DEMO_CASE.cases.find((c) => c.id === "demo-appeal")?.denial_notice_date as string : null, title: "Insurance approval (PA) denied", body: "Missing documentation: weight-management program and baseline BMI", state: "bad" as const },
@@ -67,6 +68,13 @@ export function TimelineView() {
 
   const hasOwn = own !== null && own.length > 0;
   const today = todayIso();
+  const upcomingReminders = [
+    ...demo.items.flatMap((i) => i.remind_on.map((d) => ({ d, label: TITLE[i.kind] }))),
+    ...(demo.appeal_decision_due ? [{ d: addDays(demo.appeal_decision_due, data.reminderRules.plan_decision_overdue_grace_days), label: "Plan decision overdue check" }] : []),
+  ]
+    .filter((r) => r.d >= today)
+    .sort((x, y) => x.d.localeCompare(y.d));
+  const nextReminder = upcomingReminders[0];
   const ownNext = hasOwn
     ? own
         .flatMap((o) => o.remind_on.map((d) => ({ d, label: o.label })))
@@ -188,56 +196,79 @@ export function TimelineView() {
       </section>
 
       <section className="grid items-start gap-6 lg:grid-cols-[7fr_5fr]">
-        <Card className="flex flex-col gap-4 p-6">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-[22px] font-semibold">Case timeline · Zepbound appeal</h2>
-            <span className="text-sm text-ink-2">Ref. DEMO-2026-48213</span>
+        <Card className="flex flex-col gap-5 p-6 md:p-8">
+          <div className="flex flex-wrap items-end justify-between gap-2">
+            <div className="flex flex-col gap-0.5">
+              <Eyebrow>Case timeline</Eyebrow>
+              <h2 className="text-[22px] font-semibold">Zepbound appeal</h2>
+            </div>
+            <span className="text-xs text-ink-3">Ref. DEMO-2026-48213</span>
           </div>
           <ol className="flex flex-col">
-            {timeline.map((t) => (
-              <li key={t.title} className="grid grid-cols-[96px_20px_1fr] gap-3 pb-5 last:pb-0 md:grid-cols-[120px_24px_1fr]">
-                <span className={cn("text-sm", t.state === "next" ? "font-semibold text-brand-ink" : "text-ink-2")}>{formatDate(t.date)}</span>
-                <span
-                  aria-hidden="true"
-                  className={cn(
-                    "mt-1 size-3.5 rounded-full",
-                    t.state === "bad" && "bg-danger",
-                    t.state === "done" && "bg-brand",
-                    t.state === "next" && "border-[3px] border-brand bg-surface",
-                    t.state === "future" && "border-2 border-border bg-surface",
+            {timeline.map((t, i) => {
+              const next = t.state === "next";
+              const past = t.state === "bad" || t.state === "done";
+              const showBody = Boolean(t.body) && (next || details);
+              return (
+                <li key={t.title} className="relative flex gap-4 pb-3 last:pb-0">
+                  {i < timeline.length - 1 && (
+                    <span aria-hidden="true" className={cn("absolute top-5 bottom-0 left-[6px] w-0.5 rounded-full", past ? "bg-brand/35" : "bg-border")} />
                   )}
-                />
-                <span>
-                  <strong className="text-sm">{t.title}</strong> {t.state === "next" && <Pill tone="warn" className="ml-1 min-h-[22px] text-[11px]">Next</Pill>}
-                  <span className="block text-sm text-ink-2">{t.body}</span>
-                </span>
-              </li>
-            ))}
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "relative mt-[5px] size-3.5 flex-none rounded-full",
+                      t.state === "bad" && "bg-danger",
+                      t.state === "done" && "bg-brand",
+                      next && "border-[3px] border-brand bg-surface",
+                      t.state === "future" && "border-2 border-border bg-surface",
+                    )}
+                  />
+                  <div className={cn("flex min-w-0 flex-1 flex-col gap-1", next && "-mt-2 rounded-[var(--dc-r-md)] border border-brand/20 bg-brand-soft/50 px-3.5 py-2.5")}>
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+                      <span className={cn("flex items-center gap-2 text-sm font-semibold", t.state === "future" ? "text-ink-2" : "text-ink")}>
+                        {t.title}
+                        {next && <Pill tone="warn" className="h-5 px-1.5 text-[11px]">Next</Pill>}
+                      </span>
+                      <span className={cn("text-sm whitespace-nowrap", next ? "font-semibold text-brand-ink" : "text-ink-3")}>{formatDate(t.date)}</span>
+                    </div>
+                    {showBody && <p className="text-sm text-ink-2">{t.body}</p>}
+                  </div>
+                </li>
+              );
+            })}
           </ol>
+          <button type="button" onClick={() => setDetails((v) => !v)} className={cn(btn({ variant: "ghost", size: "sm" }), "self-start px-0")} aria-expanded={details}>
+            {details ? "Hide details" : "Show details for every step"}
+          </button>
         </Card>
 
-        <div className="flex flex-col gap-4">
-          <Card className="flex flex-col gap-2.5 p-6">
-            <Eyebrow>Money so far</Eyebrow>
-            <Row label="Saved vs pharmacy quote, this month" value={formatUsd(savedThisMonth)} accent />
-            <Row label="If the appeal wins, per month" value={formatUsd(jp.best_conditional?.monthly_range_usd?.[0] ?? null)} />
-            <Row label="At stake over 12 months" value={formatUsd(jp.at_stake_usd)} />
-          </Card>
-          <Card className="flex flex-col gap-2.5 p-6">
-            <Eyebrow>Reminders scheduled</Eyebrow>
-            {[
-              ...demo.items.flatMap((i) => i.remind_on.map((d) => ({ d, label: TITLE[i.kind], id: i.id }))),
-              ...(demo.appeal_decision_due ? [{ d: addDays(demo.appeal_decision_due, data.reminderRules.plan_decision_overdue_grace_days), label: "Plan decision overdue check", id: "overdue" }] : []),
-            ]
-              .sort((a, b) => a.d.localeCompare(b.d))
-              .map((r) => (
-              <div key={`${r.id}-${r.d}`} className="flex justify-between text-sm">
-                <span>{r.label}</span>
-                <span className="text-ink-2">{formatDate(r.d)}</span>
+        <Card className="flex flex-col gap-5 p-6 md:p-8">
+          <div className="flex flex-col gap-1">
+            <Eyebrow>At stake over 12 months</Eyebrow>
+            <Num className="text-5xl text-brand">{formatUsd(jp.at_stake_usd)}</Num>
+            <p className="text-sm text-ink-2">What winning the appeal saves over the next year.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Stat label="Saved this month" value={formatUsd(savedThisMonth)} />
+            <Stat label="If the appeal wins" value={formatUsd(jp.best_conditional?.monthly_range_usd?.[0] ?? null)} unit="/month" />
+          </div>
+          {nextReminder && (
+            <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
+              <div className="flex min-w-0 flex-col">
+                <span className="text-xs text-ink-2">Next reminder</span>
+                <span className="truncate text-sm font-semibold">
+                  {nextReminder.label} · {formatDate(nextReminder.d)}
+                </span>
               </div>
-            ))}
-          </Card>
-        </div>
+              {upcomingReminders.length > 1 && (
+                <a href="#email-h" className="flex-none text-sm font-semibold text-brand no-underline hover:text-brand-ink">
+                  +{upcomingReminders.length - 1} more
+                </a>
+              )}
+            </div>
+          )}
+        </Card>
       </section>
 
       {previewItem && (
@@ -273,11 +304,14 @@ function WatchCard({ tone, label, sub, action, children }: { tone: PillTone; lab
   );
 }
 
-function Row({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+function Stat({ label, value, unit }: { label: string; value: string; unit?: string }) {
   return (
-    <div className="flex items-center justify-between gap-3">
-      <span className="text-sm text-ink-2">{label}</span>
-      <Num className={cn("text-2xl", accent && "text-brand")}>{value}</Num>
+    <div className="flex flex-col gap-0.5 rounded-[var(--dc-r-md)] bg-surface-2 px-3.5 py-3">
+      <span className="text-xs text-ink-2">{label}</span>
+      <span className="flex items-baseline gap-1">
+        <Num className="text-2xl">{value}</Num>
+        {unit && <span className="text-xs text-ink-2">{unit}</span>}
+      </span>
     </div>
   );
 }

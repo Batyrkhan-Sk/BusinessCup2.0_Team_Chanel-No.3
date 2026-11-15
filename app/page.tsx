@@ -5,7 +5,7 @@ import { landingView } from "@/lib/views/landing";
 import { DEMO_CASE, DEMO_LETTER, DEMO_PERSONAS } from "@/lib/fixtures";
 import { formatDate, formatUsd, formatUsdRange } from "@/lib/format";
 import { btn, Card, Check, DemoBadge, Eyebrow, Num, Pill, Wrap } from "@/components/ds";
-import { PageShell, VerifiedLine } from "@/components/site/chrome";
+import { PageShell } from "@/components/site/chrome";
 import { StatCard } from "@/components/site/stat-card";
 import { EndingSoon } from "@/components/site/ending-soon";
 import { WINNABILITY_LABEL } from "@/lib/content";
@@ -38,20 +38,20 @@ export default function LandingPage() {
           <div className="grid gap-3 sm:grid-cols-2">
             <Link
               href="/decode"
-              className="group flex flex-col gap-1 rounded-[var(--dc-r-lg)] bg-brand p-4 text-white no-underline shadow-md transition-colors hover:bg-brand-ink focus-visible:shadow-[var(--dc-focus)]"
+              className="group flex flex-col gap-0.5 rounded-[var(--dc-r-lg)] bg-brand px-4 py-3 text-white no-underline shadow-md transition-colors hover:bg-brand-ink focus-visible:shadow-[var(--dc-focus)]"
             >
-              <span className="text-sm text-white/80">Insurance said no?</span>
-              <span className="flex items-center justify-between gap-2 text-base font-semibold md:text-[17px]">
+              <span className="text-[13px] text-white/80">Insurance said no?</span>
+              <span className="flex items-center justify-between gap-2 text-[15px] font-semibold md:text-base">
                 Decode my denial letter
                 <ArrowRight aria-hidden="true" className="size-5 shrink-0 transition-transform group-hover:translate-x-0.5" />
               </span>
             </Link>
             <Link
               href="/quiz"
-              className="group flex flex-col gap-1 rounded-[var(--dc-r-lg)] border border-border bg-surface p-4 text-ink no-underline shadow-sm transition-colors hover:border-brand focus-visible:shadow-[var(--dc-focus)]"
+              className="group flex flex-col gap-0.5 rounded-[var(--dc-r-lg)] border border-border bg-surface px-4 py-3 text-ink no-underline shadow-sm transition-colors hover:border-brand focus-visible:shadow-[var(--dc-focus)]"
             >
-              <span className="text-sm text-ink-2">Paying cash, or about to start?</span>
-              <span className="flex items-center justify-between gap-2 text-base font-semibold md:text-[17px]">
+              <span className="text-[13px] text-ink-2">Paying cash, or about to start?</span>
+              <span className="flex items-center justify-between gap-2 text-[15px] font-semibold md:text-base">
                 Check my lowest price
                 <ArrowRight aria-hidden="true" className="size-5 shrink-0 text-brand transition-transform group-hover:translate-x-0.5" />
               </span>
@@ -61,13 +61,6 @@ export default function LandingPage() {
             <DemoBadge className="min-h-[22px] px-2 text-[11px]" />
             No letter? Try a sample one
           </Link>
-          <div className="flex flex-wrap gap-5">
-            <span className="inline-flex items-center gap-1.5 text-xs text-ink-3">
-              <span aria-hidden="true" className="inline-block size-2 rounded-full bg-brand" />
-              No login. No drug sales. No pharma money.
-            </span>
-            <VerifiedLine />
-          </div>
         </div>
 
         <Card className="flex flex-col gap-4 p-5 shadow-lg md:p-6" aria-label="Example decoded denial (DEMO)">

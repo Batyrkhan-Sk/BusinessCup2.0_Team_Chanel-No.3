@@ -11,6 +11,8 @@ import { btn, Check, inputCls, Notice } from "@/components/ds";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useGuardianMember } from "@/lib/client/use-guardian";
+import { Check as CheckIcon } from "lucide-react";
+import { formatDate, todayIso } from "@/lib/format";
 import { loadData } from "@/lib/data/load";
 
 const trialDays = loadData().pricing.trial_days;
@@ -36,7 +38,7 @@ export function ReminderSignup({ options, snapshot, compact, demo }: { options: 
   const toggle = (id: string, on: boolean) =>
     setPicked((p) => (unlimited ? { ...p, [id]: on } : on ? Object.fromEntries(options.map((o) => [o.id, o.id === id])) : { ...p, [id]: false }));
   const lockedMore = !unlimited && options.length > 1;
-  const [state, setState] = useState<{ kind: "idle" | "busy" } | { kind: "done"; text: string } | { kind: "error"; text: string; missing?: string[] }>({ kind: "idle" });
+  const [state, setState] = useState<{ kind: "idle" | "busy" } | { kind: "done"; done: Done } | { kind: "error"; text: string; missing?: string[] }>({ kind: "idle" });
   const form = useForm<z.infer<typeof Form>>({ resolver: zodResolver(Form) });
 
   async function call(path: string, body: unknown): Promise<ApiResult> {
@@ -53,7 +55,12 @@ export function ReminderSignup({ options, snapshot, compact, demo }: { options: 
     const r = await call("/api/reminders", { email, items: chosen.flatMap((o) => o.schedule ?? [{ payload: o.payload, remind_on: o.remind_on }]), snapshot });
     if (r.ok) {
       track("reminder_set", { count: chosen.length });
-      setState({ kind: "done", text: `Scheduled ${r.scheduled ?? 0} reminder email${r.scheduled === 1 ? "" : "s"}.${r.sent ? " The first one was just sent to your inbox." : ""}` });
+      const today = todayIso();
+      const upcoming = chosen
+        .flatMap((o) => (o.schedule ?? [{ remind_on: o.remind_on }]).flatMap((x) => x.remind_on.map((d) => ({ d, label: o.label }))))
+        .filter((x) => x.d >= today)
+        .sort((a, b) => a.d.localeCompare(b.d));
+      setState({ kind: "done", done: { title: "Reminders are on", email, sentNow: Boolean(r.sent), upcoming } });
       toast.success("Reminders scheduled");
     } else setState({ kind: "error", text: r.message ?? "Could not schedule reminders.", missing: r.missing });
   }
@@ -65,7 +72,7 @@ export function ReminderSignup({ options, snapshot, compact, demo }: { options: 
     const r = await call("/api/reminders/send-now", { email: form.getValues("email"), payload: chosen[0].payload });
     if (r.ok) {
       track("reminder_set", { count: 1, send_now: true });
-      setState({ kind: "done", text: "Sent. Check your inbox (and spam folder) in a minute." });
+      setState({ kind: "done", done: { title: "Email sent", email: form.getValues("email"), sentNow: true, upcoming: [] } });
       toast.success("Email sent");
     } else setState({ kind: "error", text: r.message ?? "Could not send the email.", missing: r.missing });
   }
@@ -113,14 +120,61 @@ export function ReminderSignup({ options, snapshot, compact, demo }: { options: 
       <button type="button" className={cn(btn({ variant: "ghost", size: "sm" }), "self-start px-0")} onClick={sendNow} disabled={state.kind === "busy" || chosen.length === 0}>
         Send me this email now
       </button>
-      {state.kind === "done" && <Notice tone="accent">{state.text}</Notice>}
+      {state.kind === "done" && <DoneCard done={state.done} />}
       {state.kind === "error" && (
-        <Notice tone="warn" title="Not configured yet">
+        <Notice tone="warn" title={state.missing?.length ? "Not configured yet" : "Could not send"}>
           {state.text}
           {state.missing?.length ? <span className="mt-1 block text-xs">Missing on the server: {state.missing.join(", ")}</span> : null}
         </Notice>
       )}
       <span className="text-xs text-ink-3">Your email is the only thing we store, and only for reminders. Unsubscribe in one click.</span>
     </form>
+  );
+}
+
+type Done = { title: string; email: string; sentNow: boolean; upcoming: Array<{ d: string; label: string }> };
+
+const SHOW = 3;
+
+/** Confirmation after reminders are set or an email is sent: what happens next, in dates. */
+function DoneCard({ done }: { done: Done }) {
+  const shown = done.upcoming.slice(0, SHOW);
+  const more = done.upcoming.length - shown.length;
+  const last = done.upcoming[done.upcoming.length - 1];
+  return (
+    <div role="status" className="flex flex-col gap-3 rounded-[var(--dc-r-lg)] border border-brand/15 bg-brand-soft/50 p-4">
+      <div className="flex items-start gap-3">
+        <span className="grid size-8 flex-none place-items-center rounded-full bg-brand text-white" aria-hidden="true">
+          <CheckIcon className="size-4" strokeWidth={3} />
+        </span>
+        <div className="flex min-w-0 flex-col gap-0.5">
+          <p className="font-semibold text-ink">{done.title}</p>
+          <p className="text-sm break-words text-ink-2">
+            {done.upcoming.length === 0 ? "Check " : "We will email "}
+            <strong className="font-semibold text-ink">{done.email}</strong>
+            {done.upcoming.length === 0 ? " in a minute, and the spam folder just in case." : " before each date."}
+            {done.upcoming.length > 0 && done.sentNow ? " The first one is already on its way." : ""}
+          </p>
+        </div>
+      </div>
+      {shown.length > 0 && (
+        <div className="flex flex-col gap-1.5">
+          <span className="text-xs font-semibold tracking-wide text-ink-2 uppercase">Coming up</span>
+          <ul className="flex flex-col divide-y divide-border/70 overflow-hidden rounded-[var(--dc-r-md)] border border-border/70 bg-surface">
+            {shown.map((x) => (
+              <li key={x.d + x.label} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
+                <span className="min-w-0">{x.label}</span>
+                <span className="flex-none text-ink-2">{formatDate(x.d)}</span>
+              </li>
+            ))}
+          </ul>
+          {more > 0 && last && (
+            <span className="text-xs text-ink-2">
+              and {more} more through {formatDate(last.d)}.
+            </span>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
