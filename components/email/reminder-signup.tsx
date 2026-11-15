@@ -11,6 +11,9 @@ import { btn, Check, inputCls, Notice } from "@/components/ds";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useGuardianMember } from "@/lib/client/use-guardian";
+import { loadData } from "@/lib/data/load";
+
+const trialDays = loadData().pricing.trial_days;
 
 export interface ReminderOption {
   id: string;
@@ -88,16 +91,20 @@ export function ReminderSignup({ options, snapshot, compact, demo }: { options: 
           ))}
           {lockedMore && (
             <p className="mt-1 text-xs text-ink-2">
-              One reminder is free. <Link href="/paywall" className="font-semibold text-brand">Guardian</Link> reminds you before every date.
+              One reminder is free.{" "}
+              <Link href="/paywall?from=reminders" className="font-semibold text-brand">
+                Get all {options.length} with Guardian{trialDays > 0 ? `, ${trialDays} days free` : ""}
+              </Link>
+              .
             </p>
           )}
         </fieldset>
       )}
-      <div className="flex flex-col gap-2 sm:flex-row">
+      <div className="flex w-full max-w-lg flex-col gap-2 sm:flex-row">
         <label htmlFor="remind-email" className="sr-only">
           Email
         </label>
-        <input id="remind-email" type="email" autoComplete="email" placeholder="you@example.com" className={inputCls} aria-invalid={Boolean(form.formState.errors.email)} {...form.register("email")} />
+        <input id="remind-email" type="email" autoComplete="email" placeholder="you@example.com" className={cn(inputCls, "min-w-0 flex-1")} aria-invalid={Boolean(form.formState.errors.email)} {...form.register("email")} />
         <button type="submit" className={btn({ className: "flex-none" })} disabled={state.kind === "busy" || chosen.length === 0}>
           {state.kind === "busy" ? "Working…" : "Set reminders"}
         </button>

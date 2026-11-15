@@ -20,7 +20,7 @@ import { CostChart } from "./cost-chart";
 import { EmailPreview } from "@/components/email/email-preview";
 import { ReminderSignup } from "@/components/email/reminder-signup";
 import { cn } from "@/lib/utils";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ReminderPicker, REMINDER_TITLE } from "@/components/email/reminder-picker";
 
 const data = loadData();
 
@@ -258,15 +258,11 @@ export function ResultView() {
             </h2>
             <p className="text-ink-2">The actual message, with your numbers filled in.</p>
             {options.length > 1 && (
-              <Tabs value={String(previewIdx)} onValueChange={(v) => setPreviewIdx(Number(v))}>
-                <TabsList aria-label="Preview which reminder" className="h-auto w-fit max-w-full flex-wrap justify-start gap-1 bg-surface-2 p-1">
-                  {options.map((o, i) => (
-                    <TabsTrigger key={o.id} value={String(i)} className="h-8 flex-none px-2.5 text-[13px] data-active:bg-surface data-active:text-ink data-active:shadow-sm">
-                      {shortKind(o.payload.kind)}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
+              <ReminderPicker
+                items={options.map((o, i) => ({ id: String(i), title: REMINDER_TITLE[o.payload.kind] ?? shortKind(o.payload.kind), sendDates: o.remind_on }))}
+                value={String(Math.min(previewIdx, options.length - 1))}
+                onChange={(v) => setPreviewIdx(Number(v))}
+              />
             )}
             <ReminderSignup options={options} snapshot={{ input, demo: c.demo }} demo={Boolean(c.demo)} />
           </div>

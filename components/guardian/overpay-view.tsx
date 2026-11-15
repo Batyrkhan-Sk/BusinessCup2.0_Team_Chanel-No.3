@@ -102,8 +102,8 @@ export function OverpayView() {
               exactly what to say to get it fixed. This check is part of Guardian.
             </p>
             <div className="flex flex-wrap gap-2">
-              <Link className={btn()} href="/paywall">
-                Get Guardian
+              <Link className={btn()} href="/paywall?from=overpay">
+                {data.pricing.trial_days > 0 ? `Try Guardian: ${data.pricing.trial_days} days free` : "Get Guardian"}
               </Link>
               <Link className={btn({ variant: "secondary" })} href="/guardian/overpay?demo=1">
                 <DemoBadge className="h-5 px-1.5 text-[10px]" />

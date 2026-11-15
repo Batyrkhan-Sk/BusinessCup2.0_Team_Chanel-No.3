@@ -15,13 +15,13 @@ import { btn, Card, Check, DemoBadge, Eyebrow, Num, Pill, Wrap, type PillTone } 
 import { EmailPreview } from "@/components/email/email-preview";
 import { ReminderSignup, type ReminderOption } from "@/components/email/reminder-signup";
 import { GuardianNav } from "./guardian-nav";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ReminderPicker, REMINDER_TITLE } from "@/components/email/reminder-picker";
 import { cn } from "@/lib/utils";
 
 const data = loadData();
 
 const TONE: Record<WatchItem["kind"], PillTone> = { pa_renewal: "warn", promo_ending: "danger", refill_window: "warn", appeal_deadline: "info", monthly_check: "accent", discount_ending: "danger", plan_year: "info" };
-const TITLE: Record<WatchItem["kind"], string> = { pa_renewal: "Approval renewal (PA)", promo_ending: "Promo ending", refill_window: "Refill window", appeal_deadline: "Appeal deadline", monthly_check: "Monthly check", discount_ending: "Discount ending", plan_year: "Plan-year check" };
+const TITLE = REMINDER_TITLE as Record<WatchItem["kind"], string>;
 
 export function TimelineView() {
   const demo = useMemo(() => demoWatchList(data, DEMO_CASE, DEMO_PERSONAS.sam.input, DEMO_PERSONAS.jessica.input), []);
@@ -50,7 +50,6 @@ export function TimelineView() {
   const renewal = demo.items.find((i) => i.kind === "pa_renewal");
   const promo = demo.items.find((i) => i.kind === "promo_ending");
   const appeal = demo.items.find((i) => i.kind === "appeal_deadline");
-  const refill = demo.items.find((i) => i.kind === "refill_window");
   const jp = demo.jessicaPath;
   const savedThisMonth = jp.best?.months[0]?.price_usd != null && DEMO_PERSONAS.jessica.input.current_monthly_cost_usd !== null ? DEMO_PERSONAS.jessica.input.current_monthly_cost_usd - jp.best.months[0].price_usd : null;
   const janCheck = `${Number(DEMO_CASE.today.slice(0, 4)) + 1}-${String(data.reminderRules.january_plan_check_month).padStart(2, "0")}-01`;
@@ -83,7 +82,7 @@ export function TimelineView() {
       {hasOwn && (
         <Card className="flex flex-col gap-4 p-6 shadow-md md:p-8">
           <div className="flex flex-col gap-1.5">
-            <Eyebrow>Your case · from your answers in this browser</Eyebrow>
+            <Eyebrow>Your case</Eyebrow>
             <h1 className="text-[28px] font-bold tracking-tight md:text-4xl">
               {own.length === 1 ? "1 date to watch" : `${own.length} dates to watch`}
             </h1>
@@ -238,20 +237,6 @@ export function TimelineView() {
               </div>
             ))}
           </Card>
-          {refill && appeal && (
-            <Card className="flex flex-col gap-2 p-6">
-              <Eyebrow>Preview a reminder</Eyebrow>
-              <Tabs value={previewItem?.id ?? ""} onValueChange={(v) => setPreviewId(String(v))}>
-                <TabsList aria-label="Choose reminder to preview" className="h-auto w-full flex-wrap justify-start gap-1 bg-surface-2 p-1">
-                  {demo.items.map((i) => (
-                    <TabsTrigger key={i.id} value={i.id} className="h-8 flex-none px-2.5 text-[13px] data-active:bg-surface data-active:text-ink data-active:shadow-sm">
-                      {TITLE[i.kind]}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
-            </Card>
-          )}
         </div>
       </section>
 
@@ -260,10 +245,11 @@ export function TimelineView() {
           <div className="flex flex-col gap-3">
             <Eyebrow>Reminder email preview</Eyebrow>
             <h2 id="email-h" className="text-2xl font-bold tracking-tight">
-              {TITLE[previewItem.kind]} email, exactly as it arrives
+              Every reminder, exactly as it arrives
             </h2>
-            <p className="text-sm text-ink-2">This is exactly the email that arrives before the date, with your numbers filled in.</p>
-            <ReminderSignup compact options={[{ id: previewItem.id, label: TITLE[previewItem.kind], payload: previewItem.payload, remind_on: previewItem.remind_on }]} snapshot={{ demo: true }} demo />
+            <p className="text-sm text-ink-2">Each date on the watch list gets its own email, with the numbers filled in.</p>
+            <ReminderPicker items={demo.items.map((i) => ({ id: i.id, title: TITLE[i.kind], sendDates: i.remind_on }))} value={previewItem.id} onChange={setPreviewId} />
+            <ReminderSignup key={previewItem.id} compact options={[{ id: previewItem.id, label: TITLE[previewItem.kind], payload: previewItem.payload, remind_on: previewItem.remind_on }]} snapshot={{ demo: true }} demo />
           </div>
           <EmailPreview payload={previewItem.payload} height={600} />
         </section>

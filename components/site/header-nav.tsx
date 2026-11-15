@@ -35,8 +35,8 @@ export function HeaderNav() {
               href={s.href}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "rounded-[var(--dc-r-sm)] px-3 py-1.5 no-underline transition-colors",
-                active ? "bg-brand-soft text-brand-ink" : "text-ink-2 hover:bg-surface-2 hover:text-ink",
+                "relative px-3 py-1.5 no-underline transition-colors outline-none focus-visible:shadow-[var(--dc-focus)] after:absolute after:inset-x-3 after:-bottom-1 after:h-0.5 after:rounded-full after:transition-colors",
+                active ? "text-brand-ink after:bg-brand" : "text-ink-2 after:bg-transparent hover:text-ink hover:after:bg-border",
               )}
             >
               {s.label}

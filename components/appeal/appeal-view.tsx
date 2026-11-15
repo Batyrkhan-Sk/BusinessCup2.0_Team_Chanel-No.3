@@ -225,10 +225,11 @@ export function AppealView() {
             <Card className="flex flex-col items-start gap-3 p-6 shadow-lg">
               <Eyebrow>Unlock the full pack</Eyebrow>
               <p className="text-sm">
-                Guardian ({formatUsd(monthly.price_usd)}/month) unlocks the full letter, the medical-necessity draft and the PDF export, plus reminders for every deadline.
+                Guardian unlocks the full letter, the medical-necessity draft and the PDF export, plus reminders for every deadline.
+                {data.pricing.trial_days > 0 ? ` ${data.pricing.trial_days} days free, then ${formatUsd(monthly.price_usd)}/month.` : ` ${formatUsd(monthly.price_usd)}/month.`}
               </p>
-              <Link className={btn()} href="/paywall">
-                See Guardian
+              <Link className={btn()} href="/paywall?from=appeal">
+                {data.pricing.trial_days > 0 ? `Unlock: ${data.pricing.trial_days} days free` : "See Guardian"}
               </Link>
             </Card>
           )}
