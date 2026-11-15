@@ -269,7 +269,6 @@ export function TimelineView() {
         </section>
       )}
 
-      <p className="text-xs text-ink-3">Not medical, legal or financial advice. Stored for your case: email, dates, prices and the documents you choose to keep. Never weight or symptoms.</p>
     </Wrap>
   );
 }

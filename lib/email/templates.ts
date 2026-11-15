@@ -194,7 +194,7 @@ function compose(p: ReminderPayload): Body {
 export function renderReminderEmail(payload: ReminderPayload, appUrl: string, opts: { unsubscribeUrl?: string } = {}): RenderedEmail {
   const b = compose(payload);
   const url = (path: string) => `${appUrl.replace(/\/$/, "")}${path}`;
-  const footer = `Prices verified on ${formatDate(payload.prices_verified_on)} from ${payload.source_label}. Not medical, legal or financial advice. ${b.reason}`;
+  const footer = `Not medical, legal or financial advice. ${b.reason}`;
   const demo = payload.demo ? `<p style="margin:0 0 12px;font:600 11px/1.4 Arial,sans-serif;letter-spacing:.06em;color:${C.ink3}">DEMO EMAIL · FICTIONAL CASE</p>` : "";
 
   const stats = b.stats

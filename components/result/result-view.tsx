@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import { loadData, pricesVerifiedOn } from "@/lib/data/load";
 import { bestPath } from "@/lib/engine/path";
 import { worthAppealing } from "@/lib/engine/denial";
@@ -165,7 +166,7 @@ export function ResultView() {
         </Notice>
       )}
 
-      <section className={cn("grid items-start gap-6", best && "lg:grid-cols-2")}>
+      <section className={cn("grid gap-6", best && "lg:grid-cols-2")}>
         {best && (
           <Card className="flex flex-col gap-4 p-6">
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -183,8 +184,9 @@ export function ResultView() {
             <RefillNote option={best} />
           </Card>
         )}
-        <ChannelTable path={path} />
+        <ChannelTable path={path} rows={path.options.filter((o) => o.rx_change !== "medicine")} />
       </section>
+      <AskDoctorSection options={path.options.filter((o) => o.rx_change === "medicine")} />
 
       <section className="grid gap-6 lg:grid-cols-3">
         <Card className="flex flex-col gap-3 p-6 lg:col-span-2">
@@ -311,13 +313,18 @@ function statusTone(o: ChannelOption, best: ChannelOption | null): { tone: PillT
   return { tone: "neutral", text: STATUS_LABEL.eligible };
 }
 
-function ChannelTable({ path }: { path: PathResult }) {
-  const rows = [...path.options].sort((a, b) => rank(a, path) - rank(b, path));
+function ChannelTable({ path, rows: input }: { path: PathResult; rows: ChannelOption[] }) {
+  const [showAll, setShowAll] = useState(false);
+  const sorted = [...input].sort((a, b) => rank(a, path) - rank(b, path));
+  /** Options that cost more or are not available are folded away, so the table stays as tall as the chart beside it. */
+  const secondary = (o: ChannelOption) => o.status === "ineligible" || statusTone(o, path.best).text === "Costs more";
+  const hidden = path.best ? sorted.filter(secondary).length : 0;
+  const rows = showAll || hidden === 0 ? sorted : sorted.filter((o) => !secondary(o));
   return (
     <Card className="overflow-hidden">
       <div className="px-6 pt-6 pb-2">
-        <h2 className="text-[22px] font-semibold">Every option we checked</h2>
-        <span className="text-sm text-ink-2">Rules applied to your answers</span>
+        <h2 className="text-[22px] font-semibold">Your options for this medicine</h2>
+        <span className="text-sm text-ink-2">Every way to buy it, checked against your answers</span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm">
@@ -349,7 +356,40 @@ function ChannelTable({ path }: { path: PathResult }) {
           </tbody>
         </table>
       </div>
+      {hidden > 0 && (
+        <div className="border-t border-border px-4 py-3">
+          <button type="button" className={btn({ variant: "ghost", size: "sm", className: "px-0" })} onClick={() => setShowAll((v) => !v)} aria-expanded={showAll}>
+            {showAll ? "Show fewer options" : `Show ${hidden} more ${hidden === 1 ? "option" : "options"} (cost more or not available)`}
+            <ChevronDown aria-hidden="true" className={cn("size-4 transition-transform", showAll && "rotate-180")} />
+          </button>
+        </div>
+      )}
     </Card>
+  );
+}
+
+/** Other medicines or forms, collapsed by default: only a doctor can decide whether one fits, so we show monthly prices only. */
+function AskDoctorSection({ options }: { options: ChannelOption[] }) {
+  if (options.length === 0) return null;
+  return (
+    <details className="group rounded-[var(--dc-r-lg)] border border-border bg-surface shadow-sm">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-[var(--dc-r-lg)] p-6 outline-none focus-visible:shadow-[var(--dc-focus)] [&::-webkit-details-marker]:hidden">
+        <span className="flex flex-col gap-1">
+          <span className="text-[18px] font-semibold">Other medicines to ask your doctor about ({options.length})</span>
+          <span className="text-sm text-ink-2">A different medicine or form. Only your doctor can decide whether one fits you, so we show monthly prices, not a 12-month total.</span>
+        </span>
+        <ChevronDown aria-hidden="true" className="size-5 shrink-0 text-ink-3 transition-transform group-open:rotate-180" />
+      </summary>
+      <div className="grid gap-3 border-t border-border p-6 sm:grid-cols-2 lg:grid-cols-3">
+        {options.map((o) => (
+          <div key={o.id} className="flex flex-col gap-1.5 rounded-[var(--dc-r-md)] bg-background p-4">
+            <span className="text-sm font-semibold">{o.label}</span>
+            <span className="num text-[22px]">{formatUsdRange(o.monthly_range_usd)}<span className="text-sm text-ink-3">/mo</span></span>
+            {o.status === "ineligible" && <Pill tone="neutral" className="self-start">{STATUS_LABEL.ineligible}</Pill>}
+          </div>
+        ))}
+      </div>
+    </details>
   );
 }
 

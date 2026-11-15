@@ -13,6 +13,7 @@ export const DEMO_LETTER_LINES: Array<{ text: string; bold?: boolean; size?: num
   { text: "Dear Jessica Demo,", gap: 10 },
   { text: "We reviewed a prior authorization request from your prescriber, Dr. Alex Sample, for:", gap: 4 },
   { text: "Zepbound (tirzepatide) 5 mg/0.5 mL single-dose pen, 4 pens per 28 days.", bold: true, gap: 10 },
+  { text: "Request type: Initial request (new prescription, not a renewal).", gap: 4 },
   { text: "Decision: The request is not approved. This is a pre-service decision.", gap: 10 },
   { text: "Reason for the decision:", bold: true, gap: 4 },
   { text: "Documentation of participation in a comprehensive weight-management program for at least", gap: 2 },

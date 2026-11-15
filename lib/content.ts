@@ -18,6 +18,22 @@ export const REASON_COPY: Record<string, string> = {
   requires_bridge_pa: "Your prescriber files a prior authorization with the program",
 };
 
+/** Plain-language names for extracted letter fields, used when asking the user to double-check something. */
+export const LETTER_FIELD_LABELS: Record<string, string> = {
+  is_denial_letter: "whether this is a denial letter",
+  plan_name: "the plan name",
+  plan_type: "the plan type",
+  drug_name: "the medicine named in the letter",
+  decision: "the decision",
+  request_type: "whether this was a first request or a renewal",
+  claim_timing: "whether this was decided before or after you got the medicine",
+  reason_text: "the denial reason",
+  notice_date: "the date of the notice",
+  stated_appeal_window_days: "how long you have to appeal",
+  reference_number: "the reference number",
+  appeal_contact: "where to send the appeal",
+};
+
 export const CAVEAT_COPY: Record<string, string> = {
   government_eligibility_unverified: "The program page does not say whether government-plan members can use it",
   cash_only_cannot_combine_with_insurance: "Cash price: cannot be combined with insurance and usually does not count toward your deductible",

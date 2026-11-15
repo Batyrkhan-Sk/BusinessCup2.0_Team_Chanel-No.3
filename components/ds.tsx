@@ -42,7 +42,7 @@ export type PillTone = keyof typeof pillTone;
 /** Status label: shadcn/ui Badge styles (badgeVariants), squared corners, toned with the DoseCost tokens. */
 export function Pill({ tone = "neutral", className, children }: { tone?: PillTone; className?: string; children: React.ReactNode }) {
   return (
-    <span data-slot="badge" className={cn(badgeVariants({ variant: "secondary" }), "h-6 rounded-md px-2 text-xs font-semibold", pillTone[tone], className)}>
+    <span data-slot="badge" className={cn(badgeVariants({ variant: "secondary" }), "h-6 rounded-[6px] px-2 text-xs font-semibold", pillTone[tone], className)}>
       {children}
     </span>
   );

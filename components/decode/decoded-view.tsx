@@ -9,6 +9,7 @@ import { appealWatch } from "@/lib/guardian/watch";
 import { formatDate, formatUsd, todayIso } from "@/lib/format";
 import type { DecodedDenial } from "@/lib/decoder/decode";
 import { DEMO_PERSONAS } from "@/lib/fixtures";
+import { LETTER_FIELD_LABELS } from "@/lib/content";
 import { bestPath } from "@/lib/engine/path";
 import { btn, Card, Check, DemoBadge, Eyebrow, Notice, Num, Pill, Skeleton, Wrap } from "@/components/ds";
 import { ReminderSignup } from "@/components/email/reminder-signup";
@@ -196,7 +197,11 @@ export function DecodedView() {
           </table>
           {d.needs_user_confirmation.length > 0 && (
             <Notice tone="warn" className="m-4">
-              Please double-check: {d.needs_user_confirmation.join(", ")}.
+              Please check this on your letter: {d.needs_user_confirmation.map((k) => LETTER_FIELD_LABELS[k] ?? k.replace(/_/g, " ")).join("; ")}. If something is wrong,{" "}
+              <Link href="/decode" className="font-semibold underline underline-offset-2">
+                enter the facts yourself
+              </Link>
+              .
             </Notice>
           )}
         </Card>
@@ -257,8 +262,7 @@ export function DecodedView() {
       </section>
 
       <p className="text-xs text-ink-3">
-        Not legal advice. Deadlines use the federal minimums for employer plans (29 CFR 2560.503-1) and HealthCare.gov&apos;s external review rules; your plan&apos;s notice may
-        allow more time and always controls.
+        Your plan&apos;s letter may give you more time to appeal. If it does, its deadline applies.
       </p>
     </Wrap>
   );
