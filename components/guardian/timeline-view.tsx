@@ -222,13 +222,14 @@ export function TimelineView() {
               const showBody = Boolean(t.body) && (next || details);
               return (
                 <li key={t.title} className="relative flex gap-4 pb-3 last:pb-0">
-                  {i < timeline.length - 1 && (
-                    <span aria-hidden="true" className={cn("absolute top-5 bottom-0 left-[6px] w-0.5 rounded-full", past ? "bg-brand/35" : "bg-border")} />
-                  )}
+                  <span
+                    aria-hidden="true"
+                    className={cn("absolute left-[6px] w-0.5", i === 0 ? "top-5" : "top-0", i === timeline.length - 1 ? "h-[5px]" : "bottom-0", past ? "bg-brand/35" : "bg-border")}
+                  />
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "relative mt-[5px] size-3.5 flex-none rounded-full",
+                      "relative size-3.5 flex-none rounded-full", next ? "mt-[19px]" : "mt-[5px]",
                       t.state === "bad" && "bg-danger",
                       t.state === "done" && "bg-brand",
                       next && "border-[3px] border-brand bg-surface",
@@ -239,7 +240,7 @@ export function TimelineView() {
                     className={cn(
                       "flex min-w-0 flex-1 flex-col gap-1",
                       next &&
-                        "relative -mt-2.5 mb-1 overflow-hidden rounded-xl border border-border bg-surface py-3 pr-4 pl-5 shadow-[0_8px_20px_-10px_rgba(15,23,20,0.22)] before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-brand",
+                        "relative mt-1.5 mb-2 overflow-hidden rounded-xl border border-border bg-surface py-3 pr-4 pl-5 shadow-[0_8px_20px_-10px_rgba(15,23,20,0.22)] before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-brand",
                     )}
                   >
                     {next && t.date && (
