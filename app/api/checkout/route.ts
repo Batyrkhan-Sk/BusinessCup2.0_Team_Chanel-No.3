@@ -27,6 +27,7 @@ export async function POST(req: Request) {
     success_url: `${base}/guardian/welcome?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${base}/paywall?canceled=1`,
     allow_promotion_codes: false,
+    adaptive_pricing: { enabled: false },
     metadata: { product: "guardian", plan: plan.id },
     payment_method_collection: "always",
     subscription_data: { metadata: { product: "guardian", plan: plan.id }, ...(pricing.trial_days > 0 ? { trial_period_days: pricing.trial_days } : {}) },
