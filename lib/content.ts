@@ -18,6 +18,13 @@ export const REASON_COPY: Record<string, string> = {
   requires_bridge_pa: "Your prescriber files a prior authorization with the program",
 };
 
+/** How fixable a denial type usually is. Our editorial tiers from data/appeal_rules.json, not success probabilities. */
+export const WINNABILITY_LABEL: Record<"high" | "medium" | "low", string> = {
+  high: "Usually fixable",
+  medium: "Sometimes fixable",
+  low: "Hard to change",
+};
+
 /** Plain-language names for extracted letter fields, used when asking the user to double-check something. */
 export const LETTER_FIELD_LABELS: Record<string, string> = {
   is_denial_letter: "whether this is a denial letter",

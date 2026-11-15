@@ -9,6 +9,8 @@ import type { ReminderPayload } from "@/lib/email/templates";
 import { track } from "@/lib/client/analytics";
 import { btn, Check, inputCls, Notice } from "@/components/ds";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { useGuardianMember } from "@/lib/client/use-guardian";
 
 export interface ReminderOption {
   id: string;
@@ -21,8 +23,14 @@ const Form = z.object({ email: z.string().email("Enter a valid email address") }
 
 type ApiResult = { ok: true; scheduled?: number; sent?: boolean } | { ok: false; error: string; message?: string; missing?: string[] };
 
-export function ReminderSignup({ options, snapshot, compact }: { options: ReminderOption[]; snapshot?: unknown; compact?: boolean }) {
-  const [picked, setPicked] = useState<Record<string, boolean>>(() => Object.fromEntries(options.map((o) => [o.id, true])));
+/** Without Guardian one reminder is free; Guardian (or DEMO data) unlocks every reminder. */
+export function ReminderSignup({ options, snapshot, compact, demo }: { options: ReminderOption[]; snapshot?: unknown; compact?: boolean; demo?: boolean }) {
+  const member = useGuardianMember();
+  const unlimited = Boolean(demo) || member === true;
+  const [picked, setPicked] = useState<Record<string, boolean>>(() => Object.fromEntries(options.map((o, i) => [o.id, i === 0])));
+  const toggle = (id: string, on: boolean) =>
+    setPicked((p) => (unlimited ? { ...p, [id]: on } : on ? Object.fromEntries(options.map((o) => [o.id, o.id === id])) : { ...p, [id]: false }));
+  const lockedMore = !unlimited && options.length > 1;
   const [state, setState] = useState<{ kind: "idle" | "busy" } | { kind: "done"; text: string } | { kind: "error"; text: string; missing?: string[] }>({ kind: "idle" });
   const form = useForm<z.infer<typeof Form>>({ resolver: zodResolver(Form) });
 
@@ -68,7 +76,7 @@ export function ReminderSignup({ options, snapshot, compact }: { options: Remind
                 type="checkbox"
                 className="peer sr-only"
                 checked={picked[o.id] ?? false}
-                onChange={(e) => setPicked((p) => ({ ...p, [o.id]: e.target.checked }))}
+                onChange={(e) => toggle(o.id, e.target.checked)}
               />
               <span className="rounded-md peer-focus-visible:shadow-[var(--dc-focus)]">
                 <Check on={picked[o.id] ?? false} />
@@ -76,6 +84,11 @@ export function ReminderSignup({ options, snapshot, compact }: { options: Remind
               {o.label}
             </label>
           ))}
+          {lockedMore && (
+            <p className="mt-1 text-xs text-ink-2">
+              One reminder is free. <Link href="/paywall" className="font-semibold text-brand">Guardian</Link> reminds you before every date.
+            </p>
+          )}
         </fieldset>
       )}
       <div className="flex flex-col gap-2 sm:flex-row">
@@ -98,7 +111,7 @@ export function ReminderSignup({ options, snapshot, compact }: { options: Remind
           {state.missing?.length ? <span className="mt-1 block text-xs">Missing on the server: {state.missing.join(", ")}</span> : null}
         </Notice>
       )}
-      <span className="text-xs text-ink-3">Free. Your email is the only thing we store, and only for reminders. Unsubscribe in one click.</span>
+      <span className="text-xs text-ink-3">Your email is the only thing we store, and only for reminders. Unsubscribe in one click.</span>
     </form>
   );
 }

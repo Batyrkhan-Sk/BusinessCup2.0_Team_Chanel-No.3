@@ -13,7 +13,7 @@ import { useCase } from "@/lib/client/use-case";
 import { track } from "@/lib/client/analytics";
 import { reminderOptions } from "@/lib/views/reminders";
 import { DEMO_CASE, DEMO_PERSONAS } from "@/lib/fixtures";
-import { CAVEAT_COPY, COVERAGE_LABELS, REASON_COPY, STATUS_LABEL } from "@/lib/content";
+import { CAVEAT_COPY, COVERAGE_LABELS, REASON_COPY, STATUS_LABEL, WINNABILITY_LABEL } from "@/lib/content";
 import { formatDate, formatUsd, formatUsdRange, todayIso } from "@/lib/format";
 import { btn, Card, DemoBadge, Eyebrow, Notice, Num, Pill, Skeleton, Wrap, type PillTone } from "@/components/ds";
 import { CostChart } from "./cost-chart";
@@ -194,7 +194,7 @@ export function ResultView() {
             <h2 className="text-[22px] font-semibold">Worth appealing?</h2>
             {worth ? (
               <Pill tone={worth.worth_it ? "accent" : "danger"}>
-                {worth.worth_it ? "Yes" : "Probably not"} · chance of winning: {worth.winnability}
+                {worth.worth_it ? "Yes" : "Probably not"} · {WINNABILITY_LABEL[worth.winnability].toLowerCase()}
               </Pill>
             ) : (
               <Pill tone="neutral">{input.status === "pa_denied" ? "Decode your letter to score it" : "No denial on file"}</Pill>
@@ -213,7 +213,7 @@ export function ResultView() {
                     Your denial reason maps to <strong>{c.decoded?.category_label.toLowerCase()}</strong>. {c.decoded?.plain_english}
                   </p>
                 ) : (
-                  <p className="text-sm">Upload the denial letter and we estimate your chance of winning from the type of denial: missing paperwork is often fixable, a plan exclusion rarely is.</p>
+                  <p className="text-sm">Upload the denial letter and we estimate how fixable it is from the type of denial: missing paperwork is often fixable, a plan exclusion rarely is.</p>
                 )}
                 <span className="text-xs text-ink-3">
                   Score = money at stake × an editorial weight for the denial type (not a probability). Context: insurers upheld most appeals that were filed in
@@ -268,7 +268,7 @@ export function ResultView() {
                 </TabsList>
               </Tabs>
             )}
-            <ReminderSignup options={options} snapshot={{ input, demo: c.demo }} />
+            <ReminderSignup options={options} snapshot={{ input, demo: c.demo }} demo={Boolean(c.demo)} />
           </div>
           <div className="rounded-[var(--dc-r-lg)] bg-surface-2 p-4 md:p-6">
             <EmailPreview payload={preview.payload} />

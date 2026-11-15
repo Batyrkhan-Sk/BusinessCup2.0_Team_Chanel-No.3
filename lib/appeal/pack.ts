@@ -8,6 +8,7 @@ import type { DataBundle, InsurerRule } from "@/lib/data/schemas";
 import type { DecodedDenial } from "@/lib/decoder/decode";
 import type { PathResult } from "@/lib/engine/types";
 import { formatDate, formatDateLong, formatUsd } from "@/lib/format";
+import { WINNABILITY_LABEL } from "@/lib/content";
 
 export interface AppealPack {
   title: string;
@@ -73,7 +74,7 @@ export function buildAppealPack(args: {
     checklist: d.checklist.map((c) => ({ label: c.label, detail: c.detail, who: c.who })),
     summary: [
       ["Denial category", d.category_label],
-      ["Chance of winning (our estimate)", d.winnability],
+      ["How fixable (our estimate)", WINNABILITY_LABEL[d.winnability]],
       ["File the appeal by", dl ? formatDate(dl.file_by) : "—"],
       ["Plan decision window", decision ?? "—"],
       ["Policy cited", rule ? `${rule.insurer_label} ${rule.policy_id}` : "—"],

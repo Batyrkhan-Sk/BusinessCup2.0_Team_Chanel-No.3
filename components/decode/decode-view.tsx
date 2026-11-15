@@ -113,7 +113,7 @@ export function DecodeView() {
         <Eyebrow>Step 1 of 2</Eyebrow>
         <h1 className="text-[28px] leading-tight font-bold tracking-tight md:text-4xl">Upload your denial letter</h1>
         <p className="max-w-[540px] text-lg text-ink-2">
-          A photo or PDF is enough. We&apos;ll show you why it was denied, your appeal deadline, what to gather, and how winnable it is.
+          A photo or PDF is enough. We&apos;ll show you why it was denied, your appeal deadline, what to gather, and how fixable it usually is.
         </p>
       </div>
 

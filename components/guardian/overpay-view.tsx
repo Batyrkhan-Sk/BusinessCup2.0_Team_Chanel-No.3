@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +15,7 @@ import { store } from "@/lib/client/store";
 import { formatDate, formatUsd, todayIso } from "@/lib/format";
 import { btn, Card, DemoBadge, Eyebrow, inputCls, Notice, Num, Pill, Wrap } from "@/components/ds";
 import { GuardianNav } from "./guardian-nav";
+import { useGuardianMember } from "@/lib/client/use-guardian";
 import { Dropdown } from "@/components/dropdown";
 import { DatePicker } from "@/components/date-picker";
 import { NumberStepper } from "@/components/number-stepper";
@@ -41,6 +43,7 @@ const promoCase = DEMO_CASE.cases.find((c) => c.id === "demo-promo") as unknown 
 export function OverpayView() {
   const params = useSearchParams();
   const demo = params.get("demo") === "1";
+  const member = useGuardianMember();
   const [rows, setRows] = useState<Row[]>([]);
   const [latest, setLatest] = useState<Row | null>(null);
 
@@ -82,6 +85,36 @@ export function OverpayView() {
     const basis = latest.result.expected.basis === "intro_price" ? `the ${formatUsd(latest.result.expected.expected_usd)} intro price (fill ${latest.fill_number} of ${o.promo?.intro_fills})` : `the ${formatUsd(latest.result.expected.expected_usd)} self-pay price for ${latest.dose_mg} mg`;
     return `Hello, I was charged ${formatUsd(latest.paid_usd)} for my ${getDrug(data, o.product_id).brand} fill on ${formatDate(latest.fill_date)}. Under ${o.channel_label}, this fill should be ${basis}. Please apply the correct price and refund the difference of ${formatUsd(latest.result.difference_usd)}.`;
   }, [latest]);
+
+  if (!demo && member !== true) {
+    return (
+      <Wrap className="flex flex-col gap-6 pt-2 pb-16">
+        <GuardianNav active="overpay" />
+        {member === false && (
+          <Card className="flex max-w-2xl flex-col gap-4 p-6 md:p-8">
+            <div className="flex items-center gap-2">
+              <Eyebrow>Monthly check</Eyebrow>
+              <Pill tone="accent">Guardian</Pill>
+            </div>
+            <h1 className="text-[26px] leading-tight font-bold tracking-tight md:text-[28px]">Did the pharmacy charge you the right price?</h1>
+            <p className="text-ink-2">
+              Each month, enter what you paid. We compare it with the price the program&apos;s terms say you should pay, and if you were overcharged we write
+              exactly what to say to get it fixed. This check is part of Guardian.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Link className={btn()} href="/paywall">
+                Get Guardian
+              </Link>
+              <Link className={btn({ variant: "secondary" })} href="/guardian/overpay?demo=1">
+                <DemoBadge className="h-5 px-1.5 text-[10px]" />
+                See it with sample data
+              </Link>
+            </div>
+          </Card>
+        )}
+      </Wrap>
+    );
+  }
 
   return (
     <Wrap className="flex flex-col gap-6 pt-2 pb-16">

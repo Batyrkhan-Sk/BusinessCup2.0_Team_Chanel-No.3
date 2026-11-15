@@ -8,6 +8,7 @@ import { btn, Card, Check, DemoBadge, Eyebrow, Num, Pill, Wrap } from "@/compone
 import { PageShell, VerifiedLine } from "@/components/site/chrome";
 import { StatCard } from "@/components/site/stat-card";
 import { EndingSoon } from "@/components/site/ending-soon";
+import { WINNABILITY_LABEL } from "@/lib/content";
 
 /** Re-render hourly so the "days left" count on expiring discounts stays current. */
 export const revalidate = 3600;
@@ -86,7 +87,7 @@ export default function LandingPage() {
             <div className="rounded-[var(--dc-r-md)] bg-background p-4">
               <span className="text-xs text-ink-3">Worth appealing?</span>
               <div className="num text-[26px] text-brand md:text-[32px]">{formatUsd(v.example.at_stake_usd)}</div>
-              <span className="text-xs text-ink-3">a year at stake · chance of winning: {v.example.winnability}</span>
+              <span className="text-xs text-ink-3">a year at stake · {WINNABILITY_LABEL[v.example.winnability].toLowerCase()}</span>
             </div>
           </div>
           <ul className="flex flex-col gap-2">

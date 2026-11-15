@@ -9,7 +9,7 @@ import { appealWatch } from "@/lib/guardian/watch";
 import { formatDate, formatUsd, todayIso } from "@/lib/format";
 import type { DecodedDenial } from "@/lib/decoder/decode";
 import { DEMO_PERSONAS } from "@/lib/fixtures";
-import { LETTER_FIELD_LABELS } from "@/lib/content";
+import { LETTER_FIELD_LABELS, WINNABILITY_LABEL } from "@/lib/content";
 import { bestPath } from "@/lib/engine/path";
 import { btn, Card, Check, DemoBadge, Eyebrow, Notice, Num, Pill, Skeleton, Wrap } from "@/components/ds";
 import { ReminderSignup } from "@/components/email/reminder-signup";
@@ -187,10 +187,10 @@ export function DecodedView() {
               </tr>
               <tr>
                 <th scope="row" className="px-4 py-3 text-left text-xs font-semibold tracking-[0.06em] text-ink-3 uppercase">
-                  Chance of winning (our estimate)
+                  How fixable (our estimate)
                 </th>
                 <td className="px-4 py-3">
-                  <Pill tone={winTone}>{d.winnability}</Pill>
+                  <Pill tone={winTone}>{WINNABILITY_LABEL[d.winnability]}</Pill>
                 </td>
               </tr>
             </tbody>

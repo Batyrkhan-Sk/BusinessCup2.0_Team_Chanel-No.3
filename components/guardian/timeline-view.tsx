@@ -263,7 +263,7 @@ export function TimelineView() {
               {TITLE[previewItem.kind]} email, exactly as it arrives
             </h2>
             <p className="text-sm text-ink-2">This is exactly the email that arrives before the date, with your numbers filled in.</p>
-            <ReminderSignup compact options={[{ id: previewItem.id, label: TITLE[previewItem.kind], payload: previewItem.payload, remind_on: previewItem.remind_on }]} snapshot={{ demo: true }} />
+            <ReminderSignup compact options={[{ id: previewItem.id, label: TITLE[previewItem.kind], payload: previewItem.payload, remind_on: previewItem.remind_on }]} snapshot={{ demo: true }} demo />
           </div>
           <EmailPreview payload={previewItem.payload} height={600} />
         </section>
