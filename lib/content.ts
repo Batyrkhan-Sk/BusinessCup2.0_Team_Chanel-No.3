@@ -22,6 +22,9 @@ export const CAVEAT_COPY: Record<string, string> = {
   government_eligibility_unverified: "The program page does not say whether government-plan members can use it",
   cash_only_cannot_combine_with_insurance: "Cash price: cannot be combined with insurance and usually does not count toward your deductible",
   dose_not_offered_in_window: "Not every month in the projection is priced by this program",
+  temporary_price_regular_unpublished:
+    "Some prices here are temporary, and the manufacturer has not published the regular price yet, so later months may cost more than shown",
+  late_refill_price_unpublished: "If you refill late, a higher regular price applies, and the manufacturer has not published it, so late months may cost more than shown",
   as_low_as_price: "\"As low as\" price: what you pay depends on your plan's copay",
   assumes_card_renewed_after_expiry: "The card's current terms end during this projection; later months assume it is renewed on the same terms",
   program_window_ends_in_projection: "The program ends during this projection",

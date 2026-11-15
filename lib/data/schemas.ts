@@ -80,6 +80,10 @@ export const DosePrice = z.object({
   monthly_usd: usd,
   /** price when the refill-window condition is missed */
   late_refill_monthly_usd: usd.optional(),
+  /** last day this price applies when the source marks it temporary and does not publish the regular price */
+  temporary_through: isoDate.optional(),
+  /** a refill-window condition applies to this dose, but the source does not publish the late-refill price */
+  late_refill_unpublished: z.boolean().optional(),
 });
 
 export const Promo = z.object({

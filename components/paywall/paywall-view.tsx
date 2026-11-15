@@ -6,7 +6,7 @@ import { track } from "@/lib/client/analytics";
 import { store } from "@/lib/client/store";
 import { loadData } from "@/lib/data/load";
 import { formatUsd } from "@/lib/format";
-import { btn, Card, Check, Eyebrow, Notice, Num, Wrap } from "@/components/ds";
+import { btn, Card, Check, Eyebrow, Notice, Num, Pill, Wrap } from "@/components/ds";
 import { cn } from "@/lib/utils";
 
 const data = loadData();
@@ -63,7 +63,7 @@ export function PaywallView() {
               <input type="radio" name="plan" value={p.id} checked={on} onChange={() => setPlan(p.id)} className="sr-only" />
               <div className="flex items-center justify-between">
                 <Eyebrow onDark={on}>{label}</Eyebrow>
-                {p.id === "yearly" && <span className={cn("rounded-full px-3 py-1 text-[13px] font-semibold", on ? "bg-white text-brand-ink" : "bg-brand-soft text-brand-ink")}>Save {formatUsd(saving)}</span>}
+                {p.id === "yearly" && <Pill tone="accent" className={cn(on && "bg-white")}>Save {formatUsd(saving)}</Pill>}
               </div>
               <div className="flex items-baseline gap-2">
                 <Num className="text-[64px]">{formatUsd(p.price_usd)}</Num>

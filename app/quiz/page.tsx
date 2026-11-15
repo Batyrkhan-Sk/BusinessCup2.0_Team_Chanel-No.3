@@ -8,7 +8,11 @@ export const metadata: Metadata = { title: "Find your cheapest path" };
 
 export default function QuizPage() {
   const data = loadData();
-  const products: QuizProduct[] = data.drugs.drugs.map((d) => {
+  /** Only offer medicines we can actually price: a program offer or a savings card in the data. List price alone does not count. */
+  const priceable = (productId: string) =>
+    data.prices.offers.some((o) => o.product_id === productId && o.channel !== "list") ||
+    data.savingsCards.cards.some((c) => c.product_ids.includes(productId));
+  const products: QuizProduct[] = data.drugs.drugs.filter((d) => priceable(d.product_id)).map((d) => {
     const offer = data.prices.offers.find((o) => o.product_id === d.product_id && (o.channel === "lillydirect" || o.channel === "novocare"));
     const ladder = offer?.dose_prices.filter((p) => p.dose_mg !== null) ?? [];
     const price_note =

@@ -221,7 +221,7 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
                         role="radio"
                         aria-checked={on}
                         onClick={() => setValue("current_dose_mg", o.id ? Number(o.id) : null)}
-                        className={cn("min-h-11 rounded-full px-[18px] text-[15px] font-semibold outline-none focus-visible:shadow-[var(--dc-focus)]", on ? "bg-brand-soft text-brand-ink shadow-[inset_0_0_0_2px_var(--dc-accent)]" : "bg-surface-2 text-ink-2")}
+                        className={cn("min-h-10 rounded-[var(--dc-r-md)] px-4 text-[15px] font-semibold outline-none focus-visible:shadow-[var(--dc-focus)]", on ? "bg-brand-soft text-brand-ink shadow-[inset_0_0_0_2px_var(--dc-accent)]" : "bg-surface-2 text-ink-2")}
                       >
                         {o.label}
                       </button>

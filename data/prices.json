@@ -67,6 +67,37 @@
       "source_note": "KwikPen rows on the same page show the same $299 / $399 / $449 ladder with 'Pen needle purchase required'. Late-refill prices are stated once on the page; applied to KwikPen as well."
     },
     {
+      "id": "lillydirect-foundayo-pill",
+      "channel": "lillydirect",
+      "channel_label": "LillyDirect self-pay (Foundayo tablets)",
+      "product_id": "foundayo-pill",
+      "routes_to_offer_id": null,
+      "dose_prices": [
+        { "dose_mg": 0.8, "monthly_usd": 149 },
+        { "dose_mg": 2.5, "monthly_usd": 149, "temporary_through": "2026-12-31" },
+        { "dose_mg": 5.5, "monthly_usd": 199, "temporary_through": "2026-12-31" },
+        { "dose_mg": 9, "monthly_usd": 299 },
+        { "dose_mg": 14.5, "monthly_usd": 299, "late_refill_unpublished": true },
+        { "dose_mg": 17.2, "monthly_usd": 299, "late_refill_unpublished": true }
+      ],
+      "refill_window_days": 45,
+      "units_per_month": "30 tablets (Lilly defines a month as 30 days)",
+      "promo": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace", "medicare", "medicaid", "tricare_va", "none"],
+        "cash_only": true,
+        "government_beneficiaries": "unverified",
+        "requires_plan_coverage": false,
+        "notes": "Self-pay only; does not run through insurance. Medicare Part D patients are pointed to the Medicare GLP-1 Bridge instead."
+      },
+      "valid_from": null,
+      "valid_through": null,
+      "source_url": "https://lilly.com/lillydirect/medicines/foundayo",
+      "verified_at": "2026-11-15",
+      "verification": "primary",
+      "source_note": "Self-pay prices: 0.8 mg starting at $149/month; 2.5 mg $149; 5.5 mg $199; 9 mg $299; 14.5 mg and 17.2 mg $299 when you refill within 45 days. Prices for the 2.5 mg and 5.5 mg dose are temporarily reduced through December 31, 2026. NOT PUBLISHED on the page: the regular 2.5/5.5 mg prices after that date and the regular (late-refill) price for 14.5/17.2 mg, so projections use the listed prices and may understate cost after Dec 31, 2026 or after a late refill."
+    },
+    {
       "id": "novocare-wegovy-pen",
       "channel": "novocare",
       "channel_label": "NovoCare / wegovy.com self-pay (pen)",

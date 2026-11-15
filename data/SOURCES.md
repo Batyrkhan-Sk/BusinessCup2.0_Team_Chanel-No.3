@@ -17,6 +17,10 @@ All facts below were checked on **2026-11-14**. "Primary" means read on the owne
 | TrumpRx listed prices | Wegovy pill $149, Wegovy pen $199, Ozempic $199, Zepbound $299 ("Lowest Presidential Deal") | https://trumprx.gov | primary |
 | List ("original") prices | Wegovy $1,349, Ozempic $1,028, Zepbound $1,087 | https://trumprx.gov | primary |
 | TrumpRx is cash-only; Zepbound purchases redirect to LillyDirect | — | ABC News / KFF Health News reporting on the Feb 2026 launch; FAQ answers not readable on trumprx.gov | secondary |
+| LillyDirect Foundayo tablets | | TrumpRx is cash-only; Zepbound purchases redirect to LillyDirect | — | ABC News / KFF Health News reporting on the Feb 2026 launch; FAQ answers not readable on trumprx.gov | secondary |
+49 (0.8 mg), | TrumpRx is cash-only; Zepbound purchases redirect to LillyDirect | — | ABC News / KFF Health News reporting on the Feb 2026 launch; FAQ answers not readable on trumprx.gov | secondary |
+49 (2.5 mg), | TrumpRx is cash-only; Zepbound purchases redirect to LillyDirect | — | ABC News / KFF Health News reporting on the Feb 2026 launch; FAQ answers not readable on trumprx.gov | secondary |
+99 (5.5 mg), $299 (9 mg), $299 (14.5 and 17.2 mg when refilled within 45 days); 2.5 and 5.5 mg prices temporarily reduced through 2026-12-31; 1 month = 30 days | https://lilly.com/lillydirect/medicines/foundayo (read 2026-11-15) | primary |
 
 ## Savings cards (`savings_cards.json`)
 
@@ -26,6 +30,7 @@ All facts below were checked on **2026-11-14**. "Primary" means read on the owne
 | Zepbound card, commercial without coverage | as low as $499/mo (single-dose pen); KwikPen 2.5 mg $299 with dose-specific caps | same | primary (KwikPen tiers not modelled) |
 | Zepbound card exclusions | Medicaid, Medicare incl. Part D/Advantage, Medigap, DoD, VA, TRICARE/CHAMPUS, state drug programs | same | primary |
 | Wegovy Savings Offer | as little as $25, max savings $100/month; government beneficiaries excluded; duration not stated | wegovy.com savings page | primary |
+| Foundayo Savings Card, commercial with coverage | as low as $25/month; government beneficiaries excluded; max benefit and expiry not stated | https://lilly.com/lillydirect/medicines/foundayo (read 2026-11-15) | primary |
 
 ## Medicare GLP-1 Bridge (`medicare_bridge.json`)
 
@@ -75,6 +80,7 @@ All facts below were checked on **2026-11-14**. "Primary" means read on the owne
 
 ## Could NOT verify (and how the product handles it)
 
+- **Foundayo regular prices.** Lilly does not publish the 2.5/5.5 mg price after the temporary reduction ends on 2026-12-31, or the late-refill price for 14.5/17.2 mg. Projections use the listed prices and may understate cost after those points.
 - **Spec: "employer coverage for obesity fell from 72% in 2025 to 60% in 2026" (Business Group on Health).** Not found. BGH data says 67% of large employers cover in 2026 and 72% *of those* expect to continue in 2027. The landing uses the verified figures; the 72%→60% claim is not used.
 - **Spec: "about 80% of users get prescriptions from their own doctor".** Closest verified figure is 79% (KFF via AAFP, secondary). Used as 79%.
 - **Spec: Wegovy pens "$199 for the first two fills, then $349".** Verified, with two conditions the spec omits: only at 0.25 or 0.5 mg, and only through 2026-12-31.

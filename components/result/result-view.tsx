@@ -19,6 +19,7 @@ import { CostChart } from "./cost-chart";
 import { EmailPreview } from "@/components/email/email-preview";
 import { ReminderSignup } from "@/components/email/reminder-signup";
 import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const data = loadData();
 
@@ -160,11 +161,11 @@ export function ResultView() {
         </motion.section>
       ) : (
         <Notice tone="warn" title="No path we can price">
-          None of the channels we track can price this medicine for your coverage. The table below shows why.
+          None of the options we track can price this medicine for your coverage. The table below shows why.
         </Notice>
       )}
 
-      <section className="grid items-start gap-6 lg:grid-cols-2">
+      <section className={cn("grid items-start gap-6", best && "lg:grid-cols-2")}>
         {best && (
           <Card className="flex flex-col gap-4 p-6">
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -249,25 +250,21 @@ export function ResultView() {
       {preview && (
         <section className="grid items-start gap-8 rounded-[var(--dc-r-lg)] border border-border bg-surface p-6 shadow-sm md:grid-cols-[5fr_7fr] md:p-8" aria-labelledby="preview-h">
           <div className="flex flex-col gap-4">
-            <Eyebrow>Instant preview · the real template</Eyebrow>
+            <Eyebrow>Reminder email preview</Eyebrow>
             <h2 id="preview-h" className="text-[24px] leading-tight font-bold tracking-tight md:text-[28px]">
-              This is the email you will get. Not a promise, the actual message.
+              This is the email you will get before each date.
             </h2>
-            <p className="text-ink-2">Rendered by the same template our scheduled job sends, filled with your numbers.</p>
+            <p className="text-ink-2">The actual message, with your numbers filled in.</p>
             {options.length > 1 && (
-              <div className="flex flex-wrap gap-2" role="tablist" aria-label="Preview which reminder">
-                {options.map((o, i) => (
-                  <button
-                    key={o.id}
-                    role="tab"
-                    aria-selected={i === previewIdx}
-                    onClick={() => setPreviewIdx(i)}
-                    className={cn("min-h-10 rounded-full px-3.5 text-sm font-semibold outline-none focus-visible:shadow-[var(--dc-focus)]", i === previewIdx ? "bg-brand-soft text-brand-ink" : "bg-surface-2 text-ink-2")}
-                  >
-                    {shortKind(o.payload.kind)}
-                  </button>
-                ))}
-              </div>
+              <Tabs value={String(previewIdx)} onValueChange={(v) => setPreviewIdx(Number(v))}>
+                <TabsList aria-label="Preview which reminder" className="h-auto w-fit max-w-full flex-wrap justify-start gap-1 bg-surface-2 p-1">
+                  {options.map((o, i) => (
+                    <TabsTrigger key={o.id} value={String(i)} className="h-8 flex-none px-2.5 text-[13px] data-active:bg-surface data-active:text-ink data-active:shadow-sm">
+                      {shortKind(o.payload.kind)}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
             )}
             <ReminderSignup options={options} snapshot={{ input, demo: c.demo }} />
           </div>

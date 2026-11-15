@@ -67,6 +67,12 @@ function range(prices: number[]): [number, number] | null {
   return prices.length ? [Math.min(...prices), Math.max(...prices)] : null;
 }
 
+/** Range of what the user actually pays across the projection; falls back to the program ladder when no month is priced. */
+function paidRange(lines: MonthLine[], ladder: number[]): [number, number] | null {
+  const paid = lines.map((l) => l.price_usd).filter((p): p is number => p !== null);
+  return paid.length ? range(paid) : range(ladder);
+}
+
 /* --------------------------------------------------------- price an offer */
 
 export function projectOffer(
@@ -159,7 +165,11 @@ export function enumerateOptions(input: QuizInput, data: DataBundle): ChannelOpt
     }
     const lines = projectOffer(data, offer, doses, months, { introFillsUsed: isCurrentOffer ? input.intro_fills_used ?? 0 : 0, refillsOnTime });
     if (lines.some((l) => l.price_usd === null)) base.caveats.push("dose_not_offered_in_window");
-    options.push({ ...base, months: lines, total_usd: total(lines), monthly_range_usd: range(prices) });
+    const ladder = fulfilmentOffer(data, offer).dose_prices;
+    const rowFor = (dose: number) => ladder.find((p) => p.dose_mg === dose);
+    if (lines.some((l) => { const t = rowFor(l.dose_mg)?.temporary_through; return t !== undefined && l.fill_date > t; })) base.caveats.push("temporary_price_regular_unpublished");
+    if (!refillsOnTime && lines.some((l) => rowFor(l.dose_mg)?.late_refill_unpublished)) base.caveats.push("late_refill_price_unpublished");
+    options.push({ ...base, months: lines, total_usd: total(lines), monthly_range_usd: paidRange(lines, prices) });
   }
 
   // 2) Savings cards.
@@ -212,7 +222,7 @@ export function enumerateOptions(input: QuizInput, data: DataBundle): ChannelOpt
       caveats,
       months: lines,
       total_usd: total(lines),
-      monthly_range_usd: range(lines.map((l) => l.price_usd ?? 0)),
+      monthly_range_usd: paidRange(lines, []),
       source_urls: [card.source_url],
       verified_at: card.verified_at,
     });
@@ -273,7 +283,7 @@ export function enumerateOptions(input: QuizInput, data: DataBundle): ChannelOpt
       caveats: [],
       months: lines,
       total_usd: total(lines),
-      monthly_range_usd: range(list.dose_prices.map((p) => p.monthly_usd)),
+      monthly_range_usd: paidRange(lines, list.dose_prices.map((p) => p.monthly_usd)),
       source_urls: [list.source_url],
       verified_at: list.verified_at,
     });

@@ -66,6 +66,28 @@
       "verified_at": "2026-11-14",
       "verification": "primary",
       "source_note": "'Pay as little as $25, subject to a maximum savings of $100/month.'"
+    },
+    {
+      "id": "foundayo-savings-card-covered",
+      "label": "Foundayo Savings Card (commercial insurance that covers Foundayo)",
+      "manufacturer": "Eli Lilly and Company",
+      "product_ids": ["foundayo-pill"],
+      "applies_when": "with_coverage",
+      "as_low_as_monthly_usd": 25,
+      "max_monthly_benefit_usd": null,
+      "max_annual_benefit_usd": null,
+      "expires_on": null,
+      "eligibility": {
+        "coverage_types": ["employer", "marketplace"],
+        "cash_only": false,
+        "government_beneficiaries": "excluded",
+        "requires_plan_coverage": true,
+        "notes": "Governmental beneficiaries excluded. Lilly may modify or cancel the offer at any time. Maximum benefit and expiry are not stated on the page."
+      },
+      "source_url": "https://lilly.com/lillydirect/medicines/foundayo",
+      "verified_at": "2026-11-15",
+      "verification": "primary",
+      "source_note": "If you are eligible and commercially insured with coverage for Foundayo, you could pay as low as $25 a month. Month is defined as 30-days."
     }
   ]
 }
