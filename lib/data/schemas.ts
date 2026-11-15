@@ -302,6 +302,7 @@ export const ReminderRulesSchema = Provenance.extend({
   promo_ending_lead_days: z.number().int().positive(),
   plan_decision_overdue_grace_days: z.number().int().nonnegative(),
   january_plan_check_month: z.number().int().min(1).max(12),
+  discount_ending_lead_days: z.number().int().positive(),
 });
 export type ReminderRules = z.infer<typeof ReminderRulesSchema>;
 

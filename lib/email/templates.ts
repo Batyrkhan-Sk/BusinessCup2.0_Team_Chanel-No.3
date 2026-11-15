@@ -7,7 +7,7 @@
 import { z } from "zod";
 import { formatDate, formatUsd } from "@/lib/format";
 
-export const ReminderKind = z.enum(["promo_ending", "pa_renewal", "refill_window", "appeal_deadline", "monthly_check"]);
+export const ReminderKind = z.enum(["promo_ending", "pa_renewal", "refill_window", "appeal_deadline", "monthly_check", "discount_ending", "plan_year"]);
 export type ReminderKind = z.infer<typeof ReminderKind>;
 
 const base = {
@@ -63,6 +63,23 @@ export const ReminderPayload = z.discriminatedUnion("kind", [
     ...base,
     product_label: z.string(),
     expected_usd: z.number().nullable(),
+  }),
+  z.object({
+    kind: z.literal("discount_ending"),
+    ...base,
+    product_label: z.string(),
+    discount_label: z.string(),
+    ends_on: z.string(),
+    days_left: z.number().int(),
+    current_usd: z.number().nullable(),
+  }),
+  z.object({
+    kind: z.literal("plan_year"),
+    ...base,
+    product_label: z.string(),
+    plan_year: z.string(),
+    best_label: z.string().nullable(),
+    best_monthly_usd: z.number().nullable(),
   }),
 ]);
 export type ReminderPayload = z.infer<typeof ReminderPayload>;
@@ -188,6 +205,55 @@ function compose(p: ReminderPayload): Body {
         cta: { label: "Log my last fill", path: "/guardian/overpay" },
         reason: "You get this because you turned on the monthly overpayment check.",
       };
+    case "discount_ending":
+      return {
+        subject: `Your ${p.discount_label} ends ${formatDate(p.ends_on)}`,
+        preheader: `Check what ${p.product_label} will cost after that.`,
+        headline: greet(p, `your ${p.discount_label} ends ${formatDate(p.ends_on)}.`),
+        paragraphs: [
+          `After that date your ${p.product_label} price can change. Re-run your price check before then to see your lowest official option, and ask your pharmacy or plan what you will pay next.`,
+        ],
+        stats: [
+          { label: "Days left", value: String(p.days_left), accent: true },
+          ...(p.current_usd !== null ? [{ label: "What you pay now, per month", value: formatUsd(p.current_usd) }] : []),
+        ],
+        cta: { label: "Re-check my price", path: "/quiz" },
+        reason: "You get this because you turned on discount alerts.",
+      };
+    case "plan_year":
+      return {
+        subject: `New plan year: check your ${p.product_label} price and coverage`,
+        preheader: "Coverage, approval rules, copays and savings cards often change at the start of the year.",
+        headline: greet(p, `it is ${p.plan_year}. Check what ${p.product_label} costs you now.`),
+        paragraphs: [
+          "Many plans change coverage, prior-authorization rules and copays when the new plan year starts, and savings cards can expire. Re-run your price check with your current plan details. It takes about two minutes.",
+        ],
+        stats: p.best_monthly_usd !== null ? [{ label: p.best_label ? `Last year: ${p.best_label}` : "Your lowest price last year", value: formatUsd(p.best_monthly_usd), accent: true }] : [],
+        cta: { label: "Re-check my price", path: "/quiz" },
+        reason: "You get this because you turned on the yearly plan check.",
+      };
+  }
+}
+
+/**
+ * Payloads are saved at signup, but each reminder goes out on its own date. Recompute the
+ * "days left" style fields for the scheduled send date so a 7-day reminder never says 23.
+ */
+export function payloadForSendDate(p: ReminderPayload, sendOn: string, refillLeadDays: number): ReminderPayload {
+  const days = (to: string) => Math.round((Date.parse(to) - Date.parse(sendOn)) / 86400000);
+  switch (p.kind) {
+    case "pa_renewal":
+      return { ...p, days_until: days(p.approval_ends_on) };
+    case "appeal_deadline":
+      return { ...p, days_left: days(p.file_by) };
+    case "discount_ending":
+      return { ...p, days_left: days(p.ends_on) };
+    case "refill_window": {
+      const closes = new Date(Date.parse(sendOn) + refillLeadDays * 86400000).toISOString().slice(0, 10);
+      return { ...p, window_closes_on: closes, days_left: refillLeadDays };
+    }
+    default:
+      return p;
   }
 }
 

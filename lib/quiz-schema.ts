@@ -16,6 +16,12 @@ export const QuizSchema = z.object({
   plan_copay_usd: z.number().min(0).max(100000).nullable(),
   intro_fills_used: z.number().int().min(0).max(24),
   refills_on_time: z.boolean(),
+  /** end date printed on the approval letter ("approved through ..."); drives renewal reminders */
+  approval_ends_on: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .nullable()
+    .optional(),
 });
 export type QuizValues = z.infer<typeof QuizSchema>;
 
@@ -29,6 +35,7 @@ export const QUIZ_DEFAULTS: Partial<QuizValues> = {
   plan_copay_usd: null,
   intro_fills_used: 0,
   refills_on_time: true,
+  approval_ends_on: null,
 };
 
 export const COMMERCIAL = ["employer", "marketplace"] as const;

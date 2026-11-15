@@ -25,6 +25,8 @@ export interface QuizInput {
   intro_fills_used?: number;
   /** false = the user expects to miss refill windows (late-refill prices apply) */
   refills_on_time?: boolean;
+  /** end date of an approved prior authorization, YYYY-MM-DD (from the approval letter) */
+  approval_ends_on?: string | null;
   /** first projected fill month, YYYY-MM */
   start_month: string;
 }

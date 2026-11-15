@@ -285,10 +285,10 @@ export function ResultView() {
 }
 
 function shortKind(k: string) {
-  return ({ promo_ending: "Promo", pa_renewal: "Renewal", refill_window: "Refill", appeal_deadline: "Appeal", monthly_check: "Monthly" } as Record<string, string>)[k] ?? k;
+  return ({ promo_ending: "Promo", pa_renewal: "Renewal", refill_window: "Refill", appeal_deadline: "Appeal", monthly_check: "Monthly", discount_ending: "Discount", plan_year: "New year" } as Record<string, string>)[k] ?? k;
 }
 function toneFor(k: string): PillTone {
-  return ({ promo_ending: "danger", pa_renewal: "warn", refill_window: "warn", appeal_deadline: "info", monthly_check: "accent" } as Record<string, PillTone>)[k] ?? "neutral";
+  return ({ promo_ending: "danger", pa_renewal: "warn", refill_window: "warn", appeal_deadline: "info", monthly_check: "accent", discount_ending: "danger", plan_year: "info" } as Record<string, PillTone>)[k] ?? "neutral";
 }
 
 function RefillNote({ option }: { option: ChannelOption }) {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { and, eq, lte, sql } from "drizzle-orm";
-import { ReminderPayload, renderReminderEmail } from "@/lib/email/templates";
+import { payloadForSendDate, ReminderPayload, renderReminderEmail } from "@/lib/email/templates";
+import { loadData } from "@/lib/data/load";
 import { getDb, schema } from "@/lib/db/client";
 import { sendEmail } from "@/lib/server/mail";
 import { appUrl, isConfigured, missingEnv } from "@/lib/server/env";
@@ -37,7 +38,8 @@ export async function GET(req: Request) {
       failed++;
       continue;
     }
-    const email = renderReminderEmail(payload.data, base, { unsubscribeUrl: `${base}/api/unsubscribe?token=${r.unsubscribe_token}` });
+    const fresh = payloadForSendDate(payload.data, String(r.send_on).slice(0, 10), loadData().reminderRules.refill_window_lead_days);
+    const email = renderReminderEmail(fresh, base, { unsubscribeUrl: `${base}/api/unsubscribe?token=${r.unsubscribe_token}` });
     const res = await sendEmail(r.email, email);
     const attempts = sql`${schema.reminders.attempts} + 1`;
     await db

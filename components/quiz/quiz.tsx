@@ -12,6 +12,7 @@ import { store } from "@/lib/client/store";
 import { track } from "@/lib/client/analytics";
 import { btn, Card, choiceCls, DemoBadge, Eyebrow, inputCls, Radio } from "@/components/ds";
 import { Dropdown } from "@/components/dropdown";
+import { DatePicker } from "@/components/date-picker";
 import { formatUsd } from "@/lib/format";
 import { nextMonth } from "@/lib/engine/dates";
 import { cn } from "@/lib/utils";
@@ -60,14 +61,15 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
   // persist draft
   useEffect(() => {
     if (!hydrated || submitted.current) return;
-    store.setQuiz({ ...v, step: stepIdx, demo: null });
+    // keep the start month of the last completed run, so editing answers never drops an existing result
+    store.setQuiz({ ...v, start_month: store.getQuiz()?.start_month, step: stepIdx, demo: null });
   }, [v, stepIdx, hydrated]);
 
   const product = products.find((p) => p.product_id === v.product_id) ?? null;
   const steps = useMemo(
     () =>
       ALL_STEPS.filter((s) => {
-        if (s === "extras") return Boolean(product?.promo && v.status === "self_pay") || (isCommercial(v.coverage) && v.status === "pa_approved") || Boolean(product?.refill_window_days);
+        if (s === "extras") return Boolean(product?.promo && v.status === "self_pay") || v.status === "pa_approved" || Boolean(product?.refill_window_days);
         return true;
       }),
     [product, v.status, v.coverage],
@@ -83,7 +85,7 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
     diagnosis: ["diagnosis_on_file"],
     status: ["status"],
     cost: ["current_monthly_cost_usd"],
-    extras: ["intro_fills_used", "plan_copay_usd", "refills_on_time"],
+    extras: ["intro_fills_used", "plan_copay_usd", "refills_on_time", "approval_ends_on"],
   };
 
   const canContinue = (() => {
@@ -297,6 +299,19 @@ export function Quiz({ products, verifiedOn }: { products: QuizProduct[]; verifi
                 )}
                 {isCommercial(v.coverage) && v.status === "pa_approved" && (
                   <MoneyInput id="copay" label="Your plan's copay before any savings card, if you know it" registration={register("plan_copay_usd", { setValueAs: toNum })} />
+                )}
+                {v.status === "pa_approved" && (
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="approval-ends" className="text-sm font-semibold">
+                      When does your approval end?
+                    </label>
+                    <div className="max-w-[280px]">
+                      <DatePicker id="approval-ends" value={v.approval_ends_on ?? ""} onChange={(d) => setValue("approval_ends_on", d || null)} placeholder="Pick a date" />
+                    </div>
+                    <span className="text-sm text-ink-2">
+                      It&apos;s on your approval letter (&ldquo;approved through &hellip;&rdquo;). We remind you before it runs out, so the renewal is filed in time.
+                    </span>
+                  </div>
                 )}
                 {product.refill_window_days && (
                   <ChoiceList

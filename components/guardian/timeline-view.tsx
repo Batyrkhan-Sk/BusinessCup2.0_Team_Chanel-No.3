@@ -20,8 +20,8 @@ import { cn } from "@/lib/utils";
 
 const data = loadData();
 
-const TONE: Record<WatchItem["kind"], PillTone> = { pa_renewal: "warn", promo_ending: "danger", refill_window: "warn", appeal_deadline: "info", monthly_check: "accent" };
-const TITLE: Record<WatchItem["kind"], string> = { pa_renewal: "Approval renewal (PA)", promo_ending: "Promo ending", refill_window: "Refill window", appeal_deadline: "Appeal deadline", monthly_check: "Monthly check" };
+const TONE: Record<WatchItem["kind"], PillTone> = { pa_renewal: "warn", promo_ending: "danger", refill_window: "warn", appeal_deadline: "info", monthly_check: "accent", discount_ending: "danger", plan_year: "info" };
+const TITLE: Record<WatchItem["kind"], string> = { pa_renewal: "Approval renewal (PA)", promo_ending: "Promo ending", refill_window: "Refill window", appeal_deadline: "Appeal deadline", monthly_check: "Monthly check", discount_ending: "Discount ending", plan_year: "Plan-year check" };
 
 export function TimelineView() {
   const demo = useMemo(() => demoWatchList(data, DEMO_CASE, DEMO_PERSONAS.sam.input, DEMO_PERSONAS.jessica.input), []);

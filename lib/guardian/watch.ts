@@ -36,7 +36,7 @@ export interface DemoCaseFile {
   cases: Array<Record<string, unknown> & { id: string; label: string }>;
 }
 
-function sourceLabel(url: string): string {
+export function sourceLabel(url: string): string {
   try {
     return new URL(url).hostname.replace(/^www\./, "");
   } catch {
@@ -44,7 +44,7 @@ function sourceLabel(url: string): string {
   }
 }
 
-const productLabel = (data: DataBundle, productId: string) => getDrug(data, productId).brand;
+export const productLabel = (data: DataBundle, productId: string) => getDrug(data, productId).brand;
 
 export function promoWatch(
   data: DataBundle,
@@ -91,11 +91,11 @@ export function promoWatch(
 
 export function renewalWatch(
   data: DataBundle,
-  args: { product_id: string; dose_mg: number; approval_ends_on: string; self_pay_offer_id: string; covered_card_id: string; baseline_label: string | null; today: string; demo?: boolean },
+  args: { product_id: string; dose_mg: number; approval_ends_on: string; self_pay_offer_id: string | null; covered_card_id: string | null; baseline_label: string | null; today: string; demo?: boolean },
 ): WatchItem {
   const a = renewalAlert(args.approval_ends_on, args.today, data);
-  const selfPay = basePriceForDose(fulfilmentOffer(data, getOffer(data, args.self_pay_offer_id)), args.dose_mg, true)?.price ?? null;
-  const card = data.savingsCards.cards.find((c) => c.id === args.covered_card_id);
+  const selfPay = args.self_pay_offer_id ? (basePriceForDose(fulfilmentOffer(data, getOffer(data, args.self_pay_offer_id)), args.dose_mg, true)?.price ?? null) : null;
+  const card = args.covered_card_id ? data.savingsCards.cards.find((c) => c.id === args.covered_card_id) : undefined;
   const atStake = selfPay !== null && card ? selfPay - card.as_low_as_monthly_usd : null;
   return {
     id: `renewal:${args.product_id}`,

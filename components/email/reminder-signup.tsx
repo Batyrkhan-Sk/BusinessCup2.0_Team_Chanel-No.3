@@ -17,6 +17,8 @@ export interface ReminderOption {
   label: string;
   payload: ReminderPayload;
   remind_on: string[];
+  /** when different send dates need different content (e.g. prices that change with the dose); payload above is the preview */
+  schedule?: Array<{ payload: ReminderPayload; remind_on: string[] }>;
 }
 
 const Form = z.object({ email: z.string().email("Enter a valid email address") });
@@ -45,7 +47,7 @@ export function ReminderSignup({ options, snapshot, compact, demo }: { options: 
 
   async function schedule({ email }: { email: string }) {
     setState({ kind: "busy" });
-    const r = await call("/api/reminders", { email, items: chosen.map((o) => ({ payload: o.payload, remind_on: o.remind_on })), snapshot });
+    const r = await call("/api/reminders", { email, items: chosen.flatMap((o) => o.schedule ?? [{ payload: o.payload, remind_on: o.remind_on }]), snapshot });
     if (r.ok) {
       track("reminder_set", { count: chosen.length });
       setState({ kind: "done", text: `Scheduled ${r.scheduled ?? 0} reminder email${r.scheduled === 1 ? "" : "s"}.${r.sent ? " The first one was just sent to your inbox." : ""}` });

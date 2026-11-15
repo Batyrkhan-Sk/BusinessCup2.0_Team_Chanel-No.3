@@ -12,7 +12,7 @@ const Body = z.object({
   items: z
     .array(z.object({ payload: ReminderPayload, remind_on: z.array(z.string().regex(/^\d{4}-\d{2}-\d{2}$/)).max(24) }))
     .min(1)
-    .max(10),
+    .max(20),
   snapshot: z.unknown().optional(),
 });
 
