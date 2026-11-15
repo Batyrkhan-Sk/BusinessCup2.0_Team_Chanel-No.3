@@ -15,6 +15,9 @@ export async function POST(req: Request) {
   if (!isConfigured("resend"))
     return NextResponse.json({ ...notConfigured("resend"), message: "Email sending is not configured on this deployment (Resend key missing). Nothing was sent." }, { status: 503 });
   const r = await sendEmail(parsed.data.email, renderReminderEmail(parsed.data.payload, appUrl()));
-  if (!r.ok) return NextResponse.json({ error: "send_failed", message: `The email provider rejected the send: ${r.error}` }, { status: 502 });
+  if (!r.ok) {
+    console.error("reminder send-now failed:", r.error);
+    return NextResponse.json({ error: "send_failed", message: "We could not send an email to this address right now. Please try again in a few minutes." }, { status: 502 });
+  }
   return NextResponse.json({ sent: true, id: r.id });
 }

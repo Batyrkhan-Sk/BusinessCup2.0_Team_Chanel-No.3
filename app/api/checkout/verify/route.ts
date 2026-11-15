@@ -11,9 +11,10 @@ export async function GET(req: Request) {
   const stripe = getStripe();
   if (!stripe) return NextResponse.json(notConfigured("stripe"), { status: 503 });
   try {
-    const s = await stripe.checkout.sessions.retrieve(id);
+    const s = await stripe.checkout.sessions.retrieve(id, { expand: ["subscription"] });
+    const trial = typeof s.subscription === "object" && s.subscription?.status === "trialing";
     const active = s.status === "complete" && (s.payment_status === "paid" || s.payment_status === "no_payment_required");
-    return NextResponse.json({ active, trial: s.payment_status === "no_payment_required", plan: s.metadata?.plan ?? null, email: s.customer_details?.email ?? null, livemode: s.livemode });
+    return NextResponse.json({ active, trial, plan: s.metadata?.plan ?? null, email: s.customer_details?.email ?? null, livemode: s.livemode });
   } catch {
     return NextResponse.json({ active: false, message: "Stripe could not find this checkout session." }, { status: 404 });
   }
