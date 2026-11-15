@@ -8,7 +8,21 @@
 
 ## What it is
 
-Many people in the US pay for weight-loss medicines like Zepbound and Wegovy. The price can jump without warning: the insurance says no, an approval expires, a refill is one day late, or an intro offer ends.
+### The problem, in numbers
+
+- **4 in 10 US adults have obesity** (40.3%, CDC, 2021–2023). [Source](https://www.cdc.gov/nchs/products/databriefs/db508.htm)
+- **About 1 in 8 US adults is taking a GLP-1 medicine right now** (12%), and 18% have tried one. [Source](https://www.kff.org/public-opinion/kff-health-tracking-poll-prescription-drug-costs-views-on-trump-administration-actions-and-glp-1-use/)
+- **More than half of them (56%) say it is hard to afford**, and that includes people with insurance (55%). [Same source](https://www.kff.org/public-opinion/kff-health-tracking-poll-prescription-drug-costs-views-on-trump-administration-actions-and-glp-1-use/)
+- **Coverage is shrinking:** 14% of employers have dropped or will drop GLP-1 obesity coverage for 2027. [Source](https://www.emarketer.com/content/us-employers-face-another-steep-healthcare-cost-hike-glp-1-spending-strains-budgets)
+- **When insurance says no, people give up:** fewer than 1% of denied claims are appealed (ACA Marketplace plans, 2024). [Source](https://www.kff.org/private-insurance/claims-denials-and-appeals-in-aca-marketplace-plans-in-2024/)
+
+So millions of people need these medicines, many cannot afford them, and when the insurance says no, almost nobody fights back. Often they don't know why they were denied, what the deadline is, or that a cheaper legal option exists.
+
+### Why the price jumps
+
+The price of Zepbound or Wegovy can change overnight: the insurance says no, an approval expires, a refill is one day late, or an intro offer ends. The same medicine can cost as little as $25 a month with a savings card when insurance covers it, or $449 a month paying cash at the drugmaker's own pharmacy.
+
+### What DoseCost does
 
 DoseCost helps in three ways:
 
