@@ -100,7 +100,7 @@ export function ResultView() {
             <Eyebrow onDark>Your lowest price today</Eyebrow>
             <h1 className="text-[28px] leading-tight font-bold tracking-tight md:text-[40px]">{best.label}</h1>
             <p className="max-w-[560px] text-lg text-white/80">
-              {best.reasons.map((r) => REASON_COPY[r]).filter(Boolean).join(". ") || "Available with what you told us."}
+              {(best.reasons.map((r) => REASON_COPY[r]).filter(Boolean).join(". ") || "Available with what you told us").replace(/\.?$/, ".")}
               {best.caveats.includes("cash_only_cannot_combine_with_insurance") ? ` ${CAVEAT_COPY.cash_only_cannot_combine_with_insurance}.` : ""}
             </p>
             <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:flex-wrap">

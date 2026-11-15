@@ -129,7 +129,7 @@ export function DecodedView() {
             <Eyebrow>Appeal deadline</Eyebrow>
             <Num className="text-4xl md:text-5xl">{formatDate(dl.file_by)}</Num>
             <span className="text-sm text-ink-2">
-              {dl.filing_window_days} days from {formatDate(dl.notice_date)} (29 CFR 2560.503-1). {dl.days_left >= 0 ? `${dl.days_left} days left.` : "This date has passed."}
+              {dl.filing_window_days} days from {formatDate(dl.notice_date)}. {dl.days_left >= 0 ? `${dl.days_left} days left.` : "This date has passed."}
             </span>
           </Card>
           <Card className="flex flex-col gap-1.5 p-6">
