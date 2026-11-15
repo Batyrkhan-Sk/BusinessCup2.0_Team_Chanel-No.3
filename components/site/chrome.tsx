@@ -9,9 +9,14 @@ import { HeaderNav } from "./header-nav";
 export function Logo() {
   return (
     <Link href="/" className="inline-flex items-center gap-2.5 text-lg font-bold tracking-tight text-ink no-underline">
-      <span aria-hidden="true" className="num inline-flex size-7 items-center justify-center rounded-lg bg-brand text-lg text-white">
-        $
-      </span>
+      <svg aria-hidden="true" viewBox="0 0 32 32" className="size-7 shrink-0">
+        <rect width="32" height="32" rx="7" className="fill-brand" />
+        <path fill="#fff" fillRule="evenodd" d="M16 4.5C24.6 8.6 24.6 23.4 16 27.5C7.4 23.4 7.4 8.6 16 4.5ZM16 7.9C21.3 11 21.3 21 16 24.1C10.7 21 10.7 11 16 7.9Z" />
+        <g transform="rotate(-9 16 16)">
+          <path className="fill-brand" d="M6 13.4H12.4V15H6ZM19.6 17H26V18.6H19.6Z" />
+          <path fill="#fff" d="M16 10.2Q16.5 14.4 18.8 15H22V17H18.8Q16.5 17.6 16 21.8Q15.5 17.6 13.2 17H10V15H13.2Q15.5 14.4 16 10.2Z" />
+        </g>
+      </svg>
       DoseCost
     </Link>
   );
