@@ -10,6 +10,8 @@ A B2C web app for US adults paying for Zepbound, Wegovy and other GLP-1 drugs. F
 
 - Data sources and what could not be verified: [`data/SOURCES.md`](data/SOURCES.md)
 
+## Deploy link: https://dosecost.vercel.app/
+
 ## Architecture
 
 ```
