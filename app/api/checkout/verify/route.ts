@@ -13,7 +13,7 @@ export async function GET(req: Request) {
   try {
     const s = await stripe.checkout.sessions.retrieve(id);
     const active = s.status === "complete" && (s.payment_status === "paid" || s.payment_status === "no_payment_required");
-    return NextResponse.json({ active, plan: s.metadata?.plan ?? null, email: s.customer_details?.email ?? null, livemode: s.livemode });
+    return NextResponse.json({ active, trial: s.payment_status === "no_payment_required", plan: s.metadata?.plan ?? null, email: s.customer_details?.email ?? null, livemode: s.livemode });
   } catch {
     return NextResponse.json({ active: false, message: "Stripe could not find this checkout session." }, { status: 404 });
   }

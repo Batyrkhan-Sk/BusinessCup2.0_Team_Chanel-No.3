@@ -280,6 +280,8 @@ export type StatsFile = z.infer<typeof StatsFileSchema>;
 export const PricingFileSchema = Provenance.extend({
   product: z.literal("guardian"),
   currency: z.literal("USD"),
+  /** free trial before the first charge; the card is collected at checkout */
+  trial_days: z.number().int().min(0).max(30),
   plans: z.array(
     z.object({
       id: z.enum(["monthly", "yearly"]),

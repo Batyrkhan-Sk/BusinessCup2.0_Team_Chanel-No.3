@@ -1,6 +1,7 @@
 {
   "product": "guardian",
   "currency": "USD",
+  "trial_days": 7,
   "plans": [
     { "id": "monthly", "price_usd": 7.99, "interval": "month", "stripe_price_env": "STRIPE_PRICE_MONTHLY" },
     { "id": "yearly", "price_usd": 59, "interval": "year", "stripe_price_env": "STRIPE_PRICE_YEARLY" }

@@ -15,7 +15,8 @@ export async function POST(req: Request) {
   const stripe = getStripe();
   if (!stripe || !isConfigured("stripe")) return NextResponse.json(notConfigured("stripe"), { status: 503 });
 
-  const plan = loadData().pricing.plans.find((p) => p.id === parsed.data.plan)!;
+  const pricing = loadData().pricing;
+  const plan = pricing.plans.find((p) => p.id === parsed.data.plan)!;
   const price = process.env[plan.stripe_price_env];
   if (!price) return NextResponse.json(notConfigured("stripe"), { status: 503 });
 
@@ -27,7 +28,8 @@ export async function POST(req: Request) {
     cancel_url: `${base}/paywall?canceled=1`,
     allow_promotion_codes: false,
     metadata: { product: "guardian", plan: plan.id },
-    subscription_data: { metadata: { product: "guardian", plan: plan.id } },
+    payment_method_collection: "always",
+    subscription_data: { metadata: { product: "guardian", plan: plan.id }, ...(pricing.trial_days > 0 ? { trial_period_days: pricing.trial_days } : {}) },
   });
   return NextResponse.json({ url: session.url });
 }

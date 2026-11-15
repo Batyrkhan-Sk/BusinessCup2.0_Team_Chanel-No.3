@@ -77,8 +77,13 @@ export function PaywallView() {
 
       <div className="mx-auto flex w-full max-w-[880px] flex-col items-stretch gap-3">
         <button type="button" className={btn({ size: "lg" })} onClick={checkout} disabled={state.kind === "busy"}>
-          {state.kind === "busy" ? "Opening secure checkout…" : `Start ${plan} with Stripe`}
+          {state.kind === "busy" ? "Opening secure checkout…" : data.pricing.trial_days > 0 ? `Start your ${data.pricing.trial_days}-day free trial` : `Start ${plan} with Stripe`}
         </button>
+        {data.pricing.trial_days > 0 && (
+          <p className="text-center text-sm text-ink-2">
+            Free for {data.pricing.trial_days} days, then {formatUsd(plan === "yearly" ? yearly.price_usd : monthly.price_usd)} {plan === "yearly" ? "a year" : "a month"}. Cancel before the trial ends and you pay nothing.
+          </p>
+        )}
         {state.kind === "error" && (
           <Notice tone="warn" title="Checkout not configured yet">
             {state.message}
