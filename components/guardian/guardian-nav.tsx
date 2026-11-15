@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { ManagePlanButton } from "@/components/paywall/manage-plan";
 
 /** Second-level navigation inside Guardian, styled as a segmented control so it reads as a sub-section of the main nav. */
 export function GuardianNav({ active }: { active: "timeline" | "overpay" | "appeal" }) {
@@ -11,6 +12,7 @@ export function GuardianNav({ active }: { active: "timeline" | "overpay" | "appe
     { id: "appeal", href: "/appeal?demo=jessica", label: "Appeal pack" },
   ] as const;
   return (
+    <div className="flex flex-wrap items-center justify-between gap-2">
     <nav aria-label="Guardian sections" className="flex max-w-full overflow-x-auto">
       <div className="inline-flex items-center gap-1 rounded-[var(--dc-r-md)] bg-surface-2 p-1">
         {links.map((l) => (
@@ -28,5 +30,7 @@ export function GuardianNav({ active }: { active: "timeline" | "overpay" | "appe
         ))}
       </div>
     </nav>
+    <ManagePlanButton className="px-0" />
+    </div>
   );
 }

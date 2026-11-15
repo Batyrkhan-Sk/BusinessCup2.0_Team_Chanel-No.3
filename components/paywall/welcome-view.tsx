@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ManagePlanButton } from "@/components/paywall/manage-plan";
 import { useSearchParams } from "next/navigation";
 import { store } from "@/lib/client/store";
 import { btn, Card, Notice, Skeleton, Wrap } from "@/components/ds";
@@ -48,6 +49,7 @@ export function WelcomeView() {
                 Go to my timeline
               </Link>
             </div>
+            <ManagePlanButton className="self-start px-0" />
           </>
         )}
         {state.kind === "error" && (
