@@ -31,7 +31,7 @@ export default function LandingPage() {
             Your GLP-1 can cost <Num className="text-[42px] text-brand md:text-[60px]">{formatUsd(v.hero.low_usd)}</Num> or{" "}
             <Num className="text-[42px] text-danger md:text-[60px]">{formatUsd(v.hero.high_usd)}</Num> a month.
           </h1>
-          <p className="max-w-[540px] text-lg text-ink-2 md:text-xl">
+          <p className="max-w-[540px] text-center text-lg text-ink-2 md:text-xl">
             The price jumps without warning: a denial, an approval that expires, a refill one day late, an intro offer that ends. We find your lowest price
             today from official sources only (no compounded copies) and warn you before the next jump.
           </p>

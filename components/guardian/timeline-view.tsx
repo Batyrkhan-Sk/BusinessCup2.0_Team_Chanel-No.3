@@ -5,7 +5,7 @@ import Link from "next/link";
 import { loadData } from "@/lib/data/load";
 import { demoWatchList, type WatchItem } from "@/lib/guardian/watch";
 import { DEMO_CASE, DEMO_PERSONAS } from "@/lib/fixtures";
-import { addDays } from "@/lib/engine/dates";
+import { addDays, daysBetween } from "@/lib/engine/dates";
 import { formatDate, formatUsd, todayIso } from "@/lib/format";
 import { store } from "@/lib/client/store";
 import { bestPath } from "@/lib/engine/path";
@@ -17,6 +17,7 @@ import { ReminderSignup, type ReminderOption } from "@/components/email/reminder
 import { GuardianNav } from "./guardian-nav";
 import { ReminderPicker, REMINDER_TITLE } from "@/components/email/reminder-picker";
 import { cn } from "@/lib/utils";
+import { ArrowDown } from "lucide-react";
 
 const data = loadData();
 
@@ -56,6 +57,16 @@ export function TimelineView() {
   const card = data.savingsCards.cards.find((c) => c.id === "zepbound-savings-card-covered");
   const previewItem = demo.items.find((i) => i.id === previewId) ?? demo.items[0];
   const [details, setDetails] = useState(false);
+  const [flash, setFlash] = useState(false);
+
+  /** Select a reminder, bring its email into view and briefly outline it, so the click visibly does something. */
+  function showPreview(id: string) {
+    setPreviewId(id);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    requestAnimationFrame(() => document.getElementById("email-preview")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }));
+    setFlash(true);
+    window.setTimeout(() => setFlash(false), 1600);
+  }
 
   const timeline = [
     { date: demo.items.length ? DEMO_CASE.cases.find((c) => c.id === "demo-appeal")?.denial_notice_date as string : null, title: "Insurance approval (PA) denied", body: "Missing documentation: weight-management program and baseline BMI", state: "bad" as const },
@@ -135,8 +146,8 @@ export function TimelineView() {
             label="Approval renewal (PA)"
             sub="Zepbound · DEMO"
             action={
-              <button type="button" className={btn({ variant: "secondary", size: "sm" })} onClick={() => setPreviewId(renewal.id)}>
-                Preview the reminder
+              <button type="button" className={btn({ variant: "secondary", size: "sm" })} onClick={() => showPreview(renewal.id)}>
+                See the email <ArrowDown aria-hidden="true" className="size-4" />
               </button>
             }
           >
@@ -160,8 +171,8 @@ export function TimelineView() {
             label="Promo ending"
             sub="Wegovy pen · DEMO"
             action={
-              <button type="button" className={btn({ variant: "secondary", size: "sm" })} onClick={() => setPreviewId(promo.id)}>
-                Preview the reminder
+              <button type="button" className={btn({ variant: "secondary", size: "sm" })} onClick={() => showPreview(promo.id)}>
+                See the email <ArrowDown aria-hidden="true" className="size-4" />
               </button>
             }
           >
@@ -224,12 +235,20 @@ export function TimelineView() {
                       t.state === "future" && "border-2 border-border bg-surface",
                     )}
                   />
-                  <div className={cn("flex min-w-0 flex-1 flex-col gap-1", next && "-mt-2 rounded-[var(--dc-r-md)] border border-brand/20 bg-brand-soft/50 px-3.5 py-2.5")}>
-                    <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
-                      <span className={cn("flex items-center gap-2 text-sm font-semibold", t.state === "future" ? "text-ink-2" : "text-ink")}>
-                        {t.title}
-                        {next && <Pill tone="warn" className="h-5 px-1.5 text-[11px]">Next</Pill>}
+                  <div
+                    className={cn(
+                      "flex min-w-0 flex-1 flex-col gap-1",
+                      next &&
+                        "relative -mt-2.5 mb-1 overflow-hidden rounded-xl border border-border bg-surface py-3 pr-4 pl-5 shadow-[0_8px_20px_-10px_rgba(15,23,20,0.22)] before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-brand",
+                    )}
+                  >
+                    {next && t.date && (
+                      <span className="text-[11px] font-semibold tracking-wider text-brand uppercase">
+                        Next step{daysBetween(DEMO_CASE.today, t.date) > 0 ? ` · in ${daysBetween(DEMO_CASE.today, t.date)} days` : ""}
                       </span>
+                    )}
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+                      <span className={cn("text-sm font-semibold", next && "text-base", t.state === "future" ? "text-ink-2" : "text-ink")}>{t.title}</span>
                       <span className={cn("text-sm whitespace-nowrap", next ? "font-semibold text-brand-ink" : "text-ink-3")}>{formatDate(t.date)}</span>
                     </div>
                     {showBody && <p className="text-sm text-ink-2">{t.body}</p>}
@@ -262,7 +281,7 @@ export function TimelineView() {
                 </span>
               </div>
               {upcomingReminders.length > 1 && (
-                <a href="#email-h" className="flex-none text-sm font-semibold text-brand no-underline hover:text-brand-ink">
+                <a href="#email-preview" className="flex-none text-sm font-semibold text-brand no-underline hover:text-brand-ink">
                   +{upcomingReminders.length - 1} more
                 </a>
               )}
@@ -272,7 +291,11 @@ export function TimelineView() {
       </section>
 
       {previewItem && (
-        <section className="grid items-start gap-6 rounded-[var(--dc-r-lg)] bg-surface-2 p-4 md:grid-cols-[4fr_8fr] md:p-8" aria-labelledby="email-h">
+        <section
+          id="email-preview"
+          className={cn("grid scroll-mt-6 items-start gap-6 rounded-[var(--dc-r-lg)] bg-surface-2 p-4 ring-brand/50 transition-shadow duration-500 md:grid-cols-[4fr_8fr] md:p-8", flash && "ring-2")}
+          aria-labelledby="email-h"
+        >
           <div className="flex flex-col gap-3">
             <Eyebrow>Reminder email preview</Eyebrow>
             <h2 id="email-h" className="text-2xl font-bold tracking-tight">
