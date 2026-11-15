@@ -66,13 +66,18 @@ The trial is the full Guardian plan. Nothing is held back during the trial. The 
 - Every email has a one-click **Unsubscribe** link.
 - The **email preview on the site uses the same template as the real email**, so what you see there is exactly what arrives.
 
-### Current status: please read
+### Email delivery during the hackathon: please read
 
-Right now emails are sent from Resend's shared test address (`onboarding@resend.dev`). Resend only delivers emails from that address to the team's own inbox. So **if you type your own email, the email may not arrive yet.** The site tells you plainly if a send fails; it never pretends.
+For this demo we send emails from Resend's free test address (`onboarding@resend.dev`). Resend only delivers emails from that address to the **team's own inbox**. We chose not to buy a domain for the hackathon.
 
-We are setting up our own sending domain. Once it is verified, emails reach any address with no code change; only one setting changes.
+What this means for you:
 
-Until then, the email preview on the [result](https://dosecost.vercel.app/result?demo=jessica) and [Guardian](https://dosecost.vercel.app/guardian) pages shows the exact email.
+- **You can still try everything.** Type any email and click **"Set reminders"**. Your reminders are saved in our database, and the daily job tries to send them.
+- **The email will not reach your inbox.** The site tells you this right away, in plain words. It never pretends an email was sent.
+- **You can see the exact email.** The previews on the [result](https://dosecost.vercel.app/result?demo=jessica) and [Guardian](https://dosecost.vercel.app/guardian) pages use the same template as the real email, filled with the same numbers.
+- **The sending itself is real.** The daily job has already delivered reminders to the team inbox. We can show a delivered email live during the pitch.
+
+To send to anyone, the team only needs to verify a domain in Resend and change one setting (`RESEND_FROM`). No code changes.
 
 ## Free vs Guardian
 
@@ -115,7 +120,7 @@ The AI explains. The code calculates.
 - US only, and covers the main GLP-1 medicines (Zepbound, Wegovy, Foundayo and others in the data files).
 - A Guardian membership is remembered **in the browser where you paid**. It does not carry over to another device.
 - Payments are in Stripe **test mode**, so no real money moves.
-- Email delivery to outside addresses waits on our sending domain (see "Current status" above).
+- Emails only reach the team inbox during the hackathon, because we use Resend's free test sender (see "Email delivery during the hackathon" above).
 
 ## Tests
 

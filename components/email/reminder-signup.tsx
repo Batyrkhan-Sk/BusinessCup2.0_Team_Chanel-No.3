@@ -28,7 +28,7 @@ export interface ReminderOption {
 
 const Form = z.object({ email: z.string().email("Enter a valid email address") });
 
-type ApiResult = { ok: true; scheduled?: number; sent?: boolean } | { ok: false; error: string; message?: string; missing?: string[] };
+type ApiResult = { ok: true; scheduled?: number; sent?: boolean; delivery_limited?: boolean } | { ok: false; error: string; message?: string; missing?: string[] };
 
 /** Without Guardian one reminder is free; Guardian (or DEMO data) unlocks every reminder. */
 export function ReminderSignup({ options, snapshot, compact, demo }: { options: ReminderOption[]; snapshot?: unknown; compact?: boolean; demo?: boolean }) {
@@ -38,7 +38,7 @@ export function ReminderSignup({ options, snapshot, compact, demo }: { options: 
   const toggle = (id: string, on: boolean) =>
     setPicked((p) => (unlimited ? { ...p, [id]: on } : on ? Object.fromEntries(options.map((o) => [o.id, o.id === id])) : { ...p, [id]: false }));
   const lockedMore = !unlimited && options.length > 1;
-  const [state, setState] = useState<{ kind: "idle" | "busy" } | { kind: "done"; done: Done } | { kind: "error"; text: string; missing?: string[] }>({ kind: "idle" });
+  const [state, setState] = useState<{ kind: "idle" | "busy" } | { kind: "done"; done: Done } | { kind: "error"; text: string; missing?: string[]; title?: string }>({ kind: "idle" });
   const form = useForm<z.infer<typeof Form>>({ resolver: zodResolver(Form) });
 
   async function call(path: string, body: unknown): Promise<ApiResult> {
@@ -60,7 +60,7 @@ export function ReminderSignup({ options, snapshot, compact, demo }: { options: 
         .flatMap((o) => (o.schedule ?? [{ remind_on: o.remind_on }]).flatMap((x) => x.remind_on.map((d) => ({ d, label: o.label }))))
         .filter((x) => x.d >= today)
         .sort((a, b) => a.d.localeCompare(b.d));
-      setState({ kind: "done", done: { title: "Reminders are on", email, sentNow: Boolean(r.sent), upcoming } });
+      setState({ kind: "done", done: { title: "Reminders are on", email, sentNow: Boolean(r.sent), upcoming, limited: Boolean(r.delivery_limited) } });
       toast.success("Reminders scheduled");
     } else setState({ kind: "error", text: r.message ?? "Could not schedule reminders.", missing: r.missing });
   }
@@ -74,7 +74,7 @@ export function ReminderSignup({ options, snapshot, compact, demo }: { options: 
       track("reminder_set", { count: 1, send_now: true });
       setState({ kind: "done", done: { title: "Email sent", email: form.getValues("email"), sentNow: true, upcoming: [] } });
       toast.success("Email sent");
-    } else setState({ kind: "error", text: r.message ?? "Could not send the email.", missing: r.missing });
+    } else setState({ kind: "error", text: r.message ?? "Could not send the email.", missing: r.missing, title: r.error === "sandbox_sender" ? "Email is in test mode" : undefined });
   }
 
   return (
@@ -122,7 +122,7 @@ export function ReminderSignup({ options, snapshot, compact, demo }: { options: 
       </button>
       {state.kind === "done" && <DoneCard done={state.done} />}
       {state.kind === "error" && (
-        <Notice tone="warn" title={state.missing?.length ? "Not configured yet" : "Could not send"}>
+        <Notice tone="warn" title={state.title ?? (state.missing?.length ? "Not configured yet" : "Could not send")}>
           {state.text}
           {state.missing?.length ? <span className="mt-1 block text-xs">Missing on the server: {state.missing.join(", ")}</span> : null}
         </Notice>
@@ -132,7 +132,7 @@ export function ReminderSignup({ options, snapshot, compact, demo }: { options: 
   );
 }
 
-type Done = { title: string; email: string; sentNow: boolean; upcoming: Array<{ d: string; label: string }> };
+type Done = { title: string; email: string; sentNow: boolean; upcoming: Array<{ d: string; label: string }>; limited?: boolean };
 
 const SHOW = 3;
 
@@ -157,6 +157,12 @@ function DoneCard({ done }: { done: Done }) {
           </p>
         </div>
       </div>
+      {done.limited && (
+        <p className="rounded-[var(--dc-r-md)] bg-warn-soft px-3 py-2 text-xs text-warn">
+          Your reminders are saved. During the hackathon our email sender runs in test mode and only delivers to the team&apos;s inbox, so these emails may not reach
+          you. The preview shows the exact email.
+        </p>
+      )}
       {shown.length > 0 && (
         <div className="flex flex-col gap-1.5">
           <span className="text-xs font-semibold tracking-wide text-ink-2 uppercase">Coming up</span>

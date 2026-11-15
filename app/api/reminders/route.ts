@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { ReminderPayload, renderReminderEmail } from "@/lib/email/templates";
 import { getDb, schema } from "@/lib/db/client";
-import { sendEmail } from "@/lib/server/mail";
+import { sendEmail, senderIsSandbox } from "@/lib/server/mail";
 import { appUrl, isConfigured, notConfigured } from "@/lib/server/env";
 
 export const runtime = "nodejs";
@@ -48,5 +48,5 @@ export async function POST(req: Request) {
     const r = await sendEmail(email, renderReminderEmail(items[0].payload, appUrl()));
     sent = r.ok;
   }
-  return NextResponse.json({ scheduled: rows.length, sent, email_configured: isConfigured("resend") });
+  return NextResponse.json({ scheduled: rows.length, sent, email_configured: isConfigured("resend"), delivery_limited: !sent && senderIsSandbox() });
 }

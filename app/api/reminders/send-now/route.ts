@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { ReminderPayload, renderReminderEmail } from "@/lib/email/templates";
-import { sendEmail } from "@/lib/server/mail";
+import { sendEmail, senderIsSandbox, SANDBOX_MESSAGE } from "@/lib/server/mail";
 import { appUrl, isConfigured, notConfigured } from "@/lib/server/env";
 
 export const runtime = "nodejs";
@@ -17,6 +17,7 @@ export async function POST(req: Request) {
   const r = await sendEmail(parsed.data.email, renderReminderEmail(parsed.data.payload, appUrl()));
   if (!r.ok) {
     console.error("reminder send-now failed:", r.error);
+    if (senderIsSandbox()) return NextResponse.json({ error: "sandbox_sender", message: SANDBOX_MESSAGE }, { status: 403 });
     return NextResponse.json({ error: "send_failed", message: "We could not send an email to this address right now. Please try again in a few minutes." }, { status: 502 });
   }
   return NextResponse.json({ sent: true, id: r.id });
